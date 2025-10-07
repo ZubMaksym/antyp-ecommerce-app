@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import localFont from 'next/font/local';
 import Header from '@/components/ui/Header';
+import Footer from '@/components/ui/Footer';
 
 export const metadata: Metadata = {
   title: `Дистриб'ютор пива ТОВ "Антип"`,
@@ -27,6 +28,7 @@ export default function RootLayout({
         </div>
         <Header />
         {children}
+        <Footer />
         <div id='portal'></div>
       </body>
     </html>
