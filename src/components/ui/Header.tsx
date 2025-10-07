@@ -14,9 +14,10 @@ import Modal from './Modal';
 const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [isCartOpen, setIsCartOpen] = useState(false);
 
     return (
-        <header className='relative h-[60px] lg:h-[105px] xl:h-[85px] w-full bg-[#f6efe7] flex justify-between items-center border-b border-[#4d6d7e]'>
+        <header className='z-50 sticky top-0 left-0 h-[60px] lg:h-[105px] xl:h-[85px] w-full bg-[#f6efe7] flex justify-between items-center border-b border-[#4d6d7e]'>
             <div>
                 <div className='lg:hidden'>
                     <Hamburger
@@ -60,7 +61,7 @@ const Header = () => {
             </div>
             <div>
                 <div className='flex justify-between items-center lg:mr-[30px] mr-[12px] w-[70px] lg:w-[120px]'>
-                    <button 
+                    <button
                         className='cursor-pointer'
                         onClick={() => setIsSearchOpen(!isSearchOpen)}
                     >
@@ -81,7 +82,10 @@ const Header = () => {
                             alt='profile icon'
                         />
                     </Link>
-                    <button className='cursor-pointer'>
+                    <button
+                        className='cursor-pointer'
+                        onClick={() => setIsCartOpen(!isCartOpen)}
+                    >
                         <Image
                             loading='lazy'
                             width={30}
@@ -92,8 +96,11 @@ const Header = () => {
                     </button>
                 </div>
             </div>
-            <Modal isOpen={isSearchOpen} setIsOpen={setIsSearchOpen}>
-                sds
+            <Modal isOpen={isSearchOpen} setIsOpen={setIsSearchOpen} title='Search'>
+                /
+            </Modal>
+            <Modal isOpen={isCartOpen} setIsOpen={setIsCartOpen} title='Shopping cart'>
+                /
             </Modal>
         </header >
     );

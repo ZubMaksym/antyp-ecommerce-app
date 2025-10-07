@@ -7,4 +7,11 @@ export interface ModalProps {
 
 export interface SearchProps extends ModalProps {
     children: React.ReactNode;
+    title: 'Search' | 'Shopping cart';
+}
+
+export interface ButtonProps {
+    classname: string;
+    apearence: 'primary' | 'secondary';
+    children: React.ReactNode;
 }

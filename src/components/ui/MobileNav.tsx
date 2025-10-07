@@ -22,7 +22,7 @@ const MobileNav = ({ isOpen, setIsOpen }: ModalProps) => {
             <div
                 tabIndex={0}
                 className={classNames(
-                    'lg:hidden fixed top-0 left-0 right-0 bottom-0 bg-[#ededed]/75 z-40 transition-opacity duration-550',
+                    'lg:hidden fixed top-0 left-0 right-0 bottom-0 bg-[#ededed]/75 z-60 transition-opacity duration-550',
                     {
                         'opacity-100 pointer-events-auto': isOpen,
                         'opacity-0 pointer-events-none': !isOpen,
@@ -32,7 +32,7 @@ const MobileNav = ({ isOpen, setIsOpen }: ModalProps) => {
             />
             <nav
                 className={classNames(
-                    'lg:hidden fixed top-0 left-0 z-50 bg-white h-full w-full max-w-[768px] transform transition-transform duration-550 ease-in-out',
+                    'lg:hidden fixed top-0 left-0 z-70 bg-white h-full w-full max-w-[768px] transform transition-transform duration-550 ease-in-out',
                     {
                         '-translate-x-0': isOpen,
                         '-translate-x-full': !isOpen,

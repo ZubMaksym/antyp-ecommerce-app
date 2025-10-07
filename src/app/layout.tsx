@@ -20,10 +20,10 @@ export default function RootLayout({
   return (
     <html lang=''>
       <body
-        className={`${cooperFont.className}`}
+        className={`${cooperFont.className} bg-[#F6EFE7]`}
       >
         <div className='flex justify-center items-center h-[40px] w-full bg-[#4d6d7e]'>
-          <span className='text-white font-extrabold text-[14px] text-center mx-[20px]'>Leading distributor of regional beer in Ukraine</span>
+          <span className='text-white font-extrabold text-[14px] text-center mx-[20px]'>Distributor of the best regional producers</span>
         </div>
         <Header />
         {children}
