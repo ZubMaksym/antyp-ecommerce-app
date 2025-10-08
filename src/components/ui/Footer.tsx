@@ -94,7 +94,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className='text-white text-[18px] mt-[30px] lg:mt-0'>
-                © 2025 Antyp 
+                © 2025 Antyp
             </div>
         </footer>
     );

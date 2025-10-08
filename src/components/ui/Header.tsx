@@ -10,6 +10,7 @@ import { useState } from 'react';
 import MobileNav from './MobileNav';
 import { navLinksData } from '@/utils/data';
 import Modal from './Modal';
+import SearchInput from './SearchInput';
 
 const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
@@ -97,10 +98,12 @@ const Header = () => {
                 </div>
             </div>
             <Modal isOpen={isSearchOpen} setIsOpen={setIsSearchOpen} title='Search'>
-                /
+                <SearchInput />
             </Modal>
             <Modal isOpen={isCartOpen} setIsOpen={setIsCartOpen} title='Shopping cart'>
-                /
+                <div className='w-full flex justify-center'>
+                    <div className='text-[#4d6d7e] text-[18px]'>Your cart is currently empty</div>
+                </div>
             </Modal>
         </header >
     );

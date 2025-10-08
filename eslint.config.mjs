@@ -31,6 +31,7 @@ const eslintConfig = [
       "no-console": "warn", // remove console.logs
       "react/react-in-jsx-scope": "off", // No import React
       "react/prop-types": "off", // no prop types
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ];

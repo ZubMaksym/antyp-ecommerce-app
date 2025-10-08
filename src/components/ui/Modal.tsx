@@ -51,7 +51,7 @@ const Modal = ({ isOpen, setIsOpen, children, title }: SearchProps) => {
                 <div className='absolute top-4 left-4 text-[27px] font-black text-[#4d6d7e]'>
                     {title}
                 </div>
-                <div className='px-[15px] py-[75px]'>
+                <div className='px-[15px] py-[100px]'>
                     {children}
                 </div>
             </div>

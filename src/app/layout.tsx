@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang=''>
+    <html lang='en'>
       <body
         className={`${cooperFont.className} bg-[#F6EFE7]`}
       >
