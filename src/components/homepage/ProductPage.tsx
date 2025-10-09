@@ -41,7 +41,7 @@ const ProductPage = () => {
                                 ))}
                             </div>
                             <div className='flex-1 flex flex-col gap-4 min-w-0'>
-                                <div className='aspect-square bg-white rounded-lg shadow-md max-w-[650px] max-h-[650px]'>
+                                <div className='aspect-square bg-white rounded-lg overflow-hidden shadow-md max-w-[650px] max-h-[650px]'>
                                     <Image
                                         loading='lazy'
                                         src={beerImage}
