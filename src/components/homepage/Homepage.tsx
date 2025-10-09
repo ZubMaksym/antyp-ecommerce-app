@@ -1,28 +1,31 @@
 'use client';
 import ProductCard from '../ui/ProductCard';
-// import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const Homepage = () => {
-    // const [bestsellerProducts, setBestsellerProducts] = useState<any[] | null>(null);
+    const [bestsellerProducts, setBestsellerProducts] = useState<Array<any> | null>(null);
+    const router = useRouter();
 
-    // useEffect(() => {
-    //     const fetchBestsellers = async () => {
-    //         try {
-    //             const response = await fetch('http://138.199.224.156:2007/product?isBestSeller=true');
+    useEffect(() => {
+        const fetchBestsellers = async () => {
+            try {
+                const response = await fetch('http://138.199.224.156:2007/product');
 
-    //             if (!response.ok) {
-    //                 throw new Error(`API error ${response.status} ${response.statusText}`);
-    //             }
+                if (!response.ok) {
+                    throw new Error(`API error ${response.status} ${response.statusText}`);
+                }
 
-    //             const data = await response.json();
-    //             setBestsellerProducts(data); // <-- зберігаємо готові дані
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     };
+                const data = await response.json();
+                setBestsellerProducts(data.result.items);
+            } catch (error) {
+                console.error(error);
+            }
+        };
 
-    //     fetchBestsellers();
-    // }, []);
+        fetchBestsellers();
+    }, []);
+
 
     return (
         <section className='flex flex-col items-center'>
@@ -35,13 +38,15 @@ const Homepage = () => {
                 </h1>
             </div>
             <div className='w-full grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 max-w-[1720px] px-[30px] min-h-[530px] mt-[55px] h-auto'>
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
-                <ProductCard />
+                {!bestsellerProducts ? (
+                    <p>Loading...</p>
+                ) : (
+                    <>
+                        {bestsellerProducts.map((product) => (
+                            <ProductCard name={product.shortName} shortName={product.name} key={product.id} onCardClick={() => router.push(`/product/${product.slug}`)}/>
+                        ))}
+                    </>
+                )}
             </div>
         </section>
     );

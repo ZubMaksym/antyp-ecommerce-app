@@ -1,10 +1,21 @@
 import Button from './Button';
+import { ProductCardProps } from '@/types/componentTypes';
+import beerImage from '@/public/icons/PLP_Kolsch.webp';
+import Image from 'next/image';
 
-
-const ProductCard = () => {
+const ProductCard = ({name, shortName, onCardClick}: ProductCardProps) => {
     return (
-        <div className='[88/100] md:aspect-[88/100] cursor-pointer'>
-            <div className='relative md:aspect-[95/100] aspect-[90/100] flex flex-col bg-white rounded-xl shadow-md overflow-hidden'>
+        <div 
+            tabIndex={0}
+            className='md:aspect-[88/100] cursor-pointer'
+            onClick={onCardClick}
+        >
+            <div className='relative md:aspect-[95/100] flex flex-col bg-white rounded-xl shadow-md overflow-hidden'>
+                <Image 
+                    loading='lazy'
+                    src={beerImage}
+                    alt={name}
+                />
                 <Button classname='hidden md:block absolute bottom-[1px] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[95%] h-[35px] ' apearence='secondary'>
                     <div className='flex justify-between px-3 font-extrabold'>
                         <span>Add To Cart</span>
@@ -14,10 +25,10 @@ const ProductCard = () => {
             </div>
             <div className=''>
                 <div className='text-[26px] font-black text-[#4d6d7e]'>
-                    Galaxy Ripple
+                    {name}
                 </div>
                 <div className='text-[#4d6d7e] text-[18px]'>
-                    Out-of-this world intense hop aromas with full bodied malt sweetness.
+                    {shortName}
                 </div>
                 <Button classname='md:hidden block mx-auto mt-3 w-[95%] h-[35px] ' apearence='secondary'>
                     <div className='flex justify-between px-3 font-extrabold'>
