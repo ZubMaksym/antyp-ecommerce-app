@@ -11,6 +11,7 @@ import MobileNav from './MobileNav';
 import { navLinksData } from '@/utils/data';
 import Modal from './Modal';
 import SearchInput from './SearchInput';
+import antypLogo from '@/public/icons/header/antypLogo1.svg';
 
 const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
@@ -18,7 +19,7 @@ const Header = () => {
     const [isCartOpen, setIsCartOpen] = useState(false);
 
     return (
-        <header className='z-50 sticky top-0 left-0 h-[60px] lg:h-[105px] xl:h-[85px] w-full bg-[#f6efe7] flex justify-between items-center border-b border-[#4d6d7e]'>
+        <header className='z-50 sticky top-0 left-0 h-[60px] lg:h-[105px] xl:h-[85px] w-full bg-[#f6efe7] flex justify-between items-center border-b border-[#4d6d7e] overflow-hidden'>
             <div>
                 <div className='lg:hidden'>
                     <Hamburger
@@ -47,17 +48,19 @@ const Header = () => {
                 </nav>
                 <MobileNav isOpen={isNavOpen} setIsOpen={setIsNavOpen} />
             </div>
-            <div className='absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[120px] lg:w-[170px] text-[28px] lg:text-[42px] text-[#4d6d7e] font-extrabold'>
-                <Link href='/' className='flex justify-between'>
+            <div className='absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-62/100 text-[22px] lg:text-[32px] text-[#8E4E2F] font-extrabold'>
+                <Link href='/' className='flex justify-between items-center'>
                     <Image
                         loading='lazy'
-                        width={30}
-                        height={30}
-                        className='mt-1 w-[30px] lg:w-[35px]'
-                        src={beerSVG}
+                        width={100}
+                        height={100}
+                        className='mt-1 w-[100px] lg:w-[130px]'
+                        src={antypLogo}
                         alt='beer icon'
                     />
-                    Antyp
+                    <div className='absolute w-full mt-[52px] lg:mt-[72px]'>
+                        <span className='flex justify-center'>Antyp</span>
+                    </div>
                 </Link>
             </div>
             <div>

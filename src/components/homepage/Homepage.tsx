@@ -38,7 +38,7 @@ const Homepage = () => {
                 </h1>
             </div>
             <div className='w-full grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 max-w-[1720px] px-[30px] min-h-[530px] mt-[55px] h-auto'>
-                {!bestsellerProducts ? (
+                {/* {!bestsellerProducts ? (
                     <p>Loading...</p>
                 ) : (
                     <>
@@ -46,7 +46,12 @@ const Homepage = () => {
                             <ProductCard name={product.shortName} shortName={product.name} key={product.id} onCardClick={() => router.push(`/product/${product.slug}`)}/>
                         ))}
                     </>
-                )}
+                )} */}
+                <ProductCard name='Kölsch' shortName='Light, crisp, and easy drinking, with a light toasty malt character' key={0} onCardClick={() => router.push(`/product/3fa85f64-5717-4562-b3fc-2c963f66afa6}`)}/>
+                <ProductCard name='Kölsch' shortName='Light, crisp, and easy drinking, with a light toasty malt character' key={1} onCardClick={() => router.push(`/product/3fa85f64-5717-4562-b3fc-2c963f66afa6`)}/>
+                <ProductCard name='Kölsch' shortName='Light, crisp, and easy drinking, with a light toasty malt character' key={2} onCardClick={() => router.push(`/product/3fa85f64-5717-4562-b3fc-2c963f66afa6`)}/>
+                <ProductCard name='Kölsch' shortName='Light, crisp, and easy drinking, with a light toasty malt character' key={3} onCardClick={() => router.push(`/product/3fa85f64-5717-4562-b3fc-2c963f66afa6`)}/>
+                <ProductCard name='Kölsch' shortName='Light, crisp, and easy drinking, with a light toasty malt character' key={4} onCardClick={() => router.push(`/product/3fa85f64-5717-4562-b3fc-2c963f66afa6`)}/>
             </div>
         </section>
     );
