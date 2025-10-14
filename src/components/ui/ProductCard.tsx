@@ -10,10 +10,13 @@ const ProductCard = ({name, shortName, onCardClick}: ProductCardProps) => {
             className='md:aspect-[88/100] cursor-pointer'
             onClick={onCardClick}
         >
-            <div className='relative md:aspect-[95/100] flex flex-col bg-white rounded-xl shadow-md overflow-hidden'>
+            <div className='relative md:aspect-[95/100] flex flex-col items-center justify-center bg-white rounded-xl shadow-md overflow-hidden'>
                 <Image 
                     loading='lazy'
-                    src={beerImage}
+                    // src={beerImage}
+                    width={300}
+                    height={300}
+                    src="https://ddappsfa.blob.core.windows.net/distributors/4c16269a-c2fd-4325-88bf-751c99d2f52b/products/6fe3dff2-97f5-4a33-a30d-03d262c07631/0c8ac7f3-8051-4d29-ac64-333b65c1cdbe.jpg"
                     alt={name}
                 />
                 <Button classname='hidden md:block absolute bottom-[1px] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[95%] h-[35px] ' apearence='secondary'>

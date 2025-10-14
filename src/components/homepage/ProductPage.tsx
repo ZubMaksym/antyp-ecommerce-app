@@ -7,31 +7,31 @@ import classNames from 'classnames';
 
 
 const ProductPage = () => {
-    // const [product, setProduct] = useState<any | null>(null);
-    // const slug = usePathname().split('/').pop();
+    const [product, setProduct] = useState<any | null>(null);
+    const slug = usePathname().split('/').pop();
 
-    // useEffect(() => {
-    //     const fetchProduct = async () => {
-    //         try {
-    //             const response = await fetch(`http://138.199.224.156:2007/product/${slug}`);
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const response = await fetch(`http://138.199.224.156:2007/product/${slug}`);
 
-    //             if (!response.ok) {
-    //                 throw new Error(`API Error ${response.status} ${response.statusText}`);
-    //             }
+                if (!response.ok) {
+                    throw new Error(`API Error ${response.status} ${response.statusText}`);
+                }
 
-    //             const data = await response.json();
-    //             setProduct(data.result);
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
-    //     };
-    //     fetchProduct();
-    // }, [slug]);
+                const data = await response.json();
+                setProduct(data.result);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        fetchProduct();
+    }, [slug]);
 
 
     return (
         <>
-            {/* {
+            {
                 product && (
                     <div className='w-full max-w-[1720px] mx-auto px-6 mt-[55px] flex flex-col lg:flex-row gap-10'>
                         <div className='flex sm:gap-10 lg:gap-4 flex-1'>
@@ -81,8 +81,8 @@ const ProductPage = () => {
                         </div>
                     </div>
                 )
-            } */}
-            <div className='w-full max-w-[1720px] mx-auto px-6 mt-[55px] flex flex-col lg:flex-row gap-10'>
+            }
+            {/* <div className='w-full max-w-[1720px] mx-auto px-6 mt-[55px] flex flex-col lg:flex-row gap-10'>
                 <div className='flex sm:gap-10 lg:gap-4 flex-1'>
                     <div className='scrollbar flex-1 hidden sm:flex flex-col gap-4 max-w-[150px] max-h-[650px] overflow-auto'>
                         {Array(5).fill(0).map((_, i) => (
@@ -128,7 +128,7 @@ const ProductPage = () => {
                     </div>
 
                 </div>
-            </div>
+            </div> */}
         </>
     );
 };
