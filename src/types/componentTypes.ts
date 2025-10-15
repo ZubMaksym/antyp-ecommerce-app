@@ -21,3 +21,13 @@ export interface ProductCardProps {
     shortName: string;
     onCardClick: () => void;
 }
+
+export interface CategoryCardProps {
+    children: React.ReactNode;
+    subtitle: string;
+}
+
+export interface FilterDropdownProps {
+    filterName: string;
+    children: React.ReactNode;
+}
