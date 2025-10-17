@@ -73,6 +73,7 @@ const Homepage = () => {
                                 shortName={product.name}
                                 key={product.id}
                                 onCardClick={() => router.push(`/product/${product.slug}`)}
+                                mainPhotoUrl={product.mainPhotoUrl}
                             />
                         ))}
                     </>

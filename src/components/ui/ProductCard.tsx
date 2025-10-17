@@ -3,7 +3,7 @@ import { ProductCardProps } from '@/types/componentTypes';
 // import beerImage from '@/public/icons/PLP_Kolsch.webp';
 import Image from 'next/image';
 
-const ProductCard = ({name, shortName, onCardClick}: ProductCardProps) => {
+const ProductCard = ({name, shortName, onCardClick, mainPhotoUrl}: ProductCardProps) => {
     return (
         <div 
             tabIndex={0}
@@ -16,7 +16,7 @@ const ProductCard = ({name, shortName, onCardClick}: ProductCardProps) => {
                     // src={beerImage}
                     width={300}
                     height={300}
-                    src='https://ddappsfa.blob.core.windows.net/distributors/4c16269a-c2fd-4325-88bf-751c99d2f52b/products/6fe3dff2-97f5-4a33-a30d-03d262c07631/0c8ac7f3-8051-4d29-ac64-333b65c1cdbe.jpg'
+                    src={mainPhotoUrl}
                     alt={name}
                     className='w-[50%]'
                 />

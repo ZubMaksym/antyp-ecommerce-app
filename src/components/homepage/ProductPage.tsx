@@ -1,7 +1,6 @@
 'use client';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import beerImage from '@/public/icons/PLP_Kolsch.webp';
 import Image from 'next/image';
 import classNames from 'classnames';
 
@@ -41,10 +40,13 @@ const ProductPage = () => {
                                 ))}
                             </div>
                             <div className='flex-1 flex flex-col gap-4 min-w-0'>
-                                <div className='aspect-square bg-white rounded-lg overflow-hidden shadow-md max-w-[650px] max-h-[650px]'>
+                                <div className='aspect-square flex justify-center items-center bg-white rounded-lg overflow-hidden shadow-md max-w-[650px] max-h-[650px]'>
                                     <Image
                                         loading='lazy'
-                                        src={beerImage}
+                                        width={450}
+                                        height={450}
+                                        className='w-[70%]'
+                                        src={product.mainPhotoUrl}
                                         alt='product image'
                                     />
                                 </div>
@@ -61,13 +63,15 @@ const ProductPage = () => {
                             <div className='grid grid-cols-4 gap-x-3 gap-y-6'>
                                 {Array(9).fill(0).map((_, i) => (
                                     <div key={i} 
-                                        className='aspect-square bg-white rounded-lg overflow-hidden shadow-md max-w-[190px] max-h-[190px] cursor-pointer hover:ring-1 hover:ring-[#4d6d7e]'>
+                                        className='flex justify-center items-center aspect-square bg-white rounded-lg overflow-hidden shadow-md max-w-[190px] max-h-[190px] cursor-pointer hover:ring-1 hover:ring-[#4d6d7e]'>
                                         <Image
                                             loading='lazy'
-                                            src={beerImage}
+                                            width={150}
+                                            height={150}
+                                            src={product.mainPhotoUrl}
                                             alt='product image'
                                             className={classNames(
-                                                'transition duration-500 ease-in-out',
+                                                'transition duration-500 w-[70%] ease-in-out',
                                                 {
                                                     'hover:rotate-10': i % 2 === 0,
                                                     'hover:-rotate-10': i % 2 !== 0,
@@ -82,53 +86,6 @@ const ProductPage = () => {
                     </div>
                 )
             }
-            {/* <div className='w-full max-w-[1720px] mx-auto px-6 mt-[55px] flex flex-col lg:flex-row gap-10'>
-                <div className='flex sm:gap-10 lg:gap-4 flex-1'>
-                    <div className='scrollbar flex-1 hidden sm:flex flex-col gap-4 max-w-[150px] max-h-[650px] overflow-auto'>
-                        {Array(5).fill(0).map((_, i) => (
-                            <div key={i} className='aspect-square bg-white rounded-lg shadow-md max-w-[130px]'></div>
-                        ))}
-                    </div>
-                    <div className='flex-1 flex flex-col gap-4 min-w-0'>
-                        <div className='aspect-square bg-white rounded-lg overflow-hidden shadow-md max-w-[650px] max-h-[650px]'>
-                            <Image
-                                loading='lazy'
-                                src={beerImage}
-                                alt='product image'
-                            />
-                        </div>
-                    </div>
-                </div>
-                <div className='flex-1 flex flex-col gap-4 min-w-0'>
-
-                    <h1 className='text-[36px] font-black text-[#4d6d7e]'>
-                        Kölsch
-                    </h1>
-                    <h2 className='text-[18px] text-[#4d6d7e]'>
-                        Light, crisp, and easy drinking, with a light toasty malt character
-                    </h2>
-                    <div className='grid grid-cols-4 gap-x-3 gap-y-6'>
-                        {Array(9).fill(0).map((_, i) => (
-                            <div key={i}
-                                className='aspect-square bg-white rounded-lg overflow-hidden shadow-md max-w-[190px] max-h-[190px] cursor-pointer hover:ring-1 hover:ring-[#4d6d7e]'>
-                                <Image
-                                    loading='lazy'
-                                    src={beerImage}
-                                    alt='product image'
-                                    className={classNames(
-                                        'transition duration-500 ease-in-out',
-                                        {
-                                            'hover:rotate-10': i % 2 === 0,
-                                            'hover:-rotate-10': i % 2 !== 0,
-                                        }
-                                    )}
-                                />
-                            </div>
-                        ))}
-                    </div>
-
-                </div>
-            </div> */}
         </>
     );
 };

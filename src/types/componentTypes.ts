@@ -20,6 +20,7 @@ export interface ProductCardProps {
     name: string;
     shortName: string;
     onCardClick: () => void;
+    mainPhotoUrl: string;
 }
 
 export interface CategoryCardProps {
@@ -30,4 +31,5 @@ export interface CategoryCardProps {
 export interface FilterDropdownProps {
     filterName: string;
     children: React.ReactNode;
+    isFirst?: boolean;
 }

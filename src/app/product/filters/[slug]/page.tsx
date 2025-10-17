@@ -114,6 +114,7 @@ const CategoryPage = () => {
                                 name={product.shortName}
                                 shortName={product.name}
                                 key={product.id}
+                                mainPhotoUrl={product.mainPhotoUrl}
                                 onCardClick={() => router.push(`/product/${product.slug}`)}
                             />
                         ))}
