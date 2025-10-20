@@ -3,6 +3,8 @@ import './globals.css';
 import localFont from 'next/font/local';
 import Header from '@/components/ui/Header';
 import Footer from '@/components/ui/Footer';
+import {store} from '@/state/store';
+import {Provider} from 'react-redux';
 
 export const metadata: Metadata = {
   title: `Дистриб'ютор пива ТОВ "Антип"`,
@@ -20,17 +22,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body
-        className={`${cooperFont.className} bg-[#F6EFE7]`}
-      >
-        <div className='flex justify-center items-center h-[40px] w-full bg-[#4d6d7e]'>
-          <span className='text-white font-extrabold text-[14px] text-center mx-[20px]'>Distributor of the best regional producers</span>
-        </div>
-        <Header />
-        {children}
-        <Footer />
-        <div id='portal'></div>
-      </body>
+      <Provider store={store}>
+        <body
+          className={`${cooperFont.className} bg-[#F6EFE7]`}
+        >
+          <div className='flex justify-center items-center h-[40px] w-full bg-[#4d6d7e]'>
+            <span className='text-white font-extrabold text-[14px] text-center mx-[20px]'>Distributor of the best regional producers</span>
+          </div>
+          <Header />
+          {children}
+          <Footer />
+          <div id='portal'></div>
+        </body>
+      </Provider>
     </html>
   );
 }

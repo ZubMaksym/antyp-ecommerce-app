@@ -5,8 +5,8 @@ import Image from 'next/image';
 import classNames from 'classnames';
 
 
-const FilterDropdown = ({ filterName, children }: FilterDropdownProps) => {
-    const [isFilterOpen, setIsFilterOpen] = useState(false);
+const FilterDropdown = ({ filterName, children, isFirst }: FilterDropdownProps) => {
+    const [isFilterOpen, setIsFilterOpen] = useState(isFirst ? true : false);
 
     return (
         <div

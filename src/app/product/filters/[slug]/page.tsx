@@ -35,7 +35,7 @@ const CategoryPage = () => {
         <section className='mb-[40px] flex justify-center mt-[55px]'>
             <div className='w-[300px] mx-[30px] px-[5px]'>
                 <h2 className='text-[22px] font-black text-[#4d6d7e]'>Filters</h2>
-                <FilterDropdown filterName='Manufacturer'>
+                <FilterDropdown filterName='Manufacturer' isFirst={true}>
                     <div className='flex'>
                         <CheckBox />
                         <span className='font-semibold ml-1 text-[#4d6d7e]'>Jhon Gaspar</span>
