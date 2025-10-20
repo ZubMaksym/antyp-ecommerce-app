@@ -33,3 +33,9 @@ export interface FilterDropdownProps {
     children: React.ReactNode;
     isFirst?: boolean;
 }
+
+export interface CheckBoxProps {
+    label?: string
+    onClick?: () => void;
+    checked?: boolean;
+}
