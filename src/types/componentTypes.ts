@@ -39,3 +39,11 @@ export interface CheckBoxProps {
     onClick?: () => void;
     checked?: boolean;
 }
+
+export interface FiltersButtonProps {
+    setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface MobileFiltersProps extends ModalProps {
+    children: React.ReactNode;
+}

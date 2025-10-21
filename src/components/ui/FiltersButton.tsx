@@ -1,11 +1,14 @@
 import filterIcon from '@/public/icons/shared/filters.svg';
 import Image from 'next/image';
+import { FiltersButtonProps } from '@/types/componentTypes';
 
-
-const FiltersButton = () => {
+const FiltersButton = ({ setIsOpen }: FiltersButtonProps) => {
     return (
-        <button className='flex justify-around items-center w-[145px] h-[45px] border rounded-lg bg-[#4d6d7e]'>
-            <Image 
+        <button
+            className='block lg:hidden flex justify-around items-center w-[145px] h-[45px] border rounded-lg bg-[#4d6d7e]'
+            onClick={() => setIsOpen(true)}
+        >
+            <Image
                 src={filterIcon}
                 alt='filter icon'
                 width={25}

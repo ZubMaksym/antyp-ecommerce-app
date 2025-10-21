@@ -220,6 +220,20 @@ export const filterSlice = createSlice({
             } else {
                 state.selectedWineSweetness.push(wineSweetness);
             }
+        },
+        resetFilters: (state) => {
+            state.selectedManufacturers = [];
+            state.selectedBeerTypes = [];
+            state.selectedSeasonTags = [];
+            state.selectedPackagings = [];
+            state.selectedWaterTypes = [];
+            state.selectedCarbonationLevels = [];
+            state.selectedSoftDrinkTypes = [];
+            state.selectedWineColors = [];
+            state.selectedWineSweetness = [];
+        },
+        resetProducts: (state) => {
+            state.products = [];
         }
     },
     extraReducers: (builder) => {
@@ -267,5 +281,18 @@ export const filterSlice = createSlice({
     }
 });
 
-export const { toggleManufacturers, toggleBeerTypes, toggleSeasonTags, togglePackagings, toggleWaterTypes, toggleCarbonationLevels, toggleSoftDrinkTypes, toggleWineColor, toggleWineSweetness } = filterSlice.actions;
+export const
+    {
+        toggleManufacturers,
+        toggleBeerTypes,
+        toggleSeasonTags,
+        togglePackagings,
+        toggleWaterTypes,
+        toggleCarbonationLevels,
+        toggleSoftDrinkTypes,
+        toggleWineColor,
+        toggleWineSweetness,
+        resetFilters,
+        resetProducts
+    } = filterSlice.actions;
 export default filterSlice.reducer;
