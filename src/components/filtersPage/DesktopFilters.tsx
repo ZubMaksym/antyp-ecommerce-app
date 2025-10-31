@@ -61,7 +61,7 @@ const DesktopFilters = () => {
     };
 
     return (
-        <div className='w-full lg:w-[300px] lg:mx-[10px]'>
+        <div className='w-full lg:w-[300px] mx-[15px]'>
             <h2 className='text-[22px] font-black text-[#4d6d7e]'>Filters</h2>
             <FilterDropdown filterName='Manufacturer' isFirst={true}>
                 <div className='flex flex-col'>

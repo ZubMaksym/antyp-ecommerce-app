@@ -1,6 +1,7 @@
 import { FilterDropdownProps } from '@/types/componentTypes';
 import { useState } from 'react';
-import caret from '@/public/icons/shared/caretDropdown.svg';
+// import caret from '@/public/icons/shared/caretDropdown.svg';
+import caret from '@/public/icons/shared/caretDropdownBold.svg';
 import Image from 'next/image';
 import classNames from 'classnames';
 
@@ -18,8 +19,8 @@ const FilterDropdown = ({ filterName, children, isFirst }: FilterDropdownProps) 
                 </h3>
                 <Image 
                     src={caret}
-                    width={23}
-                    height={23}
+                    width={25}
+                    height={25}
                     alt='caret dropdown'
                     className={classNames(
                         'transition duration-300',

@@ -47,7 +47,7 @@ const MobileFilters = ({ isOpen, setIsOpen, children }: MobileFiltersProps) => {
                         toggle={() => setIsOpen(false)}
                     />
                 </div>
-                <div className='flex flex-col px-[15px] py-[75px] *:first:border-t'>
+                <div className='flex flex-col mr-[30px] py-[75px] *:first:border-t'>
                     {children}
                 </div>
             </nav>
