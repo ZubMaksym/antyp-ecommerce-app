@@ -6,30 +6,44 @@ import CategoryCard from '../ui/CategoryCard';
 import { categoriess } from '@/utils/data';
 import Link from 'next/link';
 import Image from 'next/image';
+import { ClipLoader } from 'react-spinners';
+import classNames from 'classnames';
+
 
 const Homepage = () => {
     const [bestsellerProducts, setBestsellerProducts] = useState<Array<any> | null>(null);
+    const [bestsellerProductsError, setBestsellerProductsError] = useState<string | null>(null);
     const router = useRouter();
 
     useEffect(() => {
         const fetchBestsellers = async () => {
             try {
+                setBestsellerProductsError(null);
                 const response = await fetch('http://138.199.224.156:2007/product');
 
                 if (!response.ok) {
+                    setBestsellerProductsError(`Something went wrong while processing the request. We're woking to solve this problem`);
                     throw new Error(`API error ${response.status} ${response.statusText}`);
                 }
 
                 const data = await response.json();
                 setBestsellerProducts(data.result.items);
-            } catch (error) {
-                console.error(error);
+            } catch (error: any) {
+                setBestsellerProductsError(`Something went wrong while processing the request. We're woking to solve this problem`);
+                console.error(error.message);
             }
         };
 
         fetchBestsellers();
     }, []);
-
+    //  h-[60px] lg:h-[105px] xl:h-[85px]
+    if (bestsellerProductsError) {
+        return (
+            <p className='px-[20px] flex font-bold text-center text-[24px] text-red-500 justify-center items-center h-[calc(100vh-100px)]'>
+                <span className='max-w-[600px]'>{bestsellerProductsError}</span>
+            </p>
+        );
+    }
 
     return (
         <section className='mb-[40px] flex flex-col items-center'>
@@ -49,7 +63,7 @@ const Homepage = () => {
                             <Link href={`/product/filters/${data.route}`} key={ind}>
                                 <CategoryCard subtitle={data.name}>
                                     {/* <span className='text-white xl:text-[28px] lg:text-[24px] md:text-[28px] text-[22px] font-black'>{data.name}</span> */}
-                                    <Image 
+                                    <Image
                                         src={data.image}
                                         width={350}
                                         height={350}
@@ -62,9 +76,21 @@ const Homepage = () => {
                     }
                 </div>
             </div>
-            <div className='w-full grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 max-w-[1720px] px-[30px] min-h-[530px] mt-[55px] h-auto'>
+            <div className={classNames(
+                'w-full max-w-[1720px] px-[30px] mt-[55px]',
+                {
+                    'grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 h-auto min-h-[530px]': bestsellerProducts,
+                    'flex justify-center items-center h-[250px]': !bestsellerProducts
+                }
+            )}>
                 {!bestsellerProducts ? (
-                    <p>Loading...</p>
+                    <div className=''>
+                        <ClipLoader
+                            aria-label='Loading Spinner'
+                            color='#4d6d7e'
+                            size={60}
+                        />
+                    </div>
                 ) : (
                     <>
                         {bestsellerProducts.map((product) => (
