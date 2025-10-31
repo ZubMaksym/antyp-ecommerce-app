@@ -42,12 +42,12 @@ const ProductPage = () => {
                             <div className='flex-1 flex flex-col gap-4 min-w-0'>
                                 <div className='aspect-square flex justify-center items-center bg-white rounded-lg overflow-hidden shadow-md max-w-[650px] max-h-[650px]'>
                                     <Image
-                                        loading='lazy'
-                                        width={450}
-                                        height={450}
-                                        className='w-[70%]'
                                         src={product.mainPhotoUrl}
-                                        alt='product image'
+                                        alt={product.name}
+                                        width={500}
+                                        height={500}
+                                        className='w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
+                                        onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
                                     />
                                 </div>
                             </div>
@@ -62,7 +62,7 @@ const ProductPage = () => {
                             </h2>
                             <div className='grid grid-cols-4 gap-x-3 gap-y-6'>
                                 {Array(9).fill(0).map((_, i) => (
-                                    <div key={i} 
+                                    <div key={i}
                                         className='flex justify-center items-center aspect-square bg-white rounded-lg overflow-hidden shadow-md max-w-[190px] max-h-[190px] cursor-pointer hover:ring-1 hover:ring-[#4d6d7e]'>
                                         <Image
                                             loading='lazy'

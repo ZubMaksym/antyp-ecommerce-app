@@ -16,8 +16,9 @@ const Homepage = () => {
     const [bestsellerProductsError, setBestsellerProductsError] = useState<string | null>(null);
     const [totalCount, setTotalCount] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [productPerPage, setProductPerPage] = useState(20);
+    const [productPerPage, setProductPerPage] = useState(12);
     const router = useRouter();
+    const totalPages = Math.ceil(totalCount / productPerPage);
 
     useEffect(() => {
         const fetchBestsellers = async () => {
@@ -42,9 +43,6 @@ const Homepage = () => {
         fetchBestsellers();
     }, [currentPage, productPerPage]);
 
-    const currentProduct = bestsellerProducts;
-    const totalPages = Math.ceil(totalCount / productPerPage);
-
     if (bestsellerProductsError) {
         return (
             <p className='px-[20px] flex font-bold text-center text-[24px] text-red-500 justify-center items-center h-[calc(100vh-100px)]'>
@@ -56,16 +54,17 @@ const Homepage = () => {
     return (
         <section className='mb-[40px] flex flex-col items-center'>
             <div className='w-full h-[350px] px-[20px] py-[45px] md:px-[30px] md:py-[55px]'>
-                <h1
-                    className='xl:w-[800px] lg:w-[700px] w-full flex text-center text-[36px] md:text-[42px] lg:text-start xl:text-[48px] font-black text-[#4d6d7e]
-                    animate-fadeUp'
-                >
+                <h1 className='xl:w-[800px] lg:w-[700px] w-full flex text-center text-[36px] md:text-[42px] lg:text-start xl:text-[48px] font-black text-[#4d6d7e] animate-fadeUp'>
                     Leading distributor of regional beer in Ukraine
                 </h1>
             </div>
-            <div className='w-full sm:px-[20px] px-[10px] animate-fadeUp'>
-                <h2 className='text-center mb-[40px] text-[32px] text-[#4d6d7e] font-bold'>Browse By Category</h2>
-                <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 mx-auto justify-around gap-y-5 max-w-[1720px] *:mx-auto'>
+            <div 
+                className='w-full sm:px-[20px] px-[10px] animate-fadeUp'
+            >
+                <h2 className='text-center mb-[40px] text-[32px] text-[#4d6d7e] font-bold'>
+                    Browse By Category
+                </h2>
+                <div id='categories' className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 mx-auto justify-around gap-y-5 max-w-[1720px] *:mx-auto'>
                     {
                         categoriess.map((data, ind) => (
                             <Link href={`/product/filters/${data.route}`} key={ind}>
@@ -101,7 +100,7 @@ const Homepage = () => {
                     </div>
                 ) : (
                     <>
-                        {currentProduct && currentProduct.map((product) => (
+                        {bestsellerProducts.map((product) => (
                             <ProductCard
                                 name={product.shortName}
                                 shortName={product.name}

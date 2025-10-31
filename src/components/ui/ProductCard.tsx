@@ -3,22 +3,21 @@ import { ProductCardProps } from '@/types/componentTypes';
 // import beerImage from '@/public/icons/PLP_Kolsch.webp';
 import Image from 'next/image';
 
-const ProductCard = ({name, shortName, onCardClick, mainPhotoUrl}: ProductCardProps) => {
+const ProductCard = ({ name, shortName, onCardClick, mainPhotoUrl }: ProductCardProps) => {
     return (
-        <div 
+        <div
             tabIndex={0}
             className='md:aspect-[88/100] cursor-pointer'
             onClick={onCardClick}
         >
             <div className='relative md:aspect-[95/100] flex flex-col items-center justify-center bg-white rounded-xl shadow-md'>
-                <Image 
-                    loading='lazy'
-                    // src={beerImage}
-                    width={300}
-                    height={300}
+                <Image
                     src={mainPhotoUrl}
                     alt={name}
-                    className='w-[50%]'
+                    width={450}
+                    height={450}
+                    className='w-[50%] transition-all duration-500 ease-in-out blur-lg scale-105 opacity-0'
+                    onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
                 />
                 <Button classname='hidden md:block absolute bottom-[1px] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[95%] h-[35px] ' apearence='secondary'>
                     <div className='flex justify-between px-3 font-extrabold'>
