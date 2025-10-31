@@ -1,5 +1,5 @@
 'use client';
-import beerSVG from '@/public/icons/header/beer.svg';
+// import beerSVG from '@/public/icons/header/beer.svg';
 import cartSVG from '@/public/icons/header/cart.svg';
 import searchSVG from '@/public/icons/header/search.svg';
 import profileSVG from '@/public/icons/header/profile.svg';

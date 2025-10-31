@@ -51,4 +51,5 @@ export interface MobileFiltersProps extends ModalProps {
 export interface PaginationProps {
     totalPages: number;
     setCurrentPage: (page: number) => void;
+    currentPage: number;
 }

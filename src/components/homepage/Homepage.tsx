@@ -114,6 +114,7 @@ const Homepage = () => {
             </div>
             <Pagination
                 totalPages={totalPages}
+                currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
             />
         </section>
