@@ -47,3 +47,8 @@ export interface FiltersButtonProps {
 export interface MobileFiltersProps extends ModalProps {
     children: React.ReactNode;
 }
+
+export interface PaginationProps {
+    totalPages: number;
+    setCurrentPage: (page: number) => void;
+}

@@ -70,8 +70,8 @@ const CategoryPage = () => {
     ]);
 
     return (
-        <section className='mb-[40px] mt-[55px] flex flex-col lg:flex-row justify-center border'>
-            <div className='hidden lg:block border'>
+        <section className='mb-[40px] mt-[55px] flex flex-col lg:flex-row justify-center'>
+            <div className='hidden lg:block'>
                 <DesktopFilters />
             </div>
             <MobileFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen}>
@@ -82,7 +82,7 @@ const CategoryPage = () => {
                 <span className='block lg:hidden text-[24px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>Found Products: {products?.length}</span>
             </div>
             <div className={classNames(
-                'w-full gap-5 max-w-[1320px] px-[30px] min-h-[500px] h-auto border',
+                'w-full gap-5 max-w-[1320px] min-h-[500px] h-auto',
                 {
                     'grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 grid-cols-1': products?.length !== 0,
                     'flex justify-center items-center': products?.length === 0

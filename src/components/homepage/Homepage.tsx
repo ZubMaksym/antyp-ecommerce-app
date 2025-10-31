@@ -8,18 +8,22 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ClipLoader } from 'react-spinners';
 import classNames from 'classnames';
+import Pagination from '../ui/Pagination';
 
 
 const Homepage = () => {
     const [bestsellerProducts, setBestsellerProducts] = useState<Array<any> | null>(null);
     const [bestsellerProductsError, setBestsellerProductsError] = useState<string | null>(null);
+    const [totalCount, setTotalCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [productPerPage, setProductPerPage] = useState(20);
     const router = useRouter();
 
     useEffect(() => {
         const fetchBestsellers = async () => {
             try {
                 setBestsellerProductsError(null);
-                const response = await fetch('http://138.199.224.156:2007/product');
+                const response = await fetch(`http://138.199.224.156:2007/product?Page=${currentPage}&PageSize=${productPerPage}`);
 
                 if (!response.ok) {
                     setBestsellerProductsError(`Something went wrong while processing the request. We're woking to solve this problem`);
@@ -28,6 +32,7 @@ const Homepage = () => {
 
                 const data = await response.json();
                 setBestsellerProducts(data.result.items);
+                setTotalCount(data.result.totalCount);
             } catch (error: any) {
                 setBestsellerProductsError(`Something went wrong while processing the request. We're woking to solve this problem`);
                 console.error(error.message);
@@ -35,8 +40,11 @@ const Homepage = () => {
         };
 
         fetchBestsellers();
-    }, []);
-    //  h-[60px] lg:h-[105px] xl:h-[85px]
+    }, [currentPage, productPerPage]);
+
+    const currentProduct = bestsellerProducts;
+    const totalPages = Math.ceil(totalCount / productPerPage);
+
     if (bestsellerProductsError) {
         return (
             <p className='px-[20px] flex font-bold text-center text-[24px] text-red-500 justify-center items-center h-[calc(100vh-100px)]'>
@@ -93,7 +101,7 @@ const Homepage = () => {
                     </div>
                 ) : (
                     <>
-                        {bestsellerProducts.map((product) => (
+                        {currentProduct && currentProduct.map((product) => (
                             <ProductCard
                                 name={product.shortName}
                                 shortName={product.name}
@@ -105,6 +113,10 @@ const Homepage = () => {
                     </>
                 )}
             </div>
+            <Pagination
+                totalPages={totalPages}
+                setCurrentPage={setCurrentPage}
+            />
         </section>
     );
 };
