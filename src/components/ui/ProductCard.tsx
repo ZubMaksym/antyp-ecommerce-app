@@ -10,7 +10,7 @@ const ProductCard = ({ name, shortName, onCardClick, mainPhotoUrl }: ProductCard
             className='md:aspect-[88/100] cursor-pointer'
             onClick={onCardClick}
         >
-            <div className='relative md:aspect-[95/100] flex flex-col items-center justify-center bg-white rounded-xl shadow-md'>
+            <div className='relative md:aspect-[95/100] flex flex-col items-center justify-center bg-white rounded-xl shadow-md py-[30px]'>
                 <Image
                     src={mainPhotoUrl}
                     alt={name}
@@ -20,9 +20,8 @@ const ProductCard = ({ name, shortName, onCardClick, mainPhotoUrl }: ProductCard
                     onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
                 />
                 <Button classname='hidden md:block absolute bottom-[1px] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[95%] h-[35px] ' apearence='secondary'>
-                    <div className='flex justify-between px-3 font-extrabold'>
+                    <div className='flex justify-center px-3 font-extrabold'>
                         <span>Add To Cart</span>
-                        <span>$13.99</span>
                     </div>
                 </Button>
             </div>
@@ -33,10 +32,9 @@ const ProductCard = ({ name, shortName, onCardClick, mainPhotoUrl }: ProductCard
                 <div className='text-[#4d6d7e] text-[18px]'>
                     {shortName}
                 </div>
-                <Button classname='md:hidden block mx-auto mt-3 w-[95%] h-[35px] ' apearence='secondary'>
-                    <div className='flex justify-between px-3 font-extrabold'>
+                <Button classname='md:hidden block mx-auto mt-3 w-[100%] h-[35px] ' apearence='secondary'>
+                    <div className='flex justify-center px-3 font-extrabold'>
                         <span>Add To Cart</span>
-                        <span>$13.99</span>
                     </div>
                 </Button>
             </div>

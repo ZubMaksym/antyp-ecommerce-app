@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
       new URL('http://138.199.224.156:9010/**'),
     ],
   },
+  allowedDevOrigins: ['http://26.118.106.156:3000']
 };
 
 export default nextConfig;

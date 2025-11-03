@@ -1,13 +1,17 @@
 'use client';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Image from 'next/image';
 import classNames from 'classnames';
+import Button from '../ui/Button';
+import plus from '@/public/icons/shared/plus.svg';
+import minus from '@/public/icons/shared/minus.svg';
 
 
 const ProductPage = () => {
     const [product, setProduct] = useState<any | null>(null);
     const slug = usePathname().split('/').pop();
+    const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -26,6 +30,25 @@ const ProductPage = () => {
         };
         fetchProduct();
     }, [slug]);
+
+    const incrementQuantity = () => {
+        if (quantity < 9999) setQuantity(quantity + 1);
+    };
+
+    const decrementQuantity = () => {
+        if (quantity > 1) setQuantity(quantity - 1);
+    };
+
+    const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const val = Number(e.target.value);
+        if (val < 1) {
+            setQuantity(1);
+        } else if (val > 9999) {
+            setQuantity(9999);
+        } else {
+            setQuantity(val);
+        }
+    };
 
 
     return (
@@ -53,7 +76,6 @@ const ProductPage = () => {
                             </div>
                         </div>
                         <div className='flex-1 flex flex-col gap-4 min-w-0'>
-
                             <h1 className='text-[36px] font-black text-[#4d6d7e]'>
                                 {product.shortName}
                             </h1>
@@ -81,7 +103,41 @@ const ProductPage = () => {
                                     </div>
                                 ))}
                             </div>
+                            <div className='flex justify-between'>
+                                <div className='rounded-xl bg-white w-[145px] h-[50px] flex items-center justify-around border border-[#D2DADF]'>
+                                    <button className='ml-3 cursor-pointer' onClick={decrementQuantity}>
+                                        <Image
+                                            src={minus}
+                                            alt='minus'
+                                            width={20}
+                                            height={20}
+                                        />
+                                    </button>
+                                    <input
+                                        type='number'
+                                        value={quantity}
+                                        className='text-[#4d6d7e] text-center font-extrabold w-[40px] no-spinner appearance-none outline-none border-none bg-transparent'
+                                        onChange={handleQuantityChange}
 
+                                    />
+                                    <button className='mr-3 cursor-pointer' onClick={incrementQuantity}>
+                                        <Image
+                                            src={plus}
+                                            alt='plus'
+                                            width={20}
+                                            height={20}
+                                        />
+                                    </button>
+                                </div>
+                                <select className='text-[#4d6d7e] font-extrabold *:text-[#4d6d7e] *:font-extrabold rounded-xl ml-3 bg-white h-[50px] flex items-center justify-around border border-[#D2DADF] w-full *:text-center'>
+                                    <option value='1-Pack'>1-Pack</option>
+                                    <option value='6-pack'>6-Pack</option>
+                                    <option value='12-pack'>12-Pack</option>
+                                </select>
+                            </div>
+                            <Button apearence='primary' classname='h-[45px] mb-3'>
+                                <span className='flex justify-center px-3 font-extrabold'>Add to cart</span>
+                            </Button>
                         </div>
                     </div>
                 )

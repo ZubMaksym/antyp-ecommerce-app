@@ -9,16 +9,14 @@ import Image from 'next/image';
 import { ClipLoader } from 'react-spinners';
 import classNames from 'classnames';
 import Pagination from '../ui/Pagination';
+import usePagination from '@/hooks/usePagination';
 
 
 const Homepage = () => {
     const [bestsellerProducts, setBestsellerProducts] = useState<Array<any> | null>(null);
     const [bestsellerProductsError, setBestsellerProductsError] = useState<string | null>(null);
-    const [totalCount, setTotalCount] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [productPerPage, setProductPerPage] = useState(12);
     const router = useRouter();
-    const totalPages = Math.ceil(totalCount / productPerPage);
+    const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({productPerPage: 6, totalCount: 0});
 
     useEffect(() => {
         const fetchBestsellers = async () => {
@@ -41,7 +39,7 @@ const Homepage = () => {
         };
 
         fetchBestsellers();
-    }, [currentPage, productPerPage]);
+    }, [currentPage, productPerPage, setTotalCount]);
 
     if (bestsellerProductsError) {
         return (
@@ -58,7 +56,7 @@ const Homepage = () => {
                     Leading distributor of regional beer in Ukraine
                 </h1>
             </div>
-            <div 
+            <div
                 className='w-full sm:px-[20px] px-[10px] animate-fadeUp'
             >
                 <h2 className='text-center mb-[40px] text-[32px] text-[#4d6d7e] font-bold'>
@@ -86,7 +84,7 @@ const Homepage = () => {
             <div className={classNames(
                 'w-full max-w-[1720px] px-[30px] mt-[55px]',
                 {
-                    'grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 h-auto min-h-[530px]': bestsellerProducts,
+                    'grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 h-auto min-h-[430px]': bestsellerProducts,
                     'flex justify-center items-center h-[250px]': !bestsellerProducts
                 }
             )}>

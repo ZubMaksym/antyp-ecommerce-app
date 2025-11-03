@@ -17,7 +17,7 @@ const FilterDropdown = ({ filterName, children, isFirst }: FilterDropdownProps) 
                 <h3 className='text-[18px] font-bold text-[#4d6d7e]'>
                     {filterName}
                 </h3>
-                <Image 
+                <Image
                     src={caret}
                     width={25}
                     height={25}

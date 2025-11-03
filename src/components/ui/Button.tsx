@@ -8,8 +8,8 @@ const Button = ({classname, apearence, children}: ButtonProps) => {
         'cursor-pointer',
         classname,
         {
-            'rounded-xl bg-[#4d6d7e] text-white': apearence === 'primary',
-            'rounded-xl border border-[#4d6d7e] text-[#4d6d7e] transition duration-300 ease-in-out hover:text-white hover:bg-[#4d6d7e]': apearence === 'secondary'
+            'rounded-lg bg-[#4d6d7e] hover:bg-[#3E5865] text-white': apearence === 'primary',
+            'rounded-lg border border-[#4d6d7e] text-[#4d6d7e] transition duration-300 ease-in-out hover:text-white hover:bg-[#4d6d7e]': apearence === 'secondary'
         }
     )}>
         {children}
