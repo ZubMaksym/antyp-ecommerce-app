@@ -2,9 +2,9 @@ import { ButtonProps } from '@/types/componentTypes';
 import classNames from 'classnames';
 
 
-const Button = ({classname, apearence, children}: ButtonProps) => {
+const Button = ({classname, apearence, children, onClick}: ButtonProps) => {
   return (
-    <button className={classNames(
+    <button onClick={onClick} className={classNames(
         'cursor-pointer',
         classname,
         {

@@ -15,6 +15,7 @@ export interface ButtonProps {
     classname: string;
     apearence: 'primary' | 'secondary';
     children: React.ReactNode;
+    onClick?: () => void;
 }
 
 export interface ProductCardProps {

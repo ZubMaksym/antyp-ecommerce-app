@@ -3,6 +3,7 @@ import type { AppDispatch, RootState } from '@/state/store';
 import { useSelector, useDispatch } from 'react-redux';
 import CheckBox from '../ui/CheckBox';
 import { FilterName } from '@/types/reducerTypes';
+import Button from '../ui/Button';
 import {
     toggleManufacturers,
     toggleWaterTypes,
@@ -15,9 +16,8 @@ import {
     toggleWineSweetness
 } from '@/state/filterSlice/filterSlice';
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
-import { fetchFilters } from '@/state/filterSlice/filterSlice';
 import RangeSlider from './RangeSlider';
+import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
 
 const DesktopFilters = () => {
     const categoryName: any = usePathname().split('/').pop();
@@ -73,6 +73,11 @@ const DesktopFilters = () => {
     const getProductsByWineSweetness = (wineSweetness: FilterName) => {
         dispatch(toggleWineSweetness(wineSweetness.id));
     };
+
+    const resetAll = () => {
+        dispatch(resetFilters())
+        // dispatch(resetProducts())
+    }
 
     return (
         <div className='w-full lg:w-[300px] mx-[15px]'>
@@ -308,6 +313,13 @@ const DesktopFilters = () => {
                     }
                 </div>
             </FilterDropdown>
+            <Button 
+                apearence='secondary' 
+                classname='mt-5 w-full h-[35px]'
+                onClick={resetAll}
+            >
+                Clear filters
+            </Button>
         </div>
     );
 };
