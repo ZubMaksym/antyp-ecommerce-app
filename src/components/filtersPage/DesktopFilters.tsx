@@ -76,7 +76,7 @@ const DesktopFilters = () => {
 
     const resetAll = () => {
         dispatch(resetFilters())
-        // dispatch(resetProducts())
+        dispatch(resetProducts())
     }
 
     return (
@@ -105,9 +105,13 @@ const DesktopFilters = () => {
                     }
                 </div>
             </FilterDropdown>
-            <FilterDropdown filterName='Alcohol Strength'>
-                <RangeSlider min={minMaxAlcohol.min} max={minMaxAlcohol.max} />
-            </FilterDropdown>
+            {
+                categoryName !== 'bottled_water' && categoryName !== 'wine' && categoryName !== 'soft_drink' && (
+                    <FilterDropdown filterName='Alcohol Strength'>
+                        <RangeSlider min={minMaxAlcohol.min} max={minMaxAlcohol.max} />
+                    </FilterDropdown>
+                )
+            }
             {
                 categoryName === 'beer' &&
                 <FilterDropdown filterName='Beer Types'>
@@ -313,8 +317,8 @@ const DesktopFilters = () => {
                     }
                 </div>
             </FilterDropdown>
-            <Button 
-                apearence='secondary' 
+            <Button
+                apearence='secondary'
                 classname='mt-5 w-full h-[35px]'
                 onClick={resetAll}
             >

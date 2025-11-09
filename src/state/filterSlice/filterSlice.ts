@@ -38,8 +38,8 @@ const initialState: FilterSlice = {
     selectedSoftDrinkTypes: [],
     selectedWineColors: [],
     selectedWineSweetness: [],
-    selectedAlcoholStrength: {min: 0, max: 0},
-    minMaxAlcohol: {min: 0, max: 0}
+    selectedAlcoholStrength: { min: 0, max: 0 },
+    minMaxAlcohol: { min: 0, max: 0 }
 };
 
 export const fetchFilters = createAsyncThunk<
@@ -110,17 +110,33 @@ export const fetchProducts = createAsyncThunk<
     'filter/fetchProducts',
     async ({ categoryName, manufacturers, beerTypes, seasonTags, packagings, waterTypes, carbonationLevels, softDrinkTypes, wineColors, wineSweetness, alcoholStrength }) => {
         const params = new URLSearchParams();
+
         manufacturers.forEach((m) => params.append('Manufacturers', m));
-        beerTypes.forEach((b) => params.append('BeerTypes', b));
-        seasonTags.forEach((s) => params.append('SeasonTags', s));
         packagings.forEach((p) => params.append('Packagings', p));
-        waterTypes.forEach((w) => params.append('WaterTypes', w));
-        carbonationLevels.forEach((c) => params.append('CarbonationLevels', c));
-        softDrinkTypes.forEach((s) => params.append('SoftDrinkTypes', s));
-        wineColors.forEach((c) => params.append('WineColors', c));
-        wineSweetness.forEach((s) => params.append('WineSweetness', s));
-        params.append('AlcoholStrengthFrom', alcoholStrength.min.toString());
-        params.append('AlcoholStrengthTo', alcoholStrength.max.toString());
+
+        if (categoryName === 'beer') {
+            beerTypes.forEach((b) => params.append('BeerTypes', b));
+            seasonTags.forEach((s) => params.append('SeasonTags', s));
+        }
+
+        if (categoryName === 'bottled_water') {
+            waterTypes.forEach((w) => params.append('WaterTypes', w));
+            carbonationLevels.forEach((c) => params.append('CarbonationLevels', c));
+        }
+
+        if (categoryName === 'soft_drink') {
+            softDrinkTypes.forEach((s) => params.append('SoftDrinkTypes', s));
+        }
+
+        if (categoryName === 'wine') {
+            wineColors.forEach((c) => params.append('WineColors', c));
+            wineSweetness.forEach((s) => params.append('WineSweetness', s));
+        }
+
+        if (categoryName === 'beer' || categoryName === 'cider') {
+            params.append('AlcoholStrengthFrom', alcoholStrength.min.toString());
+            params.append('AlcoholStrengthTo', alcoholStrength.max.toString());
+        }
 
         const response = await fetch(
             `http://138.199.224.156:2007/product?ProductType=${categoryName}&${params.toString()}`
@@ -230,7 +246,7 @@ export const filterSlice = createSlice({
             state.selectedSoftDrinkTypes = [];
             state.selectedWineColors = [];
             state.selectedWineSweetness = [];
-            state.selectedAlcoholStrength = state.minMaxAlcohol;
+            state.selectedAlcoholStrength = state.minMaxAlcohol
         },
         resetProducts: (state) => {
             state.products = [];

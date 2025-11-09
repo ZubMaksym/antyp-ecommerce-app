@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useState, useEffect } from 'react';
 import { Sling as Hamburger } from 'hamburger-react';
 import { MobileFiltersProps } from '@/types/componentTypes';
-
+import Button from '../ui/Button';
 
 const MobileFilters = ({ isOpen, setIsOpen, children }: MobileFiltersProps) => {
     const [portalRoot, setPortalRoot] = useState<Element | null>(null);
@@ -48,6 +48,13 @@ const MobileFilters = ({ isOpen, setIsOpen, children }: MobileFiltersProps) => {
                 </div>
                 <div className='flex flex-col mr-[30px] py-[75px] *:first:border-t'>
                     {children}
+                    <Button
+                        apearence='primary'
+                        classname='mt-3 w-full h-[35px] mx-[15px]'
+                        onClick={() => setIsOpen(false)}
+                    >
+                        Apply Filters
+                    </Button>
                 </div>
             </nav>
         </aside>,

@@ -19,6 +19,7 @@ const CategoryPage = () => {
     const categoryName: any = usePathname().split('/').pop();
     const router = useRouter();
     const {
+        filters,
         products,
         loading,
         selectedManufacturers,
@@ -33,8 +34,6 @@ const CategoryPage = () => {
         selectedAlcoholStrength
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
-
-    const { filters } = useSelector((state: RootState) => state.filter);
 
     useEffect(() => {
         dispatch(resetFilters());
@@ -71,7 +70,7 @@ const CategoryPage = () => {
     ]);
 
     useEffect(() => {
-        if (!loading) {
+        if (!loading && filters) {
             dispatch(fetchProducts({
                 categoryName,
                 manufacturers: selectedManufacturers,
@@ -88,6 +87,7 @@ const CategoryPage = () => {
         }
     }, [
         loading,
+        filters,
         categoryName,
         selectedManufacturers,
         selectedBeerTypes,
@@ -110,12 +110,12 @@ const CategoryPage = () => {
             <MobileFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen}>
                 <DesktopFilters />
             </MobileFilters>
-            <div className='mx-[30px] my-[15px] flex flex-col sm:flex-row justify-between sm:items-center'>
+            <div className='mx-[15px] my-[15px] flex flex-col sm:flex-row justify-between sm:items-center'>
                 <FiltersButton setIsOpen={setIsFiltersOpen} />
                 <span className='block lg:hidden text-[24px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>Found Products: {products?.length}</span>
             </div>
             <div className={classNames(
-                'relative w-full gap-5 max-w-[1320px] min-h-[500px] px-[10px] h-auto',
+                'relative w-full gap-5 max-w-[1320px] min-h-[500px] px-[15px] h-auto',
                 {
                     'grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 grid-cols-1': products?.length !== 0,
                     'flex justify-center items-center': products?.length === 0
@@ -124,7 +124,7 @@ const CategoryPage = () => {
                 {!products
                     ? <p className='absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-[24px] font-black text-[#4d6d7e]'>Loading...</p>
                     // : products.length === 0 && !loading
-                        // ? <p className='text-[24px] font-black text-[#4d6d7e]'>Nothing found by selected filters. Try Changing them</p>
+                    //     ? <p className='text-[24px] font-black text-[#4d6d7e]'>Nothing found by selected filters. Try Changing them</p>
                         : (
                             <>
                                 {products.map((product) => (

@@ -4,22 +4,46 @@ import { RangeSliderProps } from '@/types/componentTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/state/store';
 import { setAlcoholStrengthRange } from '@/state/filterSlice/filterSlice';
+import { useState, useEffect } from 'react';
 
 const RangeSlider = ({ min, max }: RangeSliderProps) => {
     const dispatch = useDispatch<AppDispatch>()
-    const {selectedAlcoholStrength} = useSelector((state: RootState) => state.filter);
+
+    const { selectedAlcoholStrength } = useSelector(
+        (state: RootState) => state.filter
+    )
+
+    const [localValue, setLocalValue] = useState<[number, number]>([
+        selectedAlcoholStrength.min,
+        selectedAlcoholStrength.max
+    ])
+
+    useEffect(() => {
+        setLocalValue([
+            selectedAlcoholStrength.min,
+            selectedAlcoholStrength.max
+        ])
+    }, [selectedAlcoholStrength])
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            dispatch(setAlcoholStrengthRange(localValue))
+        }, 500)
+
+        return () => clearTimeout(timer)
+    }, [localValue, dispatch])
 
     return (
         <div className='flex flex-col'>
             <Slider
                 range
                 allowCross={false}
-                value={[selectedAlcoholStrength.min, selectedAlcoholStrength.max]}
+                value={localValue}
                 min={min}
                 max={max}
                 step={0.1}
                 defaultValue={[min, max]}
-                onChange={(value: number | number[]) => dispatch(setAlcoholStrengthRange(value))}
+                onChange={(value: any) => setLocalValue(value)}
                 trackStyle={{ backgroundColor: '#4d6d7e', height: '3px', margin: '0px auto' }}
                 railStyle={{ height: '2px' }}
                 handleStyle={{
@@ -30,12 +54,12 @@ const RangeSlider = ({ min, max }: RangeSliderProps) => {
                     height: '12px'
                 }}
             />
-            <div className='flex justify-between *:text-[#4d6d7e] font-medium'>  
+            <div className='flex justify-between *:text-[#4d6d7e] font-medium'>
                 <div className=''>
-                    {selectedAlcoholStrength.min}%
+                    {localValue[0]}%
                 </div>
                 <div className=''>
-                    {selectedAlcoholStrength.max}%
+                    {localValue[1]}%
                 </div>
             </div>
         </div>
