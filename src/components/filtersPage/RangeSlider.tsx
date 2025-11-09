@@ -1,17 +1,18 @@
 import 'rc-slider/assets/index.css';
 import Slider from 'rc-slider';
-import Range from 'rc-slider';
+import { RangeSliderProps } from '@/types/componentTypes';
 
-const RangeSlider = () => {
+const RangeSlider = ({ min, max }: RangeSliderProps) => {
     return (
-        <div>
+        <div className='flex flex-col'>
             <Slider
                 range
                 allowCross={false}
-                // value={range}
-                min={0}
-                max={100}
-                defaultValue={[0, 100]}
+                // value={[min, max]}
+                min={min}
+                max={max}
+                step={0.1}
+                defaultValue={[min, max]}
                 // onChange={(value: any) => setRange(value)}
                 trackStyle={{ backgroundColor: '#4d6d7e', height: '3px', margin: '0px auto' }}
                 railStyle={{ height: '2px' }}
@@ -23,7 +24,14 @@ const RangeSlider = () => {
                     height: '12px'
                 }}
             />
-            {/* <Range min={0} max={20} defaultValue={[3, 10]}/> */}
+            <div className='flex justify-between *:text-[#4d6d7e] font-medium'>  
+                <div className=''>
+                    {min}%
+                </div>
+                <div className=''>
+                    {max}%
+                </div>
+            </div>
         </div>
     );
 };

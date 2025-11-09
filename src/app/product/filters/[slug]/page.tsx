@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import DesktopFilters from '@/components/filtersPage/DesktopFilters';
 import MobileFilters from '@/components/filtersPage/MobileFilters';
 import { resetProducts, resetFilters } from '@/state/filterSlice/filterSlice';
+import { fetchFilters } from '@/state/filterSlice/filterSlice';
 
 
 const CategoryPage = () => {
@@ -32,11 +33,41 @@ const CategoryPage = () => {
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
 
+    const { filters } = useSelector((state: RootState) => state.filter);
+
     useEffect(() => {
         dispatch(resetFilters());
         dispatch(resetProducts());
     }, [categoryName, dispatch]);
 
+    useEffect(() => {
+        dispatch(fetchFilters(
+            {
+                category: categoryName,
+                manufacturers: selectedManufacturers,
+                beerTypes: selectedBeerTypes,
+                seasonTags: selectedSeasonTags,
+                packagings: selectedPackagings,
+                waterTypes: selectedWaterTypes,
+                carbonationLevels: selectedCarbonationLevels,
+                softDrinkTypes: selectedSoftDrinkTypes,
+                wineColors: selectedWineColors,
+                wineSweetness: selectedWineSweetness
+            }
+        ));
+    }, [
+        categoryName,
+        dispatch,
+        selectedBeerTypes,
+        selectedManufacturers,
+        selectedSeasonTags,
+        selectedPackagings,
+        selectedWaterTypes,
+        selectedCarbonationLevels,
+        selectedSoftDrinkTypes,
+        selectedWineColors,
+        selectedWineSweetness
+    ]);
 
     useEffect(() => {
         if (!loading) {
@@ -50,7 +81,8 @@ const CategoryPage = () => {
                 carbonationLevels: selectedCarbonationLevels,
                 softDrinkTypes: selectedSoftDrinkTypes,
                 wineColors: selectedWineColors,
-                wineSweetness: selectedWineSweetness
+                wineSweetness: selectedWineSweetness,
+                alcoholStrength: { min: filters?.alcoholStrength.min || 0, max: filters?.alcoholStrength.max || 0 }
             }));
         }
     }, [
@@ -65,7 +97,8 @@ const CategoryPage = () => {
         selectedSoftDrinkTypes,
         selectedWineColors,
         selectedWineSweetness,
-        dispatch
+        dispatch,
+        filters?.alcoholStrength
     ]);
 
     return (

@@ -10,7 +10,7 @@ export interface Result {
     beerTypes: FilterName[];
     packagings: FilterName[];
     seasonTags: FilterName[];
-    carbonationLevels: FilterName[]; // якщо можуть бути об’єкти — краще уточнити
+    carbonationLevels: FilterName[];
     waterTypes: FilterName[];
     softDrinkTypes: FilterName[];
     wineColors: FilterName[];
@@ -19,24 +19,6 @@ export interface Result {
     alcoholStrength: AlcoholStrength;
     isSparkling: boolean;
 }
-
-// export interface BeerType {
-//     id: string;
-//     name: string;
-//     count: number;
-// }
-
-// export interface Packaging {
-//     id: string;
-//     name: string;
-//     count: number;
-// }
-
-// export interface SeasonTag {
-//     id: string;
-//     name: string;
-//     count: number;
-// }
 
 export interface IBU {
     min: number;
@@ -47,12 +29,6 @@ export interface AlcoholStrength {
     min: number;
     max: number;
 }
-
-// export interface WaterTypes {
-//     id: string;
-//     name: string;
-//     count: number;
-// }
 
 export interface FilterName {
     id: string;

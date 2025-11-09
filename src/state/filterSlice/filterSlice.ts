@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { ApiResponse, Result, ApiResponseProduct, ProductItem } from '@/types/reducerTypes';
+import { ApiResponse, Result, ApiResponseProduct, ProductItem, AlcoholStrength } from '@/types/reducerTypes';
 
 export interface FilterSlice {
     filters: Result | null;
@@ -35,7 +35,7 @@ const initialState: FilterSlice = {
     selectedCarbonationLevels: [],
     selectedSoftDrinkTypes: [],
     selectedWineColors: [],
-    selectedWineSweetness: []
+    selectedWineSweetness: [],
 };
 
 export const fetchFilters = createAsyncThunk<
@@ -100,10 +100,11 @@ export const fetchProducts = createAsyncThunk<
         softDrinkTypes: string[];
         wineColors: string[];
         wineSweetness: string[];
+        alcoholStrength: AlcoholStrength;
     }
 >(
     'filter/fetchProducts',
-    async ({ categoryName, manufacturers, beerTypes, seasonTags, packagings, waterTypes, carbonationLevels, softDrinkTypes, wineColors, wineSweetness }) => {
+    async ({ categoryName, manufacturers, beerTypes, seasonTags, packagings, waterTypes, carbonationLevels, softDrinkTypes, wineColors, wineSweetness, alcoholStrength }) => {
         const params = new URLSearchParams();
         manufacturers.forEach((m) => params.append('Manufacturers', m));
         beerTypes.forEach((b) => params.append('BeerTypes', b));
@@ -114,6 +115,8 @@ export const fetchProducts = createAsyncThunk<
         softDrinkTypes.forEach((s) => params.append('SoftDrinkTypes', s));
         wineColors.forEach((c) => params.append('WineColors', c));
         wineSweetness.forEach((s) => params.append('WineSweetness', s));
+        params.append('AlcoholStrengthFrom', alcoholStrength.min.toString());
+        params.append('AlcoholStrengthTo', alcoholStrength.max.toString());
 
         const response = await fetch(
             `http://138.199.224.156:2007/product?ProductType=${categoryName}&${params.toString()}`
@@ -287,4 +290,5 @@ export const
         resetFilters,
         resetProducts
     } = filterSlice.actions;
+
 export default filterSlice.reducer;

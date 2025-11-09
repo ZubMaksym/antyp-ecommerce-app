@@ -54,3 +54,8 @@ export interface PaginationProps {
     setCurrentPage: (page: number) => void;
     currentPage: number;
 }
+
+export interface RangeSliderProps {
+    min: number;
+    max: number;
+}

@@ -37,35 +37,6 @@ const DesktopFilters = () => {
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
 
-    useEffect(() => {
-        dispatch(fetchFilters(
-            {
-                category: categoryName,
-                manufacturers: selectedManufacturers,
-                beerTypes: selectedBeerTypes,
-                seasonTags: selectedSeasonTags,
-                packagings: selectedPackagings,
-                waterTypes: selectedWaterTypes,
-                carbonationLevels: selectedCarbonationLevels,
-                softDrinkTypes: selectedSoftDrinkTypes,
-                wineColors: selectedWineColors,
-                wineSweetness: selectedWineSweetness
-            }
-        ));
-    }, [
-        categoryName,
-        dispatch,
-        selectedBeerTypes,
-        selectedManufacturers,
-        selectedSeasonTags,
-        selectedPackagings,
-        selectedWaterTypes,
-        selectedCarbonationLevels,
-        selectedSoftDrinkTypes,
-        selectedWineColors,
-        selectedWineSweetness
-    ]);
-
     const getProductsByManufacturer = (manufacturer: FilterName) => {
         dispatch(toggleManufacturers(manufacturer.id));
     };
@@ -106,7 +77,7 @@ const DesktopFilters = () => {
         <div className='w-full lg:w-[300px] mx-[15px]'>
             <h2 className='text-[22px] font-black text-[#4d6d7e]'>Filters</h2>
             <FilterDropdown filterName='Alcohol Strength' isFirst={true}>
-                <RangeSlider />
+                <RangeSlider min={filters?.alcoholStrength.min || 0} max={filters?.alcoholStrength.max || 0} />
             </FilterDropdown>
             <FilterDropdown filterName='Manufacturer'>
                 <div className='flex flex-col'>
