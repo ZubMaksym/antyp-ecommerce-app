@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import type { AppDispatch, RootState } from '@/state/store';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchFilters } from '@/state/filterSlice/filterSlice';
 import { fetchProducts } from '@/state/filterSlice/filterSlice';
 import FiltersButton from '@/components/ui/FiltersButton';
 import classNames from 'classnames';

@@ -44,9 +44,26 @@ const DesktopFilters = () => {
                 beerTypes: selectedBeerTypes,
                 seasonTags: selectedSeasonTags,
                 packagings: selectedPackagings,
+                waterTypes: selectedWaterTypes,
+                carbonationLevels: selectedCarbonationLevels,
+                softDrinkTypes: selectedSoftDrinkTypes,
+                wineColors: selectedWineColors,
+                wineSweetness: selectedWineSweetness
             }
         ));
-    }, [categoryName, dispatch, selectedBeerTypes, selectedManufacturers, selectedSeasonTags, selectedPackagings]);
+    }, [
+        categoryName,
+        dispatch,
+        selectedBeerTypes,
+        selectedManufacturers,
+        selectedSeasonTags,
+        selectedPackagings,
+        selectedWaterTypes,
+        selectedCarbonationLevels,
+        selectedSoftDrinkTypes,
+        selectedWineColors,
+        selectedWineSweetness
+    ]);
 
     const getProductsByManufacturer = (manufacturer: FilterName) => {
         dispatch(toggleManufacturers(manufacturer.id));

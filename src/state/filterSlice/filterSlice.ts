@@ -41,49 +41,35 @@ const initialState: FilterSlice = {
 export const fetchFilters = createAsyncThunk<
     Result,
     {
-        category: string | undefined;
+        category: string;
         manufacturers: string[];
         beerTypes: string[];
         seasonTags: string[];
         packagings: string[];
+        waterTypes: string[];
+        carbonationLevels: string[];
+        softDrinkTypes: string[];
+        wineColors: string[];
+        wineSweetness: string[];
     }
 >(
     'filter/fetchFilters',
-    async ({ category, manufacturers, beerTypes, seasonTags, packagings }) => {
+    async (filters) => {
+        const { category, ...rest } = filters;
         let url = `http://138.199.224.156:2007/product/filters-metadata?ProductType=${category}`;
 
-        if (manufacturers.length > 0) {
-            const params = new URLSearchParams();
-            manufacturers.forEach((m) => params.append('Manufacturers', m));
-            url += `&${params.toString()}`;
-        }
-
-        if (beerTypes.length > 0) {
-            const params = new URLSearchParams();
-            beerTypes.forEach((b) => params.append('BeerTypes', b));
-            url += `&${params.toString()}`;
-        }
-
-        if (seasonTags.length > 0) {
-            const params = new URLSearchParams();
-            seasonTags.forEach((s) => params.append('SeasonTags', s));
-            url += `&${params.toString()}`;
-        }
-
-        if (packagings.length > 0) {
-            const params = new URLSearchParams();
-            packagings.forEach((p) => params.append('Packagings', p));
-            url += `&${params.toString()}`;
-        }
-
-        console.log(url);
+        Object.entries(rest).forEach(([key, arr]) => {
+            if (arr.length > 0) {
+                const params = new URLSearchParams();
+                (arr as string[]).forEach((v) => params.append(key[0] + key.slice(1), v));
+                url += `&${params.toString()}`;
+            }
+        });
 
         const response = await fetch(url);
-
         if (!response.ok) {
             throw new Error(`API Error ${response.status} ${response.statusText}`);
         }
-
         const data: ApiResponse = await response.json();
         return data.result;
     }
