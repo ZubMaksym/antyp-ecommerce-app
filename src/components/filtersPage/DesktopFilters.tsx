@@ -3,8 +3,20 @@ import type { AppDispatch, RootState } from '@/state/store';
 import { useSelector, useDispatch } from 'react-redux';
 import CheckBox from '../ui/CheckBox';
 import { FilterName } from '@/types/reducerTypes';
-import { toggleManufacturers, toggleWaterTypes, toggleBeerTypes, toggleSeasonTags, togglePackagings, toggleCarbonationLevels, toggleSoftDrinkTypes, toggleWineColor, toggleWineSweetness } from '@/state/filterSlice/filterSlice';
+import {
+    toggleManufacturers,
+    toggleWaterTypes,
+    toggleBeerTypes,
+    toggleSeasonTags,
+    togglePackagings,
+    toggleCarbonationLevels,
+    toggleSoftDrinkTypes,
+    toggleWineColor,
+    toggleWineSweetness
+} from '@/state/filterSlice/filterSlice';
 import { usePathname } from 'next/navigation';
+import { useEffect } from 'react';
+import { fetchFilters } from '@/state/filterSlice/filterSlice';
 
 const DesktopFilters = () => {
     const categoryName: any = usePathname().split('/').pop();
@@ -23,6 +35,18 @@ const DesktopFilters = () => {
         selectedWineSweetness
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
+
+    useEffect(() => {
+        dispatch(fetchFilters(
+            {
+                category: categoryName,
+                manufacturers: selectedManufacturers,
+                beerTypes: selectedBeerTypes,
+                seasonTags: selectedSeasonTags,
+                packagings: selectedPackagings,
+            }
+        ));
+    }, [categoryName, dispatch, selectedBeerTypes, selectedManufacturers, selectedSeasonTags, selectedPackagings]);
 
     const getProductsByManufacturer = (manufacturer: FilterName) => {
         dispatch(toggleManufacturers(manufacturer.id));
@@ -67,18 +91,20 @@ const DesktopFilters = () => {
                 <div className='flex flex-col'>
                     {
                         loading
-                            ? <p></p>
+                            ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
                             : (
                                 filters?.manufacturers.map((manufacturer) => (
-                                    <div key={manufacturer.id} className='flex'>
-                                        <CheckBox
-                                            checked={selectedManufacturers.includes(manufacturer.id)}
-                                            onClick={() => getProductsByManufacturer(manufacturer)}
-                                        />
-                                        <span className='font-semibold ml-1 text-[#4d6d7e]'>
-                                            {manufacturer.name}
-                                        </span>
-                                    </div>
+                                    manufacturer.count > 0 && (
+                                        <div key={manufacturer.id} className='flex'>
+                                            <CheckBox
+                                                checked={selectedManufacturers.includes(manufacturer.id)}
+                                                onClick={() => getProductsByManufacturer(manufacturer)}
+                                            />
+                                            <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                {manufacturer.name}
+                                            </span>
+                                        </div>
+                                    )
                                 ))
                             )
                     }
@@ -90,18 +116,20 @@ const DesktopFilters = () => {
                     <div className='flex flex-col'>
                         {
                             loading
-                                ? <p></p>
+                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
                                 : (
                                     filters?.beerTypes.map((beerType) => (
-                                        <div key={beerType.id} className='flex'>
-                                            <CheckBox
-                                                checked={selectedBeerTypes.includes(beerType.id)}
-                                                onClick={() => getProductsByBeerType(beerType)}
-                                            />
-                                            <span className='font-semibold ml-1 text-[#4d6d7e]'>
-                                                {beerType.name}
-                                            </span>
-                                        </div>
+                                        beerType.count > 0 && (
+                                            <div key={beerType.id} className='flex'>
+                                                <CheckBox
+                                                    checked={selectedBeerTypes.includes(beerType.id)}
+                                                    onClick={() => getProductsByBeerType(beerType)}
+                                                />
+                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                    {beerType.name}
+                                                </span>
+                                            </div>
+                                        )
                                     ))
                                 )
                         }
@@ -114,18 +142,20 @@ const DesktopFilters = () => {
                     <div className='flex flex-col'>
                         {
                             loading
-                                ? <p></p>
+                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
                                 : (
                                     filters?.seasonTags.map((seasonTag) => (
-                                        <div key={seasonTag.id} className='flex'>
-                                            <CheckBox
-                                                checked={selectedSeasonTags.includes(seasonTag.id)}
-                                                onClick={() => getProductsBySeasonTag(seasonTag)}
-                                            />
-                                            <span className='font-semibold ml-1 text-[#4d6d7e]'>
-                                                {seasonTag.name}
-                                            </span>
-                                        </div>
+                                        seasonTag.count > 0 && (
+                                            <div key={seasonTag.id} className='flex'>
+                                                <CheckBox
+                                                    checked={selectedSeasonTags.includes(seasonTag.id)}
+                                                    onClick={() => getProductsBySeasonTag(seasonTag)}
+                                                />
+                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                    {seasonTag.name}
+                                                </span>
+                                            </div>
+                                        )
                                     ))
                                 )
                         }
@@ -138,18 +168,20 @@ const DesktopFilters = () => {
                     <div className='flex flex-col'>
                         {
                             loading
-                                ? <p></p>
+                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
                                 : (
                                     filters?.waterTypes.map((waterType) => (
-                                        <div key={waterType.id} className='flex'>
-                                            <CheckBox
-                                                checked={selectedWaterTypes.includes(waterType.id)}
-                                                onClick={() => getProductsByWaterType(waterType)}
-                                            />
-                                            <span className='font-semibold ml-1 text-[#4d6d7e]'>
-                                                {waterType.name}
-                                            </span>
-                                        </div>
+                                        waterType.count > 0 && (
+                                            <div key={waterType.id} className='flex'>
+                                                <CheckBox
+                                                    checked={selectedWaterTypes.includes(waterType.id)}
+                                                    onClick={() => getProductsByWaterType(waterType)}
+                                                />
+                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                    {waterType.name}
+                                                </span>
+                                            </div>
+                                        )
                                     ))
                                 )
                         }
@@ -162,18 +194,20 @@ const DesktopFilters = () => {
                     <div className='flex flex-col'>
                         {
                             loading
-                                ? <p></p>
+                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
                                 : (
                                     filters?.carbonationLevels.map((carbonationLevel) => (
-                                        <div key={carbonationLevel.id} className='flex'>
-                                            <CheckBox
-                                                checked={selectedCarbonationLevels.includes(carbonationLevel.id)}
-                                                onClick={() => getProductsByCarbonationLevel(carbonationLevel)}
-                                            />
-                                            <span className='font-semibold ml-1 text-[#4d6d7e]'>
-                                                {carbonationLevel.name}
-                                            </span>
-                                        </div>
+                                        carbonationLevel.count > 0 && (
+                                            <div key={carbonationLevel.id} className='flex'>
+                                                <CheckBox
+                                                    checked={selectedCarbonationLevels.includes(carbonationLevel.id)}
+                                                    onClick={() => getProductsByCarbonationLevel(carbonationLevel)}
+                                                />
+                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                    {carbonationLevel.name}
+                                                </span>
+                                            </div>
+                                        )
                                     ))
                                 )
                         }
@@ -186,18 +220,20 @@ const DesktopFilters = () => {
                     <div className='flex flex-col'>
                         {
                             loading
-                                ? <p></p>
+                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
                                 : (
                                     filters?.softDrinkTypes.map((softDrinkType) => (
-                                        <div key={softDrinkType.id} className='flex'>
-                                            <CheckBox
-                                                checked={selectedSoftDrinkTypes.includes(softDrinkType.id)}
-                                                onClick={() => getProductsBySoftDrinkType(softDrinkType)}
-                                            />
-                                            <span className='font-semibold ml-1 text-[#4d6d7e]'>
-                                                {softDrinkType.name}
-                                            </span>
-                                        </div>
+                                        softDrinkType.count > 0 && (
+                                            <div key={softDrinkType.id} className='flex'>
+                                                <CheckBox
+                                                    checked={selectedSoftDrinkTypes.includes(softDrinkType.id)}
+                                                    onClick={() => getProductsBySoftDrinkType(softDrinkType)}
+                                                />
+                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                    {softDrinkType.name}
+                                                </span>
+                                            </div>
+                                        )
                                     ))
                                 )
                         }
@@ -210,18 +246,20 @@ const DesktopFilters = () => {
                     <div className='flex flex-col'>
                         {
                             loading
-                                ? <p>Loading...</p>
+                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
                                 : (
                                     filters?.wineColors.map((wineColor) => (
-                                        <div key={wineColor.id} className='flex'>
-                                            <CheckBox
-                                                checked={selectedWineColors.includes(wineColor.id)}
-                                                onClick={() => getProductsByWineColor(wineColor)}
-                                            />
-                                            <span className='font-semibold ml-1 text-[#4d6d7e]'>
-                                                {wineColor.name}
-                                            </span>
-                                        </div>
+                                        wineColor.count > 0 && (
+                                            <div key={wineColor.id} className='flex'>
+                                                <CheckBox
+                                                    checked={selectedWineColors.includes(wineColor.id)}
+                                                    onClick={() => getProductsByWineColor(wineColor)}
+                                                />
+                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                    {wineColor.name}
+                                                </span>
+                                            </div>
+                                        )
                                     ))
                                 )
                         }
@@ -234,18 +272,20 @@ const DesktopFilters = () => {
                     <div className='flex flex-col'>
                         {
                             loading
-                                ? <p>Loading...</p>
+                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
                                 : (
                                     filters?.wineSweetness.map((wineSweetness) => (
-                                        <div key={wineSweetness.id} className='flex'>
-                                            <CheckBox
-                                                checked={selectedWineSweetness.includes(wineSweetness.id)}
-                                                onClick={() => getProductsByWineSweetness(wineSweetness)}
-                                            />
-                                            <span className='font-semibold ml-1 text-[#4d6d7e]'>
-                                                {wineSweetness.name}
-                                            </span>
-                                        </div>
+                                        wineSweetness.count > 0 && (
+                                            <div key={wineSweetness.id} className='flex'>
+                                                <CheckBox
+                                                    checked={selectedWineSweetness.includes(wineSweetness.id)}
+                                                    onClick={() => getProductsByWineSweetness(wineSweetness)}
+                                                />
+                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                    {wineSweetness.name}
+                                                </span>
+                                            </div>
+                                        )
                                     ))
                                 )
                         }
@@ -256,18 +296,20 @@ const DesktopFilters = () => {
                 <div className='flex flex-col'>
                     {
                         loading
-                            ? <p></p>
+                            ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
                             : (
                                 filters?.packagings.map((packaging) => (
-                                    <div key={packaging.id} className='flex'>
-                                        <CheckBox
-                                            onClick={() => getProductsByPackaging(packaging)}
-                                            checked={selectedPackagings.includes(packaging.id)}
-                                        />
-                                        <span className='font-semibold ml-1 text-[#4d6d7e]'>
-                                            {packaging.name}
-                                        </span>
-                                    </div>
+                                    packaging.count > 0 && (
+                                        <div key={packaging.id} className='flex'>
+                                            <CheckBox
+                                                onClick={() => getProductsByPackaging(packaging)}
+                                                checked={selectedPackagings.includes(packaging.id)}
+                                            />
+                                            <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                {packaging.name}
+                                            </span>
+                                        </div>
+                                    )
                                 ))
                             )
                     }

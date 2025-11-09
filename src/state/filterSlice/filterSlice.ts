@@ -42,35 +42,41 @@ export const fetchFilters = createAsyncThunk<
     Result,
     {
         category: string | undefined;
+        manufacturers: string[];
+        beerTypes: string[];
+        seasonTags: string[];
+        packagings: string[];
     }
 >(
     'filter/fetchFilters',
-    async ({ category }) => {
-        const url = `http://138.199.224.156:2007/product/filters-metadata?ProductType=${category}`;
+    async ({ category, manufacturers, beerTypes, seasonTags, packagings }) => {
+        let url = `http://138.199.224.156:2007/product/filters-metadata?ProductType=${category}`;
 
-        // if (manufacturers.length > 0) {
-        //     const params = new URLSearchParams();
-        //     manufacturers.forEach((m) => params.append('Manufacturers', m));
-        //     url += `&${params.toString()}`;
-        // }
+        if (manufacturers.length > 0) {
+            const params = new URLSearchParams();
+            manufacturers.forEach((m) => params.append('Manufacturers', m));
+            url += `&${params.toString()}`;
+        }
 
-        // if (beerTypes.length > 0) {
-        //     const params = new URLSearchParams();
-        //     beerTypes.forEach((b) => params.append('BeerTypes', b));
-        //     url += `&${params.toString()}`;
-        // }
+        if (beerTypes.length > 0) {
+            const params = new URLSearchParams();
+            beerTypes.forEach((b) => params.append('BeerTypes', b));
+            url += `&${params.toString()}`;
+        }
 
-        // if (seasonTags.length > 0) {
-        //     const params = new URLSearchParams();
-        //     seasonTags.forEach((s) => params.append('SeasonTags', s));
-        //     url += `&${params.toString()}`;
-        // }
+        if (seasonTags.length > 0) {
+            const params = new URLSearchParams();
+            seasonTags.forEach((s) => params.append('SeasonTags', s));
+            url += `&${params.toString()}`;
+        }
 
-        // if (packagings.length > 0) {
-        //     const params = new URLSearchParams();
-        //     packagings.forEach((p) => params.append('Packagings', p));
-        //     url += `&${params.toString()}`;
-        // }
+        if (packagings.length > 0) {
+            const params = new URLSearchParams();
+            packagings.forEach((p) => params.append('Packagings', p));
+            url += `&${params.toString()}`;
+        }
+
+        console.log(url);
 
         const response = await fetch(url);
 

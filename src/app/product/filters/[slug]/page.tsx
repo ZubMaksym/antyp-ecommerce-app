@@ -36,8 +36,8 @@ const CategoryPage = () => {
     useEffect(() => {
         dispatch(resetFilters());
         dispatch(resetProducts());
-        dispatch(fetchFilters({ category: categoryName }));
     }, [categoryName, dispatch]);
+
 
     useEffect(() => {
         if (!loading) {

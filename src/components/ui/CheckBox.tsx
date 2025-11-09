@@ -2,13 +2,13 @@ import classNames from 'classnames';
 import { CheckBoxProps } from '@/types/componentTypes';
 
 
-const CheckBox = ({ label, onClick, checked}: CheckBoxProps) => {
+const CheckBox = ({ label, onClick, checked }: CheckBoxProps) => {
     return (
         <label className='flex items-center gap-2 cursor-pointer relative'>
             <input
                 type='checkbox'
                 className='peer w-4 h-4 appearance-none border border-[#4d6d7e] rounded'
-                checked={checked || false}             // контроль стану
+                checked={checked || false}
                 onChange={onClick}
             />
             <svg

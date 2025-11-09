@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
+import { FilterName } from './reducerTypes';
 
 export interface ModalProps {
     isOpen: boolean;

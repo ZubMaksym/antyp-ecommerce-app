@@ -2,7 +2,6 @@ import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 import { useState, useEffect } from 'react';
 import { Sling as Hamburger } from 'hamburger-react';
-import Link from 'next/link';
 import { MobileFiltersProps } from '@/types/componentTypes';
 
 
