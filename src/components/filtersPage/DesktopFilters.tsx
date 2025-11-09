@@ -33,7 +33,8 @@ const DesktopFilters = () => {
         selectedCarbonationLevels,
         selectedSoftDrinkTypes,
         selectedWineColors,
-        selectedWineSweetness
+        selectedWineSweetness,
+        minMaxAlcohol
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
 
@@ -76,10 +77,7 @@ const DesktopFilters = () => {
     return (
         <div className='w-full lg:w-[300px] mx-[15px]'>
             <h2 className='text-[22px] font-black text-[#4d6d7e]'>Filters</h2>
-            <FilterDropdown filterName='Alcohol Strength' isFirst={true}>
-                <RangeSlider min={filters?.alcoholStrength.min || 0} max={filters?.alcoholStrength.max || 0} />
-            </FilterDropdown>
-            <FilterDropdown filterName='Manufacturer'>
+            <FilterDropdown filterName='Manufacturer' isFirst={true}>
                 <div className='flex flex-col'>
                     {
                         loading
@@ -101,6 +99,9 @@ const DesktopFilters = () => {
                             )
                     }
                 </div>
+            </FilterDropdown>
+            <FilterDropdown filterName='Alcohol Strength'>
+                <RangeSlider min={minMaxAlcohol.min} max={minMaxAlcohol.max} />
             </FilterDropdown>
             {
                 categoryName === 'beer' &&

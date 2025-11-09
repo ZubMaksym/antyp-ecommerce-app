@@ -29,7 +29,8 @@ const CategoryPage = () => {
         selectedCarbonationLevels,
         selectedSoftDrinkTypes,
         selectedWineColors,
-        selectedWineSweetness
+        selectedWineSweetness,
+        selectedAlcoholStrength
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
 
@@ -52,7 +53,7 @@ const CategoryPage = () => {
                 carbonationLevels: selectedCarbonationLevels,
                 softDrinkTypes: selectedSoftDrinkTypes,
                 wineColors: selectedWineColors,
-                wineSweetness: selectedWineSweetness
+                wineSweetness: selectedWineSweetness,
             }
         ));
     }, [
@@ -82,7 +83,7 @@ const CategoryPage = () => {
                 softDrinkTypes: selectedSoftDrinkTypes,
                 wineColors: selectedWineColors,
                 wineSweetness: selectedWineSweetness,
-                alcoholStrength: { min: filters?.alcoholStrength.min || 0, max: filters?.alcoholStrength.max || 0 }
+                alcoholStrength: selectedAlcoholStrength
             }));
         }
     }, [
@@ -98,7 +99,7 @@ const CategoryPage = () => {
         selectedWineColors,
         selectedWineSweetness,
         dispatch,
-        filters?.alcoholStrength
+        selectedAlcoholStrength
     ]);
 
     return (
@@ -114,16 +115,16 @@ const CategoryPage = () => {
                 <span className='block lg:hidden text-[24px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>Found Products: {products?.length}</span>
             </div>
             <div className={classNames(
-                'w-full gap-5 max-w-[1320px] min-h-[500px] px-[10px] h-auto',
+                'relative w-full gap-5 max-w-[1320px] min-h-[500px] px-[10px] h-auto',
                 {
                     'grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 grid-cols-1': products?.length !== 0,
                     'flex justify-center items-center': products?.length === 0
                 }
             )}>
                 {!products
-                    ? <p>Loading...</p>
-                    : products.length === 0 && !loading
-                        ? <p className='text-[24px] font-black text-[#4d6d7e]'>Nothing found by selected filters. Try Changing them</p>
+                    ? <p className='absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-[24px] font-black text-[#4d6d7e]'>Loading...</p>
+                    // : products.length === 0 && !loading
+                        // ? <p className='text-[24px] font-black text-[#4d6d7e]'>Nothing found by selected filters. Try Changing them</p>
                         : (
                             <>
                                 {products.map((product) => (

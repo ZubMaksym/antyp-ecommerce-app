@@ -18,6 +18,8 @@ export interface FilterSlice {
     selectedSoftDrinkTypes: Array<string>;
     selectedWineColors: Array<string>;
     selectedWineSweetness: Array<string>;
+    selectedAlcoholStrength: AlcoholStrength;
+    minMaxAlcohol: AlcoholStrength;
 }
 
 const initialState: FilterSlice = {
@@ -36,6 +38,8 @@ const initialState: FilterSlice = {
     selectedSoftDrinkTypes: [],
     selectedWineColors: [],
     selectedWineSweetness: [],
+    selectedAlcoholStrength: {min: 0, max: 0},
+    minMaxAlcohol: {min: 0, max: 0}
 };
 
 export const fetchFilters = createAsyncThunk<
@@ -229,6 +233,10 @@ export const filterSlice = createSlice({
         },
         resetProducts: (state) => {
             state.products = [];
+        },
+        setAlcoholStrengthRange: (state, action: PayloadAction<[number, number]>) => {
+            state.selectedAlcoholStrength.min = action.payload[0];
+            state.selectedAlcoholStrength.max = action.payload[1];
         }
     },
     extraReducers: (builder) => {
@@ -254,6 +262,14 @@ export const filterSlice = createSlice({
             .addCase(fetchFilters.fulfilled, (state, action: PayloadAction<any>) => {
                 state.loading = false;
                 state.filters = action.payload;
+                state.minMaxAlcohol = {
+                    min: state.filters?.alcoholStrength.min!,
+                    max: state.filters?.alcoholStrength.max!,
+                }
+                state.selectedAlcoholStrength = {
+                    min: state.filters?.alcoholStrength.min!,
+                    max: state.filters?.alcoholStrength.max!,
+                }
             })
             .addCase(fetchFilters.rejected, (state, action) => {
                 state.loading = false;
@@ -288,7 +304,8 @@ export const
         toggleWineColor,
         toggleWineSweetness,
         resetFilters,
-        resetProducts
+        resetProducts,
+        setAlcoholStrengthRange
     } = filterSlice.actions;
 
 export default filterSlice.reducer;
