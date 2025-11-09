@@ -17,6 +17,7 @@ import {
 import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import { fetchFilters } from '@/state/filterSlice/filterSlice';
+import RangeSlider from './RangeSlider';
 
 const DesktopFilters = () => {
     const categoryName: any = usePathname().split('/').pop();
@@ -104,7 +105,10 @@ const DesktopFilters = () => {
     return (
         <div className='w-full lg:w-[300px] mx-[15px]'>
             <h2 className='text-[22px] font-black text-[#4d6d7e]'>Filters</h2>
-            <FilterDropdown filterName='Manufacturer' isFirst={true}>
+            <FilterDropdown filterName='Alcohol Strength' isFirst={true}>
+                <RangeSlider />
+            </FilterDropdown>
+            <FilterDropdown filterName='Manufacturer'>
                 <div className='flex flex-col'>
                     {
                         loading
