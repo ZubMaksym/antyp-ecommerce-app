@@ -75,9 +75,9 @@ const DesktopFilters = () => {
     };
 
     const resetAll = () => {
-        dispatch(resetFilters())
-        dispatch(resetProducts())
-    }
+        dispatch(resetFilters());
+        dispatch(resetProducts());
+    };
 
     return (
         <div className='w-full lg:w-[300px] mx-[15px]'>

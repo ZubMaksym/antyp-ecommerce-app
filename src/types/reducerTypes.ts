@@ -50,6 +50,7 @@ export interface ProductItem {
 
 export interface ProductResponse {
     items: ProductItem[];
+    totalCount: number;
 }
 
 export interface ApiResponseProduct {

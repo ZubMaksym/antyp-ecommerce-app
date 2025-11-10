@@ -12,6 +12,8 @@ import DesktopFilters from '@/components/filtersPage/DesktopFilters';
 import MobileFilters from '@/components/filtersPage/MobileFilters';
 import { resetProducts, resetFilters } from '@/state/filterSlice/filterSlice';
 import { fetchFilters } from '@/state/filterSlice/filterSlice';
+import usePagination from '@/hooks/usePagination';
+import Pagination from '@/components/ui/Pagination';
 
 
 const CategoryPage = () => {
@@ -31,9 +33,11 @@ const CategoryPage = () => {
         selectedSoftDrinkTypes,
         selectedWineColors,
         selectedWineSweetness,
-        selectedAlcoholStrength
+        selectedAlcoholStrength,
+        totalCount
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
+    const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 6, totalCount: 0 });
 
     useEffect(() => {
         dispatch(resetFilters());
@@ -41,6 +45,7 @@ const CategoryPage = () => {
     }, [categoryName, dispatch]);
 
     useEffect(() => {
+        setCurrentPage(1);
         dispatch(fetchFilters(
             {
                 category: categoryName,
@@ -66,7 +71,8 @@ const CategoryPage = () => {
         selectedCarbonationLevels,
         selectedSoftDrinkTypes,
         selectedWineColors,
-        selectedWineSweetness
+        selectedWineSweetness,
+        setCurrentPage
     ]);
 
     useEffect(() => {
@@ -82,8 +88,11 @@ const CategoryPage = () => {
                 softDrinkTypes: selectedSoftDrinkTypes,
                 wineColors: selectedWineColors,
                 wineSweetness: selectedWineSweetness,
-                alcoholStrength: selectedAlcoholStrength
+                alcoholStrength: selectedAlcoholStrength,
+                currentPage: currentPage,
+                productPerPage: productPerPage
             }));
+            setTotalCount(totalCount);
         }
     }, [
         loading,
@@ -99,7 +108,11 @@ const CategoryPage = () => {
         selectedWineColors,
         selectedWineSweetness,
         dispatch,
-        selectedAlcoholStrength
+        selectedAlcoholStrength,
+        currentPage,
+        productPerPage,
+        setTotalCount,
+        totalCount,
     ]);
 
     return (
@@ -114,17 +127,18 @@ const CategoryPage = () => {
                 <FiltersButton setIsOpen={setIsFiltersOpen} />
                 <span className='block lg:hidden text-[24px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>Found Products: {products?.length}</span>
             </div>
-            <div className={classNames(
-                'relative w-full gap-5 max-w-[1320px] min-h-[500px] px-[15px] h-auto',
-                {
-                    'grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 grid-cols-1': products?.length !== 0,
-                    'flex justify-center items-center': products?.length === 0
-                }
-            )}>
-                {!products
-                    ? <p className='absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-[24px] font-black text-[#4d6d7e]'>Loading...</p>
-                    // : products.length === 0 && !loading
-                    //     ? <p className='text-[24px] font-black text-[#4d6d7e]'>Nothing found by selected filters. Try Changing them</p>
+            <div className='flex flex-col'>
+                <div className={classNames(
+                    'relative w-full gap-5 max-w-[1320px] min-h-[500px] px-[15px] h-auto',
+                    {
+                        'grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 grid-cols-1': products?.length !== 0,
+                        'flex justify-center items-center': products?.length === 0
+                    }
+                )}>
+                    {!products
+                        ? <p className='absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-[24px] font-black text-[#4d6d7e]'>Loading...</p>
+                        // : products.length === 0 && !loading
+                        //     ? <p className='text-[24px] font-black text-[#4d6d7e]'>Nothing found by selected filters. Try Changing them</p>
                         : (
                             <>
                                 {products.map((product) => (
@@ -138,6 +152,14 @@ const CategoryPage = () => {
                                 ))}
                             </>
                         )}
+                </div>
+                <div className='self-center'>
+                    <Pagination
+                        totalPages={totalPages}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                    />
+                </div>
             </div>
         </section >
     );

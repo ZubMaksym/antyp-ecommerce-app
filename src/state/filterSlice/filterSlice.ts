@@ -20,6 +20,7 @@ export interface FilterSlice {
     selectedWineSweetness: Array<string>;
     selectedAlcoholStrength: AlcoholStrength;
     minMaxAlcohol: AlcoholStrength;
+    totalCount: number;
 }
 
 const initialState: FilterSlice = {
@@ -39,7 +40,8 @@ const initialState: FilterSlice = {
     selectedWineColors: [],
     selectedWineSweetness: [],
     selectedAlcoholStrength: { min: 0, max: 0 },
-    minMaxAlcohol: { min: 0, max: 0 }
+    minMaxAlcohol: { min: 0, max: 0 },
+    totalCount: 0
 };
 
 export const fetchFilters = createAsyncThunk<
@@ -92,7 +94,7 @@ export const fetchInitialProducts = createAsyncThunk<ProductItem[], { category: 
 );
 
 export const fetchProducts = createAsyncThunk<
-    ProductItem[],
+    { items: ProductItem[], totalCount: number },
     {
         categoryName: string;
         manufacturers: string[]
@@ -105,10 +107,26 @@ export const fetchProducts = createAsyncThunk<
         wineColors: string[];
         wineSweetness: string[];
         alcoholStrength: AlcoholStrength;
+        currentPage: number;
+        productPerPage: number
     }
 >(
     'filter/fetchProducts',
-    async ({ categoryName, manufacturers, beerTypes, seasonTags, packagings, waterTypes, carbonationLevels, softDrinkTypes, wineColors, wineSweetness, alcoholStrength }) => {
+    async ({
+        categoryName,
+        manufacturers,
+        beerTypes,
+        seasonTags,
+        packagings,
+        waterTypes,
+        carbonationLevels,
+        softDrinkTypes,
+        wineColors,
+        wineSweetness,
+        alcoholStrength,
+        currentPage,
+        productPerPage,
+    }) => {
         const params = new URLSearchParams();
 
         manufacturers.forEach((m) => params.append('Manufacturers', m));
@@ -139,7 +157,7 @@ export const fetchProducts = createAsyncThunk<
         }
 
         const response = await fetch(
-            `http://138.199.224.156:2007/product?ProductType=${categoryName}&${params.toString()}`
+            `http://138.199.224.156:2007/product?Page=${currentPage}&PageSize=${productPerPage}&ProductType=${categoryName}&${params.toString()}`
         );
 
         if (!response.ok) {
@@ -147,7 +165,10 @@ export const fetchProducts = createAsyncThunk<
         }
 
         const data: ApiResponseProduct = await response.json();
-        return data.result.items;
+        return {
+            items: data.result.items,
+            totalCount: data.result.totalCount
+        };
     }
 );
 
@@ -246,7 +267,7 @@ export const filterSlice = createSlice({
             state.selectedSoftDrinkTypes = [];
             state.selectedWineColors = [];
             state.selectedWineSweetness = [];
-            state.selectedAlcoholStrength = state.minMaxAlcohol
+            state.selectedAlcoholStrength = state.minMaxAlcohol;
         },
         resetProducts: (state) => {
             state.products = [];
@@ -280,13 +301,13 @@ export const filterSlice = createSlice({
                 state.loading = false;
                 state.filters = action.payload;
                 state.minMaxAlcohol = {
-                    min: state.filters?.alcoholStrength.min!,
-                    max: state.filters?.alcoholStrength.max!,
-                }
+                    min: state.filters?.alcoholStrength.min || 0,
+                    max: state.filters?.alcoholStrength.max || 0,
+                };
                 state.selectedAlcoholStrength = {
-                    min: state.filters?.alcoholStrength.min!,
-                    max: state.filters?.alcoholStrength.max!,
-                }
+                    min: state.filters?.alcoholStrength.min || 0,
+                    max: state.filters?.alcoholStrength.max || 0,
+                };
             })
             .addCase(fetchFilters.rejected, (state, action) => {
                 state.loading = false;
@@ -300,7 +321,8 @@ export const filterSlice = createSlice({
             })
             .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<any>) => {
                 state.productsLoading = false;
-                state.products = action.payload;
+                state.products = action.payload.items;
+                state.totalCount = action.payload.totalCount;
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.productsLoading = false;
