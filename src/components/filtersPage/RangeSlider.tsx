@@ -95,7 +95,8 @@ const RangeSlider = ({ min, max }: RangeSliderProps) => {
                         onChange={handleMinInput}
                         onBlur={handleMinBlure}
                         placeholder='From'
-                        className='border border-[#4d6d7e] rounded-lg bg-white text-[#4d6d7e] px-3 h-[40px] w-[100px] placeholder:text-[16px] placeholder:text-[#6E8792]' 
+                        className='mt-1 focus:outline-offset-2 focus:outline-3 focus:outline-[#4d6d7e80] focus:ring-2 ring-[#4d6d7e] lg:border-0 border border-[#4d6d7e]
+                                   rounded-lg bg-white text-[#4d6d7e] px-3 h-[40px] w-[100px] placeholder:text-[16px] placeholder:text-[#6E8792]' 
                     />
                 </div>
                 <span className='w-[30px] mt-5 h-[1.5px] bg-[#4d6d7e]'></span>
@@ -109,7 +110,8 @@ const RangeSlider = ({ min, max }: RangeSliderProps) => {
                         onChange={handleMaxInput}
                         onBlur={handleMaxBlure}
                         placeholder='To'
-                        className='border border-[#4d6d7e] rounded-lg bg-white text-[#4d6d7e] px-3 w-[100px] h-[40px] placeholder:text-[16px] placeholder:text-[#6E8792]'
+                        className='mt-1 focus:outline-offset-2 focus:outline-3 focus:outline-[#4d6d7e80] focus:ring-2 ring-[#4d6d7e] lg:border-0 border border-[#4d6d7e]
+                                   rounded-lg bg-white text-[#4d6d7e] px-3 w-[100px] h-[40px] placeholder:text-[16px] placeholder:text-[#6E8792]'
                     />
                 </div>
             </div>
