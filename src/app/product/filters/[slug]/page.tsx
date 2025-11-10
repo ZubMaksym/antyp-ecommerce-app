@@ -127,7 +127,7 @@ const CategoryPage = () => {
                 <FiltersButton setIsOpen={setIsFiltersOpen} />
                 <span className='block lg:hidden text-[24px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>Found Products: {products?.length}</span>
             </div>
-            <div className='flex flex-col'>
+            <div className='flex flex-col w-full max-w-[1320px]'>
                 <div className={classNames(
                     'relative w-full gap-5 max-w-[1320px] min-h-[500px] px-[15px] h-auto',
                     {
@@ -155,6 +155,7 @@ const CategoryPage = () => {
                 </div>
                 <div className='self-center'>
                     <Pagination
+                        scrollTopValue={0}
                         totalPages={totalPages}
                         currentPage={currentPage}
                         setCurrentPage={setCurrentPage}

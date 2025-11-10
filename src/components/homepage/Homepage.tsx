@@ -114,6 +114,7 @@ const Homepage = () => {
                 totalPages={totalPages}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
+                scrollTopValue={700}
             />
         </section>
     );

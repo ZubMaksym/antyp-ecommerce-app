@@ -54,6 +54,7 @@ export interface PaginationProps {
     totalPages: number;
     setCurrentPage: (page: number) => void;
     currentPage: number;
+    scrollTopValue: number;
 }
 
 export interface RangeSliderProps {
