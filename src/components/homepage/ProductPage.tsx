@@ -6,12 +6,22 @@ import classNames from 'classnames';
 import Button from '../ui/Button';
 import plus from '@/public/icons/shared/plus.svg';
 import minus from '@/public/icons/shared/minus.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/state/store';
+import { addItem } from '@/state/cartState/cartSlice';
+import { ProductItem } from '@/types/reducerTypes';
 
 
 const ProductPage = () => {
     const [product, setProduct] = useState<any | null>(null);
     const slug = usePathname().split('/').pop();
     const [quantity, setQuantity] = useState(1);
+
+    const dispatch = useDispatch<AppDispatch>();
+
+    const addToCart = (item: ProductItem) => {
+        dispatch(addItem(item));
+    };
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -135,7 +145,11 @@ const ProductPage = () => {
                                     <option value='12-pack'>12-Pack</option>
                                 </select>
                             </div>
-                            <Button apearence='primary' classname='h-[45px] mb-3'>
+                            <Button
+                                apearence='primary'
+                                classname='h-[45px] mb-3'
+                                onClick={() => addToCart(product)}
+                            >
                                 <span className='flex justify-center px-3 font-extrabold'>Add to cart</span>
                             </Button>
                         </div>

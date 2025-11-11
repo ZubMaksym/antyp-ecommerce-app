@@ -12,11 +12,17 @@ import { navLinksData } from '@/utils/data';
 import Modal from './Modal';
 import SearchInput from './SearchInput';
 import antypLogo from '@/public/icons/header/antypLogo1.svg';
+import Cart from '../cart/Cart';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/state/store';
+import classNames from 'classnames';
+import { it } from 'node:test';
 
 const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
+    const { items } = useSelector((state: RootState) => state.cart);
 
     return (
         <header className='z-50 sticky top-0 left-0 h-[60px] lg:h-[105px] xl:h-[85px] w-full bg-[#f6efe7] flex justify-between items-center border-b border-[#4d6d7e] overflow-hidden'>
@@ -64,9 +70,9 @@ const Header = () => {
                 </Link>
             </div>
             <div>
-                <div className='flex justify-between items-center lg:mr-[30px] mr-[12px] w-[70px] lg:w-[120px]'>
+                <div className='flex justify-between items-center lg:mr-[30px] mr-[12px] w-[70px] lg:w-[130px]'>
                     <button
-                        className='cursor-pointer'
+                        className='cursor-pointer h-[40px] w-[40px] flex justify-center items-center'
                         onClick={() => setIsSearchOpen(!isSearchOpen)}
                     >
                         <Image
@@ -77,7 +83,7 @@ const Header = () => {
                             alt='search icon'
                         />
                     </button>
-                    <Link href='/login' className='cursor-pointer hidden lg:block'>
+                    <Link href='/login' className='lg:flex justify-center items-center cursor-pointer hidden h-[40px] w-[40px]'>
                         <Image
                             loading='lazy'
                             width={25}
@@ -87,16 +93,27 @@ const Header = () => {
                         />
                     </Link>
                     <button
-                        className='cursor-pointer'
+                        className='cursor-pointer h-[40px] w-[40px]'
                         onClick={() => setIsCartOpen(!isCartOpen)}
                     >
-                        <Image
-                            loading='lazy'
-                            width={30}
-                            height={30}
-                            src={cartSVG}
-                            alt='cart icon'
-                        />
+                        <div className='relative h-[40px] flex justify-center'>
+                            <Image
+                                className=''
+                                loading='lazy'
+                                width={30}
+                                height={30}
+                                src={cartSVG}
+                                alt='cart icon'
+                            />
+                            <div className={classNames(
+                                'font-bold text-white w-4 h-4 text-[11px] bg-[#4d6d7e] absolute top-0 right-0 rounded-[50%]',
+                                {
+                                    'hidden': items.length === 0
+                                }
+                            )}>
+                                {items.length}
+                            </div>
+                        </div>
                     </button>
                 </div>
             </div>
@@ -104,9 +121,7 @@ const Header = () => {
                 <SearchInput />
             </Modal>
             <Modal isOpen={isCartOpen} setIsOpen={setIsCartOpen} title='Shopping cart'>
-                <div className='w-full flex justify-center'>
-                    <div className='text-[#4d6d7e] text-[18px]'>Your cart is currently empty</div>
-                </div>
+                <Cart />
             </Modal>
         </header >
     );

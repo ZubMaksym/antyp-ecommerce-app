@@ -38,13 +38,16 @@ const CategoryPage = () => {
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
     const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 6, totalCount: 0 });
+    const [categoryChanged, setCategoryChanges] = useState(false);
 
     useEffect(() => {
-        dispatch(resetProducts());
         dispatch(resetFilters());
+        dispatch(resetProducts());
+        setCategoryChanges(true);
     }, [categoryName, dispatch]);
 
     useEffect(() => {
+        if (!categoryChanged) return;
         setCurrentPage(1);
         dispatch(fetchFilters(
             {
@@ -72,7 +75,8 @@ const CategoryPage = () => {
         selectedSoftDrinkTypes,
         selectedWineColors,
         selectedWineSweetness,
-        setCurrentPage
+        setCurrentPage,
+        categoryChanged
     ]);
 
     useEffect(() => {
@@ -118,7 +122,7 @@ const CategoryPage = () => {
     return (
         <section className='mb-[40px] mt-[55px] flex flex-col lg:flex-row justify-center'>
             <div className='hidden lg:block'>
-                <DesktopFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen}/>
+                <DesktopFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
             </div>
             <MobileFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
             <div className='mx-[15px] my-[15px] flex flex-col sm:flex-row justify-between sm:items-center'>
@@ -151,7 +155,7 @@ const CategoryPage = () => {
                             </>
                         )}
                 </div>
-                <div className='self-center'>
+                <div className='self-center place-self-end'>
                     <Pagination
                         scrollTopValue={0}
                         totalPages={totalPages}

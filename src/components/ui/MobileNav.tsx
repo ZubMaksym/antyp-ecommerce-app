@@ -5,7 +5,7 @@ import { Sling as Hamburger } from 'hamburger-react';
 import { navLinksData } from '@/utils/data';
 import Link from 'next/link';
 import { ModalProps } from '@/types/componentTypes';
-
+import useForbidBodyScroll from '@/hooks/useForbidBodyScroll';
 
 const MobileNav = ({ isOpen, setIsOpen }: ModalProps) => {
     const [portalRoot, setPortalRoot] = useState<Element | null>(null);
@@ -14,6 +14,8 @@ const MobileNav = ({ isOpen, setIsOpen }: ModalProps) => {
         const el = document.querySelector('#portal');
         setPortalRoot(el);
     }, []);
+
+    useForbidBodyScroll(isOpen, 1023);
 
     if (!portalRoot) return null;
 

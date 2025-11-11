@@ -1,54 +1,56 @@
 @import "tailwindcss";
 
 .scrollbar::-webkit-scrollbar {
-    width: 6px;
-    overflow-y: scroll;
+  width: 6px;
+  overflow-y: scroll;
 }
 
 .scrollbar::-webkit-scrollbar-track {
-    background-color: #CBCECD;
-    border-radius: 2px;
+  background-color: #CBCECD;
+  border-radius: 2px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
-    background-color: #688da1;
-    border-radius: 2px;
+  background-color: #688da1;
+  border-radius: 2px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: #4d6d7e;
+  background-color: #4d6d7e;
 }
 
 @keyframes fadeUp {
-    0% {
-        opacity: 0;
-        transform: translateY(30px);
-    }
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
 
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes shine {
   0% {
     transform: translateX(-100%);
   }
+
   50% {
     transform: translateX(100%);
   }
+
   100% {
     transform: translateX(100%);
   }
 }
 
 .animate-fadeUp {
-    animation: fadeUp 1s ease-out forwards;
+  animation: fadeUp 1s ease-out forwards;
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 .no-spinner::-webkit-outer-spin-button,
@@ -59,4 +61,10 @@ html {
 
 .no-spinner {
   -moz-appearance: textfield;
+}
+
+.no-scroll {
+  overflow: hidden;
+  touch-action: none;
+  /* щоб мобільний скрол теж зупинявся */
 }

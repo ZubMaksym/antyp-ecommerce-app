@@ -267,8 +267,7 @@ export const filterSlice = createSlice({
             state.selectedSoftDrinkTypes = [];
             state.selectedWineColors = [];
             state.selectedWineSweetness = [];
-            state.minMaxAlcohol = {min: 0, max: 0};
-            state.selectedAlcoholStrength = {min: 0, max: 0};
+            state.selectedAlcoholStrength = state.minMaxAlcohol;
         },
         resetProducts: (state) => {
             state.products = [];

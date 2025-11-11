@@ -2,7 +2,7 @@ import classNames from 'classnames';
 import { CheckBoxProps } from '@/types/componentTypes';
 
 
-const CheckBox = ({ label, onClick, checked }: CheckBoxProps) => {
+const CheckBox = ({ onClick, checked }: CheckBoxProps) => {
     return (
         <label className='flex items-center gap-2 cursor-pointer relative'>
             <input
@@ -25,7 +25,6 @@ const CheckBox = ({ label, onClick, checked }: CheckBoxProps) => {
             >
                 <polyline points='20 6 9 17 4 12' />
             </svg>
-            {label && <span className='font-semibold text-[#4d6d7e]'>{label}</span>}
         </label>
     );
 };

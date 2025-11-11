@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { SearchProps } from '@/types/componentTypes';
 import Image from 'next/image';
 import closeSVG from '@/public/icons/shared/close.svg';
+import useForbidBodyScroll from '@/hooks/useForbidBodyScroll';
 
 const Modal = ({ isOpen, setIsOpen, children, title }: SearchProps) => {
     const [portalRoot, setPortalRoot] = useState<Element | null>(null);
@@ -12,6 +13,8 @@ const Modal = ({ isOpen, setIsOpen, children, title }: SearchProps) => {
         const el = document.querySelector('#portal');
         setPortalRoot(el);
     }, []);
+
+    useForbidBodyScroll(isOpen, 20000);
 
     if (!portalRoot) return null;
 

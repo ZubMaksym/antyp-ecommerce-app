@@ -100,7 +100,7 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                                 checked={selectedManufacturers.includes(manufacturer.id)}
                                             />
                                             <span 
-                                                className='font-semibold ml-1 text-[#4d6d7e]'
+                                                className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'
                                             >
                                                 {manufacturer.name}
                                             </span>
@@ -136,7 +136,7 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                                 <CheckBox
                                                     checked={selectedBeerTypes.includes(beerType.id)}
                                                 />
-                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                <span className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'>
                                                     {beerType.name}
                                                 </span>
                                             </div>
@@ -165,7 +165,7 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                                 <CheckBox
                                                     checked={selectedSeasonTags.includes(seasonTag.id)}
                                                 />
-                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                <span className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'>
                                                     {seasonTag.name}
                                                 </span>
                                             </div>
@@ -194,7 +194,7 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                                 <CheckBox
                                                     checked={selectedWaterTypes.includes(waterType.id)}
                                                 />
-                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                <span className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'>
                                                     {waterType.name}
                                                 </span>
                                             </div>
@@ -223,7 +223,7 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                                 <CheckBox
                                                     checked={selectedCarbonationLevels.includes(carbonationLevel.id)}
                                                 />
-                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                <span className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'>
                                                     {carbonationLevel.name}
                                                 </span>
                                             </div>
@@ -252,7 +252,7 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                                 <CheckBox
                                                     checked={selectedSoftDrinkTypes.includes(softDrinkType.id)}
                                                 />
-                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                <span className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'>
                                                     {softDrinkType.name}
                                                 </span>
                                             </div>
@@ -281,7 +281,7 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                                 <CheckBox
                                                     checked={selectedWineColors.includes(wineColor.id)}
                                                 />
-                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                <span className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'>
                                                     {wineColor.name}
                                                 </span>
                                             </div>
@@ -310,7 +310,7 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                                 <CheckBox
                                                     checked={selectedWineSweetness.includes(wineSweetness.id)}
                                                 />
-                                                <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                                <span className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'>
                                                     {wineSweetness.name}
                                                 </span>
                                             </div>
@@ -337,7 +337,7 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                             <CheckBox
                                                 checked={selectedPackagings.includes(packaging.id)}
                                             />
-                                            <span className='font-semibold ml-1 text-[#4d6d7e]'>
+                                            <span className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'>
                                                 {packaging.name}
                                             </span>
                                         </div>

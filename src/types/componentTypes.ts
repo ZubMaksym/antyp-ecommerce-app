@@ -38,9 +38,8 @@ export interface FilterDropdownProps {
 }
 
 export interface CheckBoxProps {
-    label?: string
     onClick?: () => void;
-    checked?: boolean;
+    checked: boolean;
 }
 
 export interface FiltersButtonProps {
