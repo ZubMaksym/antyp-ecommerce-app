@@ -11,9 +11,9 @@ const FilterDropdown = ({ filterName, children, isFirst }: FilterDropdownProps) 
 
     return (
         <div
-            className='w-full border-b border-[#CBCECD] mt-3 cursor-pointer'
+            className='w-full border-b border-[#CBCECD] mt-3'
         >
-            <div className='flex justify-between' onClick={() => setIsFilterOpen(!isFilterOpen)}>
+            <div className='flex justify-between cursor-pointer' onClick={() => setIsFilterOpen(!isFilterOpen)}>
                 <h3 className='text-[18px] font-bold text-[#4d6d7e]'>
                     {filterName}
                 </h3>

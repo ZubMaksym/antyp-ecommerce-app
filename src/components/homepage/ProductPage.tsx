@@ -58,7 +58,7 @@ const ProductPage = () => {
                     <div className='w-full max-w-[1720px] mx-auto px-6 mt-[55px] flex flex-col lg:flex-row gap-10'>
                         <div className='flex sm:gap-10 lg:gap-4 flex-1'>
                             <div className='scrollbar flex-1 hidden sm:flex flex-col gap-4 max-w-[150px] max-h-[650px] overflow-auto'>
-                                {Array(6).fill(0).map((_, i) => (
+                                {Array(3).fill(0).map((_, i) => (
                                     <div key={i} className='aspect-square bg-white rounded-lg shadow-md max-w-[130px]'></div>
                                 ))}
                             </div>

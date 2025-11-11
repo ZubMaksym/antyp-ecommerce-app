@@ -34,14 +34,14 @@ const CategoryPage = () => {
         selectedWineColors,
         selectedWineSweetness,
         selectedAlcoholStrength,
-        totalCount
+        totalCount,
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
     const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 6, totalCount: 0 });
 
     useEffect(() => {
-        dispatch(resetFilters());
         dispatch(resetProducts());
+        dispatch(resetFilters());
     }, [categoryName, dispatch]);
 
     useEffect(() => {
@@ -118,11 +118,9 @@ const CategoryPage = () => {
     return (
         <section className='mb-[40px] mt-[55px] flex flex-col lg:flex-row justify-center'>
             <div className='hidden lg:block'>
-                <DesktopFilters />
+                <DesktopFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen}/>
             </div>
-            <MobileFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen}>
-                <DesktopFilters />
-            </MobileFilters>
+            <MobileFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
             <div className='mx-[15px] my-[15px] flex flex-col sm:flex-row justify-between sm:items-center'>
                 <FiltersButton setIsOpen={setIsFiltersOpen} />
                 <span className='block lg:hidden text-[24px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>Found Products: {products?.length}</span>

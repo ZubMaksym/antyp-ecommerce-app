@@ -34,6 +34,7 @@ export interface FilterDropdownProps {
     filterName: string;
     children: React.ReactNode;
     isFirst?: boolean;
+    allowOverflow: boolean;
 }
 
 export interface CheckBoxProps {
@@ -46,9 +47,6 @@ export interface FiltersButtonProps {
     setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export interface MobileFiltersProps extends ModalProps {
-    children: React.ReactNode;
-}
 
 export interface PaginationProps {
     totalPages: number;

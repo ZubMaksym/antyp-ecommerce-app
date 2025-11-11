@@ -7,13 +7,14 @@ const CheckBox = ({ label, onClick, checked }: CheckBoxProps) => {
         <label className='flex items-center gap-2 cursor-pointer relative'>
             <input
                 type='checkbox'
-                className='peer w-4 h-4 appearance-none border border-[#4d6d7e] rounded'
+                className='peer w-[20px] h-[20px] appearance-none border border-[#4d6d7e] rounded'
                 checked={checked || false}
-                onChange={onClick}
+                readOnly
+                // onChange={onClick}
             />
             <svg
                 className={classNames(
-                    'absolute w-4 h-4 pointer-events-none rounded fill-none peer-checked:bg-[#4d6d7e]',
+                    'absolute w-[20px] h-[20px] pointer-events-none rounded fill-none peer-checked:bg-[#4d6d7e]',
                     { 'stroke-white': checked }
                 )}
                 viewBox='0 0 24 24'

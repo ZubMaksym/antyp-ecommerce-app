@@ -2,6 +2,7 @@
 
 .scrollbar::-webkit-scrollbar {
     width: 6px;
+    overflow-y: scroll;
 }
 
 .scrollbar::-webkit-scrollbar-track {

@@ -83,7 +83,7 @@ const RangeSlider = ({ min, max }: RangeSliderProps) => {
     }, [localValue, dispatch]);
 
     return (
-        <div className='flex flex-col'>
+        <div className='flex flex-col w-full lg:max-w-[280px]'>
             <div className='flex justify-between items-center mb-3'>
                 <div className='flex flex-col'>
                     <label htmlFor='min' className='text-[#4d6d7e]'>From</label>
