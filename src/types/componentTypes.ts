@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { FilterName } from './reducerTypes';
+import { FilterName, ProductItem } from './reducerTypes';
 
 export interface ModalProps {
     isOpen: boolean;
@@ -46,7 +46,6 @@ export interface FiltersButtonProps {
     setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-
 export interface PaginationProps {
     totalPages: number;
     setCurrentPage: (page: number) => void;
@@ -55,6 +54,13 @@ export interface PaginationProps {
 }
 
 export interface RangeSliderProps {
+    rangeFor: 'ibu' | 'alcoholStrength'
     min: number;
     max: number;
+}
+
+export interface ProductsProps {
+    products: ProductItem[] | null;
+    loading: boolean;
+    productsLoadedOnce: boolean;
 }

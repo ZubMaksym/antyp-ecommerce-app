@@ -2,7 +2,7 @@ import FilterDropdown from '../ui/FilterDropdown';
 import type { AppDispatch, RootState } from '@/state/store';
 import { useSelector, useDispatch } from 'react-redux';
 import CheckBox from '../ui/CheckBox';
-import { FilterName } from '@/types/reducerTypes';
+import { FilterName, Result } from '@/types/reducerTypes';
 import Button from '../ui/Button';
 import {
     toggleManufacturers,
@@ -20,7 +20,7 @@ import RangeSlider from './RangeSlider';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
 import { ModalProps } from '@/types/componentTypes';
 
-const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
+const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
     const categoryName: any = usePathname().split('/').pop();
 
     const {
@@ -35,7 +35,8 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
         selectedSoftDrinkTypes,
         selectedWineColors,
         selectedWineSweetness,
-        minMaxAlcohol
+        minMaxAlcohol,
+        minMaxIbu
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
 
@@ -91,15 +92,15 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                             : (
                                 filters?.manufacturers.map((manufacturer) => (
                                     manufacturer.count > 0 && (
-                                        <div 
-                                            key={manufacturer.id} 
+                                        <div
+                                            key={manufacturer.id}
                                             className='flex w-fit cursor-pointer'
                                             onClick={() => getProductsByManufacturer(manufacturer)}
                                         >
                                             <CheckBox
                                                 checked={selectedManufacturers.includes(manufacturer.id)}
                                             />
-                                            <span 
+                                            <span
                                                 className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'
                                             >
                                                 {manufacturer.name}
@@ -114,7 +115,14 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
             {
                 categoryName !== 'bottled_water' && categoryName !== 'wine' && categoryName !== 'soft_drink' && (
                     <FilterDropdown filterName='Alcohol Strength' allowOverflow={false}>
-                        <RangeSlider min={minMaxAlcohol.min} max={minMaxAlcohol.max} />
+                        <RangeSlider min={minMaxAlcohol.min} max={minMaxAlcohol.max} rangeFor='alcoholStrength' />
+                    </FilterDropdown>
+                )
+            }
+            {
+                categoryName === 'beer' && (
+                    <FilterDropdown filterName='IBU' allowOverflow={false}>
+                        <RangeSlider min={minMaxIbu.min} max={minMaxIbu.max} rangeFor='ibu' />
                     </FilterDropdown>
                 )
             }
@@ -128,8 +136,8 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                 : (
                                     filters?.beerTypes.map((beerType) => (
                                         beerType.count > 0 && (
-                                            <div 
-                                                key={beerType.id} 
+                                            <div
+                                                key={beerType.id}
                                                 className='flex w-fit cursor-pointer'
                                                 onClick={() => getProductsByBeerType(beerType)}
                                             >
@@ -157,8 +165,8 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                 : (
                                     filters?.seasonTags.map((seasonTag) => (
                                         seasonTag.count > 0 && (
-                                            <div 
-                                                key={seasonTag.id} 
+                                            <div
+                                                key={seasonTag.id}
                                                 className='flex w-fit cursor-pointer'
                                                 onClick={() => getProductsBySeasonTag(seasonTag)}
                                             >
@@ -186,8 +194,8 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                 : (
                                     filters?.waterTypes.map((waterType) => (
                                         waterType.count > 0 && (
-                                            <div 
-                                                key={waterType.id} 
+                                            <div
+                                                key={waterType.id}
                                                 className='flex w-fit cursor-pointer'
                                                 onClick={() => getProductsByWaterType(waterType)}
                                             >
@@ -215,8 +223,8 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                 : (
                                     filters?.carbonationLevels.map((carbonationLevel) => (
                                         carbonationLevel.count > 0 && (
-                                            <div 
-                                                key={carbonationLevel.id} 
+                                            <div
+                                                key={carbonationLevel.id}
                                                 className='flex w-fit cursor-pointer'
                                                 onClick={() => getProductsByCarbonationLevel(carbonationLevel)}
                                             >
@@ -244,8 +252,8 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                 : (
                                     filters?.softDrinkTypes.map((softDrinkType) => (
                                         softDrinkType.count > 0 && (
-                                            <div 
-                                                key={softDrinkType.id} 
+                                            <div
+                                                key={softDrinkType.id}
                                                 className='flex w-fit cursor-pointer'
                                                 onClick={() => getProductsBySoftDrinkType(softDrinkType)}
                                             >
@@ -273,8 +281,8 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                 : (
                                     filters?.wineColors.map((wineColor) => (
                                         wineColor.count > 0 && (
-                                            <div 
-                                                key={wineColor.id} 
+                                            <div
+                                                key={wineColor.id}
                                                 className='flex w-fit cursor-pointer'
                                                 onClick={() => getProductsByWineColor(wineColor)}
                                             >
@@ -302,8 +310,8 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                                 : (
                                     filters?.wineSweetness.map((wineSweetness) => (
                                         wineSweetness.count > 0 && (
-                                            <div 
-                                                key={wineSweetness.id} 
+                                            <div
+                                                key={wineSweetness.id}
                                                 className='flex w-fit cursor-pointer'
                                                 onClick={() => getProductsByWineSweetness(wineSweetness)}
                                             >
@@ -329,8 +337,8 @@ const DesktopFilters = ({isOpen ,setIsOpen}: ModalProps) => {
                             : (
                                 filters?.packagings.map((packaging) => (
                                     packaging.count > 0 && (
-                                        <div 
-                                            key={packaging.id} 
+                                        <div
+                                            key={packaging.id}
                                             className='flex w-fit cursor-pointer'
                                             onClick={() => getProductsByPackaging(packaging)}
                                         >

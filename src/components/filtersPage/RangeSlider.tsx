@@ -3,16 +3,24 @@ import Slider from 'rc-slider';
 import { RangeSliderProps } from '@/types/componentTypes';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/state/store';
-import { setAlcoholStrengthRange } from '@/state/filterSlice/filterSlice';
-import { useState, useEffect, ChangeEvent, SetStateAction } from 'react';
+import { setAlcoholStrengthRange, setIbuRange } from '@/state/filterSlice/filterSlice';
+import { useState, useEffect, ChangeEvent } from 'react';
 
-const RangeSlider = ({ min, max }: RangeSliderProps) => {
+const RangeSlider = ({ min, max, rangeFor }: RangeSliderProps) => {
     const dispatch = useDispatch<AppDispatch>();
-    const { selectedAlcoholStrength } = useSelector(
+    const { selectedAlcoholStrength, selectedIBU } = useSelector(
         (state: RootState) => state.filter
     );
     const [minInput, setMinInput] = useState<string>('');
     const [maxInput, setMaxInput] = useState<string>('');
+
+    const valuesFor: [number, number] = rangeFor === 'ibu'
+        ? [selectedIBU.min, selectedIBU.max]
+        : [selectedAlcoholStrength.min, selectedAlcoholStrength.max];
+
+    const selectedFor = rangeFor === 'ibu'
+        ? selectedIBU
+        : selectedAlcoholStrength;
 
     const handleMinInput = (e: ChangeEvent<HTMLInputElement>) => {
         const val = e.target.value;
@@ -60,23 +68,21 @@ const RangeSlider = ({ min, max }: RangeSliderProps) => {
         }
     };
 
-    const [localValue, setLocalValue] = useState<[number, number]>([
-        selectedAlcoholStrength.min,
-        selectedAlcoholStrength.max
-    ]);
+    const [localValue, setLocalValue] = useState<[number, number]>(valuesFor);
 
     useEffect(() => {
-        setLocalValue([
-            selectedAlcoholStrength.min,
-            selectedAlcoholStrength.max
-        ]);
-    }, [selectedAlcoholStrength]);
+        setLocalValue(valuesFor);
+    }, [selectedFor]);
 
     useEffect(() => {
         setMinInput(String(localValue[0]));
         setMaxInput(String(localValue[1]));
         const timer = setTimeout(() => {
-            dispatch(setAlcoholStrengthRange(localValue));
+            if (rangeFor === 'ibu') {
+                dispatch(setIbuRange(localValue));
+            } else {
+                dispatch(setAlcoholStrengthRange(localValue));
+            }
         }, 500);
 
         return () => clearTimeout(timer);
@@ -90,7 +96,7 @@ const RangeSlider = ({ min, max }: RangeSliderProps) => {
                     <input
                         id='min'
                         type='number'
-                        step={0.1}
+                        step={rangeFor === 'ibu' ? 1 : 0.1}
                         value={minInput}
                         onChange={handleMinInput}
                         onBlur={handleMinBlure}
@@ -105,7 +111,7 @@ const RangeSlider = ({ min, max }: RangeSliderProps) => {
                     <input
                         id='max'
                         type='number'
-                        step={0.1}
+                        step={rangeFor === 'ibu' ? 1 : 0.1}
                         value={maxInput}
                         onChange={handleMaxInput}
                         onBlur={handleMaxBlure}
@@ -121,7 +127,7 @@ const RangeSlider = ({ min, max }: RangeSliderProps) => {
                 value={localValue}
                 min={min}
                 max={max}
-                step={0.1}
+                step={rangeFor === 'ibu' ? 1 : 0.1}
                 defaultValue={[min, max]}
                 onChange={(value: any) => setLocalValue(value)}
                 trackStyle={{ backgroundColor: '#4d6d7e', height: '3px', margin: '0px auto' }}
@@ -136,10 +142,10 @@ const RangeSlider = ({ min, max }: RangeSliderProps) => {
             />
             <div className='flex justify-between *:text-[#4d6d7e] font-medium'>
                 <div className=''>
-                    {localValue[0]}%
+                    {localValue[0]}{rangeFor === 'ibu' ? '' : '%'}
                 </div>
                 <div className=''>
-                    {localValue[1]}%
+                    {localValue[1]}{rangeFor === 'ibu' ? '' : '%'}
                 </div>
             </div>
         </div>

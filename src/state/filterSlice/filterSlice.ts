@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { ApiResponse, Result, ApiResponseProduct, ProductItem, AlcoholStrength } from '@/types/reducerTypes';
+import { ApiResponse, Result, ApiResponseProduct, ProductItem, AlcoholStrength, IBU } from '@/types/reducerTypes';
 
 export interface FilterSlice {
     filters: Result | null;
@@ -8,6 +8,7 @@ export interface FilterSlice {
     error: string | null;
     products: ProductItem[] | null;
     productsLoading: boolean;
+    productsLoadedOnce: boolean;
     productsError: string | null;
     selectedManufacturers: Array<string>;
     selectedBeerTypes: Array<string>;
@@ -19,7 +20,9 @@ export interface FilterSlice {
     selectedWineColors: Array<string>;
     selectedWineSweetness: Array<string>;
     selectedAlcoholStrength: AlcoholStrength;
+    selectedIBU: IBU;
     minMaxAlcohol: AlcoholStrength;
+    minMaxIbu: IBU;
     totalCount: number;
 }
 
@@ -29,6 +32,7 @@ const initialState: FilterSlice = {
     error: null,
     products: null,
     productsLoading: false,
+    productsLoadedOnce: false,
     productsError: null,
     selectedManufacturers: [],
     selectedBeerTypes: [],
@@ -40,7 +44,9 @@ const initialState: FilterSlice = {
     selectedWineColors: [],
     selectedWineSweetness: [],
     selectedAlcoholStrength: { min: 0, max: 0 },
+    selectedIBU: { min: 0, max: 0 },
     minMaxAlcohol: { min: 0, max: 0 },
+    minMaxIbu: { min: 0, max: 0 },
     totalCount: 0
 };
 
@@ -107,6 +113,7 @@ export const fetchProducts = createAsyncThunk<
         wineColors: string[];
         wineSweetness: string[];
         alcoholStrength: AlcoholStrength;
+        ibu: IBU;
         currentPage: number;
         productPerPage: number
     }
@@ -126,6 +133,7 @@ export const fetchProducts = createAsyncThunk<
         alcoholStrength,
         currentPage,
         productPerPage,
+        ibu,
     }) => {
         const params = new URLSearchParams();
 
@@ -135,6 +143,8 @@ export const fetchProducts = createAsyncThunk<
         if (categoryName === 'beer') {
             beerTypes.forEach((b) => params.append('BeerTypes', b));
             seasonTags.forEach((s) => params.append('SeasonTags', s));
+            params.append('IbuFrom', ibu.min.toString());
+            params.append('IbuTo', ibu.max.toString());
         }
 
         if (categoryName === 'bottled_water') {
@@ -268,6 +278,7 @@ export const filterSlice = createSlice({
             state.selectedWineColors = [];
             state.selectedWineSweetness = [];
             state.selectedAlcoholStrength = state.minMaxAlcohol;
+            state.selectedIBU = state.minMaxIbu;
         },
         resetProducts: (state) => {
             state.products = [];
@@ -275,6 +286,10 @@ export const filterSlice = createSlice({
         setAlcoholStrengthRange: (state, action: PayloadAction<[number, number]>) => {
             state.selectedAlcoholStrength.min = action.payload[0];
             state.selectedAlcoholStrength.max = action.payload[1];
+        },
+        setIbuRange: (state, action: PayloadAction<[number, number]>) => {
+            state.selectedIBU.min = action.payload[0];
+            state.selectedIBU.max = action.payload[1];
         }
     },
     extraReducers: (builder) => {
@@ -284,12 +299,14 @@ export const filterSlice = createSlice({
                 state.productsError = null;
             })
             .addCase(fetchInitialProducts.fulfilled, (state, action: PayloadAction<any>) => {
+                state.productsLoadedOnce = true;
                 state.productsLoading = false;
                 state.products = action.payload;
             })
             .addCase(fetchInitialProducts.rejected, (state, action) => {
                 state.productsLoading = false;
                 state.productsError = action.error.message || 'Error. Request rejected';
+                state.productsLoadedOnce = true;
             })
 
 
@@ -297,9 +314,17 @@ export const filterSlice = createSlice({
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchFilters.fulfilled, (state, action: PayloadAction<any>) => {
+            .addCase(fetchFilters.fulfilled, (state, action: PayloadAction<Result>) => {
                 state.loading = false;
                 state.filters = action.payload;
+                state.minMaxIbu = {
+                    min: state.filters.ibu.min || 0,
+                    max: state.filters.ibu.max || 0,
+                };
+                state.selectedIBU = {
+                    min: state.filters?.ibu.min || 0,
+                    max: state.filters?.ibu.max || 0,
+                };
                 state.minMaxAlcohol = {
                     min: state.filters?.alcoholStrength.min || 0,
                     max: state.filters?.alcoholStrength.max || 0,
@@ -323,10 +348,12 @@ export const filterSlice = createSlice({
                 state.productsLoading = false;
                 state.products = action.payload.items;
                 state.totalCount = action.payload.totalCount;
+                state.productsLoadedOnce = true;
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.productsLoading = false;
                 state.productsError = action.error.message || 'Error. Request rejected';
+                state.productsLoadedOnce = true;
             });
     }
 });
@@ -344,7 +371,8 @@ export const
         toggleWineSweetness,
         resetFilters,
         resetProducts,
-        setAlcoholStrengthRange
+        setAlcoholStrengthRange,
+        setIbuRange
     } = filterSlice.actions;
 
 export default filterSlice.reducer;
