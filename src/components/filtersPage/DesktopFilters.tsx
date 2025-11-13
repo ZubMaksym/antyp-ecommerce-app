@@ -19,6 +19,7 @@ import { usePathname } from 'next/navigation';
 import RangeSlider from './RangeSlider';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
 import { ModalProps } from '@/types/componentTypes';
+import { useState, useEffect, useRef } from 'react';
 
 const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
     const categoryName: any = usePathname().split('/').pop();
@@ -39,6 +40,19 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
         minMaxIbu
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
+
+    const lastLengthRef = useRef(5);
+    const [prevLength, setPrevLength] = useState(5);
+
+    const currentItems = filters?.manufacturers || []; // приклад для seasonTags
+
+    // оновлюємо prevLength коли loading стає false
+    useEffect(() => {
+        if (!loading) {
+            lastLengthRef.current = currentItems.length;
+            setPrevLength(currentItems.length);
+        }
+    }, [loading, currentItems.length]);
 
     const getProductsByManufacturer = (manufacturer: FilterName) => {
         dispatch(toggleManufacturers(manufacturer.id));
@@ -87,28 +101,34 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
             <FilterDropdown filterName='Manufacturer' isFirst={true} allowOverflow={true}>
                 <div className='flex flex-col *:mt-2 *:first:mt-0'>
                     {
-                        loading
-                            ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
-                            : (
-                                filters?.manufacturers.map((manufacturer) => (
-                                    manufacturer.count > 0 && (
-                                        <div
-                                            key={manufacturer.id}
-                                            className='flex w-fit cursor-pointer'
-                                            onClick={() => getProductsByManufacturer(manufacturer)}
+                        loading ? (
+                            // показуємо стільки скелетонів, скільки було раніше
+                            Array(prevLength).fill(0).map((_, idx) => (
+                                <div key={idx} className='animate-pulse flex items-center gap-2'>
+                                    <div className='w-5 h-5 bg-gray-300 rounded'></div>
+                                    <div className='h-4 bg-gray-300 rounded flex-1'></div>
+                                </div>
+                            ))
+                        ) : (
+                            filters?.manufacturers.map((manufacturer) => (
+                                manufacturer.count > 0 && (
+                                    <div
+                                        key={manufacturer.id}
+                                        className='flex w-fit cursor-pointer'
+                                        onClick={() => getProductsByManufacturer(manufacturer)}
+                                    >
+                                        <CheckBox
+                                            checked={selectedManufacturers.includes(manufacturer.id)}
+                                        />
+                                        <span
+                                            className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'
                                         >
-                                            <CheckBox
-                                                checked={selectedManufacturers.includes(manufacturer.id)}
-                                            />
-                                            <span
-                                                className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'
-                                            >
-                                                {manufacturer.name}
-                                            </span>
-                                        </div>
-                                    )
-                                ))
-                            )
+                                            {manufacturer.name}
+                                        </span>
+                                    </div>
+                                )
+                            ))
+                        )
                     }
                 </div>
             </FilterDropdown>
