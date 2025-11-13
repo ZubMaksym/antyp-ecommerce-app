@@ -64,3 +64,7 @@ export interface ProductsProps {
     loading: boolean;
     productsLoadedOnce: boolean;
 }
+
+export interface FilterSkeletonProps {
+    record: number
+}

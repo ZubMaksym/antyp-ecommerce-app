@@ -20,6 +20,7 @@ import RangeSlider from './RangeSlider';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
 import { ModalProps } from '@/types/componentTypes';
 import { useState, useEffect, useRef } from 'react';
+import { FilterSkeleton } from '../ui/FilterSkeleton';
 
 const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
     const categoryName: any = usePathname().split('/').pop();
@@ -41,18 +42,40 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
 
-    const lastLengthRef = useRef(5);
-    const [prevLength, setPrevLength] = useState(5);
-
-    const currentItems = filters?.manufacturers || []; // приклад для seasonTags
-
-    // оновлюємо prevLength коли loading стає false
-    useEffect(() => {
-        if (!loading) {
-            lastLengthRef.current = currentItems.length;
-            setPrevLength(currentItems.length);
+    const getVisibleItems = (filter: Result, key: keyof Result) => {
+        if (Array.isArray(filter[key])) {
+            const visibleItems = filter?.[key].filter(item => item.count > 0) || []
+            return visibleItems
         }
-    }, [loading, currentItems.length]);
+        return [];
+    }
+    
+    const [prevVisibleLengths, setPrevVisibleLengths] = useState<Record<string, number>>({});
+
+    useEffect(() => {
+    if (!loading && filters) {
+        const newLengths: Record<string, number> = {};
+
+        const filterKeys: (keyof Result)[] = [
+            'manufacturers',
+            'beerTypes',
+            'seasonTags',
+            'packagings',
+            'waterTypes',
+            'carbonationLevels',
+            'softDrinkTypes',
+            'wineColors',
+            'wineSweetness'
+        ];
+
+        filterKeys.forEach(key => {
+            const visibleItems = getVisibleItems(filters, key);
+            newLengths[key] = visibleItems.length;
+        });
+
+        setPrevVisibleLengths(newLengths);
+    }
+    }, [loading, filters]);
 
     const getProductsByManufacturer = (manufacturer: FilterName) => {
         dispatch(toggleManufacturers(manufacturer.id));
@@ -101,34 +124,28 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
             <FilterDropdown filterName='Manufacturer' isFirst={true} allowOverflow={true}>
                 <div className='flex flex-col *:mt-2 *:first:mt-0'>
                     {
-                        loading ? (
-                            // показуємо стільки скелетонів, скільки було раніше
-                            Array(prevLength).fill(0).map((_, idx) => (
-                                <div key={idx} className='animate-pulse flex items-center gap-2'>
-                                    <div className='w-5 h-5 bg-gray-300 rounded'></div>
-                                    <div className='h-4 bg-gray-300 rounded flex-1'></div>
-                                </div>
-                            ))
-                        ) : (
-                            filters?.manufacturers.map((manufacturer) => (
-                                manufacturer.count > 0 && (
-                                    <div
-                                        key={manufacturer.id}
-                                        className='flex w-fit cursor-pointer'
-                                        onClick={() => getProductsByManufacturer(manufacturer)}
-                                    >
-                                        <CheckBox
-                                            checked={selectedManufacturers.includes(manufacturer.id)}
-                                        />
-                                        <span
-                                            className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'
+                        loading 
+                            ? <FilterSkeleton record={prevVisibleLengths.manufacturers}/>
+                            : (
+                                filters?.manufacturers.map((manufacturer) => (
+                                    manufacturer.count > 0 && (
+                                        <div
+                                            key={manufacturer.id}
+                                            className='flex w-fit cursor-pointer'
+                                            onClick={() => getProductsByManufacturer(manufacturer)}
                                         >
-                                            {manufacturer.name}
-                                        </span>
-                                    </div>
-                                )
-                            ))
-                        )
+                                            <CheckBox
+                                                checked={selectedManufacturers.includes(manufacturer.id)}
+                                            />
+                                            <span
+                                                className='font-semibold text-[17px] ml-1 text-[#4d6d7e]'
+                                            >
+                                                {manufacturer.name}
+                                            </span>
+                                        </div>
+                                    )
+                                ))
+                            )
                     }
                 </div>
             </FilterDropdown>
@@ -152,7 +169,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.beerTypes}/>
                                 : (
                                     filters?.beerTypes.map((beerType) => (
                                         beerType.count > 0 && (
@@ -181,7 +198,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.seasonTags}/>
                                 : (
                                     filters?.seasonTags.map((seasonTag) => (
                                         seasonTag.count > 0 && (
@@ -210,7 +227,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.waterTypes}/>
                                 : (
                                     filters?.waterTypes.map((waterType) => (
                                         waterType.count > 0 && (
@@ -239,7 +256,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.carbonationLevels}/>
                                 : (
                                     filters?.carbonationLevels.map((carbonationLevel) => (
                                         carbonationLevel.count > 0 && (
@@ -268,7 +285,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.softDrinkTypes}/>
                                 : (
                                     filters?.softDrinkTypes.map((softDrinkType) => (
                                         softDrinkType.count > 0 && (
@@ -297,7 +314,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.wineColors}/>
                                 : (
                                     filters?.wineColors.map((wineColor) => (
                                         wineColor.count > 0 && (
@@ -326,7 +343,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0v'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.wineSweetness}/>
                                 : (
                                     filters?.wineSweetness.map((wineSweetness) => (
                                         wineSweetness.count > 0 && (
@@ -353,7 +370,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                 <div className='flex flex-col *:mt-2 *:first:mt-0'>
                     {
                         loading
-                            ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                            ? <FilterSkeleton record={prevVisibleLengths.packagings}/>
                             : (
                                 filters?.packagings.map((packaging) => (
                                     packaging.count > 0 && (

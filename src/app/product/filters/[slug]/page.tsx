@@ -33,11 +33,13 @@ const CategoryPage = () => {
         selectedAlcoholStrength,
         selectedIBU,
         totalCount,
-        productsLoadedOnce
+        productsLoadedOnce,
+        productsLoading
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
     const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 6, totalCount: 0 });
     const [categoryChanged, setCategoryChanges] = useState(false);
+    const [prodReq, setProdReq] = useState(false)
 
     useEffect(() => {
         dispatch(resetFilters());
@@ -45,9 +47,9 @@ const CategoryPage = () => {
         setCategoryChanges(true);
     }, [categoryName, dispatch]);
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [selectedAlcoholStrength, selectedIBU]);
+    // useEffect(() => {
+    //     setCurrentPage(1);
+    // }, [selectedAlcoholStrength, selectedIBU]);
 
     useEffect(() => {
         if (!categoryChanged) return;
@@ -84,6 +86,7 @@ const CategoryPage = () => {
 
     useEffect(() => {
         if (!loading && filters) {
+            console.log('fetch!!!!!!!!!!')
             dispatch(fetchProducts({
                 categoryName,
                 manufacturers: selectedManufacturers,
@@ -101,8 +104,10 @@ const CategoryPage = () => {
                 productPerPage: productPerPage
             }));
             setTotalCount(totalCount);
+            setProdReq(true);
         }
     }, [
+        dispatch,
         loading,
         filters,
         categoryName,
@@ -115,7 +120,6 @@ const CategoryPage = () => {
         selectedSoftDrinkTypes,
         selectedWineColors,
         selectedWineSweetness,
-        dispatch,
         selectedAlcoholStrength,
         selectedIBU,
         currentPage,
@@ -135,7 +139,7 @@ const CategoryPage = () => {
                 <span className='block lg:hidden text-[24px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>Found Products: {products?.length}</span>
             </div>
             <div className='flex flex-col w-full justify-between max-w-[1320px]'>
-                <Products products={products} loading={loading} productsLoadedOnce={productsLoadedOnce} />
+                <Products products={products} loading={productsLoading} productsLoadedOnce={productsLoadedOnce}/>
                 {
                     products && (
                         <div className='self-center'>

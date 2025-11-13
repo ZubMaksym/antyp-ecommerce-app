@@ -282,6 +282,7 @@ export const filterSlice = createSlice({
         },
         resetProducts: (state) => {
             state.products = [];
+            state.productsLoadedOnce = false;
         },
         setAlcoholStrengthRange: (state, action: PayloadAction<[number, number]>) => {
             state.selectedAlcoholStrength.min = action.payload[0];
@@ -299,14 +300,14 @@ export const filterSlice = createSlice({
                 state.productsError = null;
             })
             .addCase(fetchInitialProducts.fulfilled, (state, action: PayloadAction<any>) => {
-                state.productsLoadedOnce = true;
+                // state.productsLoadedOnce = true;
                 state.productsLoading = false;
                 state.products = action.payload;
             })
             .addCase(fetchInitialProducts.rejected, (state, action) => {
                 state.productsLoading = false;
                 state.productsError = action.error.message || 'Error. Request rejected';
-                state.productsLoadedOnce = true;
+                // state.productsLoadedOnce = true;
             })
 
 
@@ -353,7 +354,7 @@ export const filterSlice = createSlice({
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.productsLoading = false;
                 state.productsError = action.error.message || 'Error. Request rejected';
-                state.productsLoadedOnce = true;
+                // state.productsLoadedOnce = true;
             });
     }
 });
