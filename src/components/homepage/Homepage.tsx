@@ -10,6 +10,8 @@ import { ClipLoader } from 'react-spinners';
 import classNames from 'classnames';
 import Pagination from '../ui/Pagination';
 import usePagination from '@/hooks/usePagination';
+import { useDispatch } from 'react-redux';
+import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
 
 
 const Homepage = () => {
@@ -17,6 +19,13 @@ const Homepage = () => {
     const [bestsellerProductsError, setBestsellerProductsError] = useState<string | null>(null);
     const router = useRouter();
     const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 6, totalCount: 0 });
+    const dispatch = useDispatch();
+
+
+    const resetAll = () => {
+        dispatch(resetFilters());
+        dispatch(resetProducts());
+    };
 
     useEffect(() => {
         const fetchBestsellers = async () => {
@@ -65,7 +74,11 @@ const Homepage = () => {
                 <div id='categories' className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 mx-auto justify-around gap-y-5 max-w-[1720px] *:mx-auto'>
                     {
                         categoriess.map((data, ind) => (
-                            <Link href={`/product/filters/${data.route}`} key={ind}>
+                            <Link 
+                                href={`/product/filters/${data.route}`} 
+                                key={ind}
+                                onClick={resetAll}
+                            >
                                 <CategoryCard subtitle={data.name}>
                                     {/* <span className='text-white xl:text-[28px] lg:text-[24px] md:text-[28px] text-[22px] font-black'>{data.name}</span> */}
                                     <Image

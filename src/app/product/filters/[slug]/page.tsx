@@ -39,7 +39,7 @@ const CategoryPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 6, totalCount: 0 });
     const [categoryChanged, setCategoryChanges] = useState(false);
-    const [prodReq, setProdReq] = useState(false)
+    const [prodReq, setProdReq] = useState(false);
 
     useEffect(() => {
         dispatch(resetFilters());
@@ -85,8 +85,9 @@ const CategoryPage = () => {
     ]);
 
     useEffect(() => {
+        if (!categoryChanged) return;
         if (!loading && filters) {
-            console.log('fetch!!!!!!!!!!')
+            console.log('fetch!!!!!!!!!!');
             dispatch(fetchProducts({
                 categoryName,
                 manufacturers: selectedManufacturers,
@@ -108,18 +109,18 @@ const CategoryPage = () => {
         }
     }, [
         dispatch,
-        loading,
+        // loading,
         filters,
-        categoryName,
-        selectedManufacturers,
-        selectedBeerTypes,
-        selectedSeasonTags,
-        selectedPackagings,
-        selectedWaterTypes,
-        selectedCarbonationLevels,
-        selectedSoftDrinkTypes,
-        selectedWineColors,
-        selectedWineSweetness,
+        // categoryName,
+        // selectedManufacturers,
+        // selectedBeerTypes,
+        // selectedSeasonTags,
+        // selectedPackagings,
+        // selectedWaterTypes,
+        // selectedCarbonationLevels,
+        // selectedSoftDrinkTypes,
+        // selectedWineColors,
+        // selectedWineSweetness,
         selectedAlcoholStrength,
         selectedIBU,
         currentPage,

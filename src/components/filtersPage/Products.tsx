@@ -48,7 +48,7 @@ const Products = ({ products, loading, productsLoadedOnce }: ProductsProps) => {
         </div>
     );
 
-    if (products && !loading) return (
+    if (products) return (
         <div className={classNames(
             'relative w-full gap-5 max-w-[1320px] min-h-[500px] px-[15px] h-auto',
             {

@@ -19,7 +19,7 @@ import { usePathname } from 'next/navigation';
 import RangeSlider from './RangeSlider';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
 import { ModalProps } from '@/types/componentTypes';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { FilterSkeleton } from '../ui/FilterSkeleton';
 
 const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
@@ -44,11 +44,11 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
 
     const getVisibleItems = (filter: Result, key: keyof Result) => {
         if (Array.isArray(filter[key])) {
-            const visibleItems = filter?.[key].filter(item => item.count > 0) || []
-            return visibleItems
+            const visibleItems = filter?.[key].filter(item => item.count > 0) || [];
+            return visibleItems;
         }
         return [];
-    }
+    };
     
     const [prevVisibleLengths, setPrevVisibleLengths] = useState<Record<string, number>>({});
 

@@ -103,7 +103,7 @@ export const fetchProducts = createAsyncThunk<
     { items: ProductItem[], totalCount: number },
     {
         categoryName: string;
-        manufacturers: string[]
+        manufacturers: string[];
         beerTypes: string[];
         seasonTags: string[];
         packagings: string[];
@@ -268,6 +268,7 @@ export const filterSlice = createSlice({
             }
         },
         resetFilters: (state) => {
+            state.filters = null;
             state.selectedManufacturers = [];
             state.selectedBeerTypes = [];
             state.selectedSeasonTags = [];
@@ -277,8 +278,20 @@ export const filterSlice = createSlice({
             state.selectedSoftDrinkTypes = [];
             state.selectedWineColors = [];
             state.selectedWineSweetness = [];
-            state.selectedAlcoholStrength = state.minMaxAlcohol;
-            state.selectedIBU = state.minMaxIbu;
+
+            // якщо фільтри вже завантажені — відновлюємо min/max
+            if (state.filters) {
+                state.selectedAlcoholStrength = {
+                    min: 0,
+                    max: 0
+                };
+                state.selectedIBU = {
+                    min: 0,
+                    max: 0
+                };
+            }
+
+            // а якщо фільтри ще не завантажені — взагалі нічого не чіпаємо
         },
         resetProducts: (state) => {
             state.products = [];

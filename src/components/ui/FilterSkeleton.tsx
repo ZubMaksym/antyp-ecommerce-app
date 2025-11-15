@@ -1,4 +1,4 @@
-import { FilterSkeletonProps } from "@/types/componentTypes";
+import { FilterSkeletonProps } from '@/types/componentTypes';
 
 export const FilterSkeleton = ({record}: FilterSkeletonProps) => {
   return (
