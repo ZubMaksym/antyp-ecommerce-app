@@ -279,7 +279,6 @@ export const filterSlice = createSlice({
             state.selectedWineColors = [];
             state.selectedWineSweetness = [];
 
-            // якщо фільтри вже завантажені — відновлюємо min/max
             if (state.filters) {
                 state.selectedAlcoholStrength = {
                     min: 0,
@@ -290,8 +289,6 @@ export const filterSlice = createSlice({
                     max: 0
                 };
             }
-
-            // а якщо фільтри ще не завантажені — взагалі нічого не чіпаємо
         },
         resetProducts: (state) => {
             state.products = [];
@@ -313,14 +310,12 @@ export const filterSlice = createSlice({
                 state.productsError = null;
             })
             .addCase(fetchInitialProducts.fulfilled, (state, action: PayloadAction<any>) => {
-                // state.productsLoadedOnce = true;
                 state.productsLoading = false;
                 state.products = action.payload;
             })
             .addCase(fetchInitialProducts.rejected, (state, action) => {
                 state.productsLoading = false;
                 state.productsError = action.error.message || 'Error. Request rejected';
-                // state.productsLoadedOnce = true;
             })
 
 

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { FilterName, ProductItem } from './reducerTypes';
+import { FilterName, ProductItem, ProductItemCart } from './reducerTypes';
 
 export interface ModalProps {
     isOpen: boolean;
@@ -15,14 +15,12 @@ export interface ButtonProps {
     classname: string;
     apearence: 'primary' | 'secondary';
     children: React.ReactNode;
-    onClick?: () => void;
+    onClick?: any;
 }
 
 export interface ProductCardProps {
-    name: string;
-    shortName: string;
+    product: ProductItemCart;
     onCardClick: () => void;
-    mainPhotoUrl: string;
 }
 
 export interface CategoryCardProps {

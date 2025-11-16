@@ -47,9 +47,9 @@ const CategoryPage = () => {
         setCategoryChanges(true);
     }, [categoryName, dispatch]);
 
-    // useEffect(() => {
-    //     setCurrentPage(1);
-    // }, [selectedAlcoholStrength, selectedIBU]);
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [selectedAlcoholStrength, selectedIBU]);
 
     useEffect(() => {
         if (!categoryChanged) return;
@@ -109,18 +109,7 @@ const CategoryPage = () => {
         }
     }, [
         dispatch,
-        // loading,
         filters,
-        // categoryName,
-        // selectedManufacturers,
-        // selectedBeerTypes,
-        // selectedSeasonTags,
-        // selectedPackagings,
-        // selectedWaterTypes,
-        // selectedCarbonationLevels,
-        // selectedSoftDrinkTypes,
-        // selectedWineColors,
-        // selectedWineSweetness,
         selectedAlcoholStrength,
         selectedIBU,
         currentPage,

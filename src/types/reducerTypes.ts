@@ -66,3 +66,7 @@ export interface Manufacturer {
 export interface Result {
     manufacturers: Manufacturer[];
 }
+
+export interface ProductItemCart extends ProductItem {
+    quantity: number;
+}

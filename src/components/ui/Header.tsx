@@ -14,15 +14,17 @@ import SearchInput from './SearchInput';
 import antypLogo from '@/public/icons/header/antypLogo1.svg';
 import Cart from '../cart/Cart';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/state/store';
+import { RootState, AppDispatch } from '@/state/store';
 import classNames from 'classnames';
-import { it } from 'node:test';
+import { toggleCart } from '@/state/cartState/cartSlice';
+import { useDispatch } from 'react-redux';
 
 const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [isCartOpen, setIsCartOpen] = useState(false);
-    const { items } = useSelector((state: RootState) => state.cart);
+    // const [isCartOpen, setIsCartOpen] = useState(false);
+    const { items, isCartOpen } = useSelector((state: RootState) => state.cart);
+    const dispatch = useDispatch<AppDispatch>();
 
     return (
         <header className='z-50 sticky top-0 left-0 h-[60px] lg:h-[105px] xl:h-[85px] w-full bg-[#f6efe7] flex justify-between items-center border-b border-[#4d6d7e] overflow-hidden'>
@@ -94,7 +96,7 @@ const Header = () => {
                     </Link>
                     <button
                         className='cursor-pointer h-[40px] w-[40px]'
-                        onClick={() => setIsCartOpen(!isCartOpen)}
+                        onClick={() => dispatch(toggleCart())}
                     >
                         <div className='relative h-[40px] flex justify-center'>
                             <Image
@@ -120,7 +122,7 @@ const Header = () => {
             <Modal isOpen={isSearchOpen} setIsOpen={setIsSearchOpen} title='Search'>
                 <SearchInput />
             </Modal>
-            <Modal isOpen={isCartOpen} setIsOpen={setIsCartOpen} title='Shopping cart'>
+            <Modal isOpen={isCartOpen!} setIsOpen={() => dispatch(toggleCart())} title='Shopping cart'>
                 <Cart />
             </Modal>
         </header >

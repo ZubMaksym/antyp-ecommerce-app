@@ -21,7 +21,6 @@ const Homepage = () => {
     const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 6, totalCount: 0 });
     const dispatch = useDispatch();
 
-
     const resetAll = () => {
         dispatch(resetFilters());
         dispatch(resetProducts());
@@ -113,11 +112,10 @@ const Homepage = () => {
                     <>
                         {bestsellerProducts.map((product) => (
                             <ProductCard
-                                name={product.shortName}
-                                shortName={product.name}
                                 key={product.id}
+                                product={product}
                                 onCardClick={() => router.push(`/product/${product.slug}`)}
-                                mainPhotoUrl={product.mainPhotoUrl}
+                                
                             />
                         ))}
                     </>
