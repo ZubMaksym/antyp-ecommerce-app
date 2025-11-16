@@ -42,7 +42,7 @@ const Homepage = () => {
                 setTotalCount(data.result.totalCount);
             } catch (error: any) {
                 setBestsellerProductsError(`Something went wrong while processing the request. We're woking to solve this problem`);
-                console.error(error.message);
+                throw new Error(error.message);
             }
         };
 

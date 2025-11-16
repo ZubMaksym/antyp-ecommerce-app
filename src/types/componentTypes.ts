@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { FilterName, ProductItem, ProductItemCart } from './reducerTypes';
+import { ProductItem } from './reducerTypes';
 
 export interface ModalProps {
     isOpen: boolean;
@@ -19,7 +19,7 @@ export interface ButtonProps {
 }
 
 export interface ProductCardProps {
-    product: ProductItemCart;
+    product: ProductItem;
     onCardClick: () => void;
 }
 

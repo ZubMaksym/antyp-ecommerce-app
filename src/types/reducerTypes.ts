@@ -69,4 +69,5 @@ export interface Result {
 
 export interface ProductItemCart extends ProductItem {
     quantity: number;
+    packaging: string;
 }

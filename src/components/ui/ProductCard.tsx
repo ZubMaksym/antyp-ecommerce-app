@@ -35,7 +35,7 @@ const ProductCard = ({ onCardClick, product }: ProductCardProps) => {
                 <Button
                     classname='hidden md:block absolute bottom-[1px] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[95%] h-[35px]'
                     apearence='secondary'
-                    onClick={(e: React.MouseEvent) => handleClick(e, {...product, quantity: 1})}
+                    onClick={(e: React.MouseEvent) => handleClick(e, {...product, quantity: 1, packaging: ''})}
                 >
                     <div className='flex justify-center px-3 font-extrabold'>
                         <span>Add To Cart</span>
@@ -52,7 +52,7 @@ const ProductCard = ({ onCardClick, product }: ProductCardProps) => {
                 <Button
                     classname='md:hidden block mx-auto mt-3 w-[100%] h-[35px]'
                     apearence='secondary'
-                    onClick={(e: React.MouseEvent) => handleClick(e, {...product, quantity: 1})}
+                    onClick={(e: React.MouseEvent) => handleClick(e, {...product, quantity: 1, packaging: ''})}
                 >
                     <div className='flex justify-center px-3 font-extrabold'>
                         <span>Add To Cart</span>

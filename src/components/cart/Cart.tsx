@@ -6,6 +6,9 @@ import closeIcon from '@/public/icons/shared/close.svg';
 import { removeItem } from '@/state/cartState/cartSlice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/state/store';
+import plus from '@/public/icons/shared/plus.svg';
+import minus from '@/public/icons/shared/minus.svg';
+import Button from '../ui/Button';
 
 
 const Cart = () => {
@@ -19,10 +22,10 @@ const Cart = () => {
     );
 
     return (
-        <div className='*:first:mt-0 *:mt-5'>
+        <div className='scrollbar overflow-y-scroll max-h-[calc(100vh-170px)] *:first:mt-0 *:mt-5'>
             {
                 items.map((item) => (
-                    <div className='flex' key={item.id}>
+                    <div className='flex border-b border-[#CAD3D8] pb-5' key={item.id}>
                         <button
                             className='h-[20px] cursor-pointer'
                             onClick={() => dispatch(removeItem(item))}
@@ -36,7 +39,7 @@ const Cart = () => {
                             />
                         </button>
                         <div className='flex items-center'>
-                            <div className='flex justify-center items-center bg-white w-[130px] h-[130px] '>
+                            <div className='flex justify-center rounded items-center bg-white w-[130px] h-[130px] '>
                                 <Image
                                     className='lg:w-[110px] lg:h-[110px]'
                                     src={item.mainPhotoUrl}
@@ -49,8 +52,34 @@ const Cart = () => {
                                 <div className='text-[#4d6d7e] font-black text-[21px]'>
                                     {item.shortName}
                                 </div>
-                                <div className='text-[#4d6d7e] font-extrabold text-[16px]'>
-                                    Quantity: {item.quantity}
+                                <div className='flex gap-3 mt-2'>
+                                    <div className='h-[26px] text-[#4d6d7e] border border-[#CAD3D8] rounded-xl px-3 font-extrabold text-[16px]'>
+                                        {item.packaging}
+                                    </div>
+                                    <div className='rounded-xl w-[100px] h-[26px] flex items-center justify-around border border-[#D2DADF]'>
+                                        <button className='ml-3 cursor-pointer'>
+                                            <Image
+                                                src={minus}
+                                                alt='minus'
+                                                width={20}
+                                                height={20}
+                                            />
+                                        </button>
+                                        <input
+                                            type='number'
+                                            value={item.quantity}
+                                            className='text-[#4d6d7e] text-center font-extrabold w-[50px] no-spinner appearance-none outline-none border-none bg-transparent'
+                                        // onChange={handleQuantityChange}
+                                        />
+                                        <button className='mr-3 cursor-pointer'>
+                                            <Image
+                                                src={plus}
+                                                alt='plus'
+                                                width={20}
+                                                height={20}
+                                            />
+                                        </button>
+                                    </div>
                                 </div>
                                 {/* <div className='text-[#4d6d7e] font-extrabold text-[16px]'>
                                     Total quantity: {totalQuantity}
@@ -60,6 +89,12 @@ const Cart = () => {
                     </div>
                 ))
             }
+            <div className='text-[#4d6d7e] font-extrabold text-[18px]'>
+                Total products: {totalQuantity}
+            </div>
+            <Button apearence='primary' classname='font-bold text-[22px] w-full mt-5 mb-1 h-[52px]'>
+                Checkout
+            </Button>
         </div>
     );
 };

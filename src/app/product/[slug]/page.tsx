@@ -14,13 +14,14 @@ import { toggleCart } from '@/state/cartState/cartSlice';
 
 const ProductPage = () => {
     const [product, setProduct] = useState<any | null>(null);
+    const [packaging, setPackaging] = useState<string>('');
     const slug = usePathname().split('/').pop();
     const [quantity, setQuantity] = useState(1);
 
     const dispatch = useDispatch<AppDispatch>();
 
     const addToCart = (item: ProductItem) => {
-        dispatch(addItem({...item, quantity}));
+        dispatch(addItem({ ...item, quantity, packaging: packaging }));
         dispatch(toggleCart());
     };
 
@@ -41,6 +42,12 @@ const ProductPage = () => {
         };
         fetchProduct();
     }, [slug]);
+
+    useEffect(() => {
+        if (product && product.packagings.length > 0) {
+            setPackaging(product.packagings[0].name);
+        }
+    }, [product]);
 
     const incrementQuantity = () => {
         if (quantity < 9999) setQuantity(quantity + 1);
@@ -140,13 +147,16 @@ const ProductPage = () => {
                                         />
                                     </button>
                                 </div>
-                                <select className='text-[#4d6d7e] font-extrabold *:text-[#4d6d7e] *:font-extrabold rounded-xl ml-3 bg-white h-[50px] flex items-center justify-around border border-[#D2DADF] w-full *:text-center'>
+                                <select
+                                    className='text-[#4d6d7e] font-extrabold *:text-[#4d6d7e] *:font-extrabold rounded-xl ml-3 bg-white h-[50px] flex items-center justify-around border border-[#D2DADF] w-full *:text-center'
+                                    onChange={(e) => setPackaging(e.target.value)}
+                                >
                                     {
                                         product.packagings.map((pack: FilterName) => (
                                             // <div className='' key={pack.id}>
                                             <option
                                                 key={pack.id}
-                                                value={pack.id}
+                                                value={pack.name}
                                             >
                                                 {pack.name}
                                             </option>
