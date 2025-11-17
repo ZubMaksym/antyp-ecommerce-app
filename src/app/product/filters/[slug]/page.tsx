@@ -15,7 +15,7 @@ import Products from '@/components/filtersPage/Products';
 import Link from 'next/link';
 import Image from 'next/image';
 import carret from '@/public/icons/shared/caretDropdownBold.svg';
-
+import GoUpButton from '@/components/ui/GoUpButton';
 
 const CategoryPage = () => {
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -150,9 +150,11 @@ const CategoryPage = () => {
                 </div>
             </div>
             <MobileFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
-            <div className='mx-[15px] my-[15px] flex flex-col sm:flex-row justify-between sm:items-center'>
+            <div className='mx-[15px] my-[15px] flex flex-row justify-between sm:items-center'>
+                <span className='block lg:hidden text-[24px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>
+                    Found Products: {products?.length}
+                </span>
                 <FiltersButton setIsOpen={setIsFiltersOpen} />
-                <span className='block lg:hidden text-[24px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>Found Products: {products?.length}</span>
             </div>
             <div className='flex flex-col w-full justify-between max-w-[1320px]'>
                 <Products products={products} loading={productsLoading} productsLoadedOnce={productsLoadedOnce} />
@@ -169,6 +171,7 @@ const CategoryPage = () => {
                     )
                 }
             </div>
+            <GoUpButton />
         </section>
     );
 };

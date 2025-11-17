@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
 import Image from 'next/image';
@@ -9,6 +8,7 @@ import { AppDispatch } from '@/state/store';
 import plus from '@/public/icons/shared/plus.svg';
 import minus from '@/public/icons/shared/minus.svg';
 import Button from '../ui/Button';
+import { incrementItemQuantity, decrementItemQuantity, changeItemQuantity } from '@/state/cartState/cartSlice';
 
 
 const Cart = () => {
@@ -42,6 +42,7 @@ const Cart = () => {
                             <div className='flex justify-center items-center rounded bg-white sm:min-w-[130px] sm:w-[130px] sm:h-[130px] min-w-[100px] w-[100px] h-[100px]'>
                                 <Image
                                     className='w-full h-full object-contain'
+                                    loading='lazy'
                                     src={item.mainPhotoUrl}
                                     width={250}
                                     height={250}
@@ -57,7 +58,9 @@ const Cart = () => {
                                         {item.packaging}
                                     </div>
                                     <div className='rounded-xl w-[100px] h-[26px] flex items-center justify-around border border-[#D2DADF]'>
-                                        <button className='ml-3 cursor-pointer'>
+                                        <button 
+                                            className='ml-3 cursor-pointer' 
+                                            onClick={() => dispatch(decrementItemQuantity(item.id))}>
                                             <Image
                                                 src={minus}
                                                 alt='minus'
@@ -69,9 +72,12 @@ const Cart = () => {
                                             type='number'
                                             value={item.quantity}
                                             className='text-[#4d6d7e] text-center font-extrabold w-[50px] no-spinner appearance-none outline-none border-none bg-transparent'
-                                        // onChange={handleQuantityChange}
+                                            onChange={(e) => dispatch(changeItemQuantity({id: item.id, value: Number(e.target.value)}))}
                                         />
-                                        <button className='mr-3 cursor-pointer'>
+                                        <button 
+                                            className='mr-3 cursor-pointer' 
+                                            onClick={() => dispatch(incrementItemQuantity(item.id))}
+                                        >
                                             <Image
                                                 src={plus}
                                                 alt='plus'

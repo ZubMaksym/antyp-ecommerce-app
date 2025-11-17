@@ -5,7 +5,7 @@ import { FiltersButtonProps } from '@/types/componentTypes';
 const FiltersButton = ({ setIsOpen }: FiltersButtonProps) => {
     return (
         <button
-            className='block lg:hidden flex justify-around items-center w-[145px] h-[45px] rounded-lg bg-[#4d6d7e]'
+            className='block lg:hidden flex justify-around items-center w-[45px] h-[40px] rounded-lg bg-[#4d6d7e]'
             onClick={() => setIsOpen(true)}
         >
             <Image
@@ -14,9 +14,9 @@ const FiltersButton = ({ setIsOpen }: FiltersButtonProps) => {
                 width={25}
                 height={25}
             />
-            <div className='text-[22px] text-white font-black'>
+            {/* <div className='text-[22px] text-white font-black'>
                 Filters
-            </div>
+            </div> */}
         </button>
     );
 };

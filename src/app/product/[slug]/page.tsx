@@ -11,12 +11,14 @@ import { AppDispatch } from '@/state/store';
 import { addItem } from '@/state/cartState/cartSlice';
 import { FilterName, ProductItem } from '@/types/reducerTypes';
 import { toggleCart } from '@/state/cartState/cartSlice';
+import { incrementQuantity, decrementQuantity, handleQuantityChange } from '@/utils/helpers';
 
 const ProductPage = () => {
     const [product, setProduct] = useState<any | null>(null);
     const [packaging, setPackaging] = useState<string>('');
     const slug = usePathname().split('/').pop();
     const [quantity, setQuantity] = useState(1);
+    const [productLoading, setPoductLoading] = useState(true)
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -36,6 +38,7 @@ const ProductPage = () => {
 
                 const data = await response.json();
                 setProduct(data.result);
+                setPoductLoading(false);
             } catch (error) {
                 console.error(error);
             }
@@ -49,25 +52,13 @@ const ProductPage = () => {
         }
     }, [product]);
 
-    const incrementQuantity = () => {
-        if (quantity < 9999) setQuantity(quantity + 1);
-    };
-
-    const decrementQuantity = () => {
-        if (quantity > 1) setQuantity(quantity - 1);
-    };
-
-    const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const val = Number(e.target.value);
-        if (val < 1) {
-            setQuantity(1);
-        } else if (val > 9999) {
-            setQuantity(9999);
-        } else {
-            setQuantity(val);
-        }
-    };
-
+    if(productLoading) {
+        return (
+            <div className="h-[calc(100vh-170px)] flex justify-center items-center">
+                <div className='text-[24px] text-[#4d6d7e] font-black'> Loading...</div>
+            </div>
+        )
+    }
 
     return (
         <section className='flex justify-center'>
@@ -123,7 +114,7 @@ const ProductPage = () => {
                             </div>
                             <div className='flex justify-between'>
                                 <div className='rounded-xl bg-white w-[145px] h-[50px] flex items-center justify-around border border-[#D2DADF]'>
-                                    <button className='ml-3 cursor-pointer' onClick={decrementQuantity}>
+                                    <button className='ml-3 cursor-pointer' onClick={() => decrementQuantity(quantity, setQuantity)}>
                                         <Image
                                             src={minus}
                                             alt='minus'
@@ -135,10 +126,13 @@ const ProductPage = () => {
                                         type='number'
                                         value={quantity}
                                         className='text-[#4d6d7e] text-center font-extrabold w-[40px] no-spinner appearance-none outline-none border-none bg-transparent'
-                                        onChange={handleQuantityChange}
+                                        onChange={(e: ChangeEvent<HTMLInputElement>) => handleQuantityChange(e ,setQuantity)}
 
                                     />
-                                    <button className='mr-3 cursor-pointer' onClick={incrementQuantity}>
+                                    <button 
+                                        className='mr-3 cursor-pointer'
+                                        onClick={() => incrementQuantity(quantity, setQuantity)}
+                                    >
                                         <Image
                                             src={plus}
                                             alt='plus'
