@@ -12,6 +12,7 @@ import Pagination from '../ui/Pagination';
 import usePagination from '@/hooks/usePagination';
 import { useDispatch } from 'react-redux';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
+import GoUpButton from '../ui/GoUpButton';
 
 
 const Homepage = () => {
@@ -127,6 +128,7 @@ const Homepage = () => {
                 setCurrentPage={setCurrentPage}
                 scrollTopValue={700}
             />
+            <GoUpButton />
         </section>
     );
 };

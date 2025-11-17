@@ -119,7 +119,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
     };
 
     return (                                                                                                                    //h-[60px] lg:h-[105px] xl:h-[85px]
-        <div className={`pt-3 lg:pt-0 px-4 scrollbar lg:sticky overflow-y-scroll xl:top-[100px] lg:top-[130px] w-full lg:w-[300px] mx-[15px] max-h-[calc(100vh-170px)]`}>
+        <div className={`pt-3 lg:pt-0 px-4 scrollbar overflow-y-scroll xl:top-[100px] lg:top-[130px] w-full lg:w-[300px] mx-[15px] max-h-[calc(100vh-170px)]`}>
             <h2 className='text-[22px] font-black text-[#4d6d7e]'>Filters</h2>
             <FilterDropdown filterName='Manufacturer' isFirst={true} allowOverflow={true}>
                 <div className='flex flex-col *:mt-2 *:first:mt-0'>

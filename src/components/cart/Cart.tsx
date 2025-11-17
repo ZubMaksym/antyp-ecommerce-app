@@ -25,7 +25,7 @@ const Cart = () => {
         <div className='scrollbar overflow-y-scroll max-h-[calc(100vh-170px)] *:first:mt-0 *:mt-5'>
             {
                 items.map((item) => (
-                    <div className='flex border-b border-[#CAD3D8] pb-5' key={item.id}>
+                    <div className='flex border-b pb-5 w-[98%] border-[#CAD3D8] gap-1' key={item.id}>
                         <button
                             className='h-[20px] cursor-pointer'
                             onClick={() => dispatch(removeItem(item))}
@@ -39,9 +39,9 @@ const Cart = () => {
                             />
                         </button>
                         <div className='flex items-center'>
-                            <div className='flex justify-center rounded items-center bg-white w-[130px] h-[130px] '>
+                            <div className='flex justify-center items-center rounded bg-white sm:min-w-[130px] sm:w-[130px] sm:h-[130px] min-w-[100px] w-[100px] h-[100px]'>
                                 <Image
-                                    className='lg:w-[110px] lg:h-[110px]'
+                                    className='w-full h-full object-contain'
                                     src={item.mainPhotoUrl}
                                     width={250}
                                     height={250}
@@ -52,8 +52,8 @@ const Cart = () => {
                                 <div className='text-[#4d6d7e] font-black text-[21px]'>
                                     {item.shortName}
                                 </div>
-                                <div className='flex gap-3 mt-2'>
-                                    <div className='h-[26px] text-[#4d6d7e] border border-[#CAD3D8] rounded-xl px-3 font-extrabold text-[16px]'>
+                                <div className='flex flex-col sm:flex-row gap-3 mt-2 w-fit'>
+                                    <div className='text-[#4d6d7e] flex justify-center border border-[#CAD3D8] rounded-xl px-2 font-extrabold text-[16px]'>
                                         {item.packaging}
                                     </div>
                                     <div className='rounded-xl w-[100px] h-[26px] flex items-center justify-around border border-[#D2DADF]'>
@@ -92,7 +92,7 @@ const Cart = () => {
             <div className='text-[#4d6d7e] font-extrabold text-[18px]'>
                 Total products: {totalQuantity}
             </div>
-            <Button apearence='primary' classname='font-bold text-[22px] w-full mt-5 mb-1 h-[52px]'>
+            <Button apearence='primary' classname='font-bold text-[22px] w-[98%] mt-5 mb-1 h-[52px]'>
                 Checkout
             </Button>
         </div>

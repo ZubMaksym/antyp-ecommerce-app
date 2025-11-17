@@ -12,6 +12,9 @@ import { fetchFilters } from '@/state/filterSlice/filterSlice';
 import usePagination from '@/hooks/usePagination';
 import Pagination from '@/components/ui/Pagination';
 import Products from '@/components/filtersPage/Products';
+import Link from 'next/link';
+import Image from 'next/image';
+import carret from '@/public/icons/shared/caretDropdownBold.svg';
 
 
 const CategoryPage = () => {
@@ -119,9 +122,32 @@ const CategoryPage = () => {
     ]);
 
     return (
-        <section className='mb-[40px] mt-[55px] flex flex-col lg:flex-row justify-center'>
-            <div className='hidden lg:block'>
-                <DesktopFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
+        <section className='mb-[40px] flex flex-col lg:flex-row justify-center'>
+            <div className=''>
+                <Link
+                    href='/'
+                    className='flex text-[#4d6d7e] font-bold ml-[25px] mt-[20px] lg:mb-[30px] text-[32px] relative transition-all duration-300
+                    hover:text-[#737373] after:absolute after:left-[5px] after:bottom-0 after:h-[2px] after:bg-[#737373]
+                    after:w-0 hover:after:w-[175px] after:transition-all after:duration-300'
+                >
+                    {/* <Image
+                        className='rotate-90'
+                        width={50}
+                        height={50}
+                        src={carret}
+                        alt=''
+                    /> */}
+                    <span>&#60;</span>
+                    <div className='ml-2'>
+                        Homepage
+                    </div>
+                </Link>
+                {/* <div className='text-[#4d6d7e] font-bold mx-[20px] mt-[20px] mb-[30px] text-[32px]'>
+                    Back To Homepage
+                </div> */}
+                <div className='lg:sticky top-25 hidden lg:block'>
+                    <DesktopFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
+                </div>
             </div>
             <MobileFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
             <div className='mx-[15px] my-[15px] flex flex-col sm:flex-row justify-between sm:items-center'>
@@ -129,7 +155,7 @@ const CategoryPage = () => {
                 <span className='block lg:hidden text-[24px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>Found Products: {products?.length}</span>
             </div>
             <div className='flex flex-col w-full justify-between max-w-[1320px]'>
-                <Products products={products} loading={productsLoading} productsLoadedOnce={productsLoadedOnce}/>
+                <Products products={products} loading={productsLoading} productsLoadedOnce={productsLoadedOnce} />
                 {
                     products && (
                         <div className='self-center'>
@@ -143,7 +169,7 @@ const CategoryPage = () => {
                     )
                 }
             </div>
-        </section >
+        </section>
     );
 };
 
