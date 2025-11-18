@@ -66,3 +66,7 @@ export interface ProductsProps {
 export interface FilterSkeletonProps {
     record: number
 }
+
+export interface ProductDetailsTableProps {
+    product: ProductItem;
+}

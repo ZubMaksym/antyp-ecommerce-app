@@ -13,8 +13,8 @@ import usePagination from '@/hooks/usePagination';
 import Pagination from '@/components/ui/Pagination';
 import Products from '@/components/filtersPage/Products';
 import Link from 'next/link';
-import Image from 'next/image';
-import carret from '@/public/icons/shared/caretDropdownBold.svg';
+// import Image from 'next/image';
+// import carret from '@/public/icons/shared/caretDropdownBold.svg';
 import GoUpButton from '@/components/ui/GoUpButton';
 
 const CategoryPage = () => {
@@ -126,9 +126,9 @@ const CategoryPage = () => {
             <div className=''>
                 <Link
                     href='/'
-                    className='flex w-[130px] text-[#4d6d7e] font-bold ml-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] text-[22px] relative transition-all duration-300
+                    className='flex items-center w-[140px] text-[#4d6d7e] font-bold ml-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] text-[22px] relative transition-all duration-300
                     hover:text-[#737373] after:absolute after:left-[5px] after:bottom-0 after:h-[2px] after:bg-[#737373]
-                    after:w-0 hover:after:w-[120px] after:transition-all after:duration-300'
+                    after:w-0 hover:after:w-[132px] after:transition-all after:duration-300'
                 >
                     {/* <Image
                         className='rotate-90'
@@ -137,8 +137,8 @@ const CategoryPage = () => {
                         src={carret}
                         alt=''
                     /> */}
-                    <span>&#60;</span>
-                    <div className='ml-2'>
+                    <span className='text-[30px]'>&#8678;</span>
+                    <div className='ml-1'>
                         Homepage
                     </div>
                 </Link>
