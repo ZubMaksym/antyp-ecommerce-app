@@ -65,7 +65,30 @@ const ProductPage = () => {
             {
                 product && (
                     <div className='w-full max-w-[1720px] mx-auto px-6 mt-[55px] flex flex-col lg:flex-row gap-10'>
-                        <div className='flex sm:gap-10 lg:gap-4 flex-1'>
+                        <div className="flex-1 mb-3">
+                            <div className="lg:sticky top-28">
+                                <div className='flex sm:gap-10 lg:gap-4'>
+                                    <div className='scrollbar flex-1 hidden sm:flex flex-col gap-4 max-w-[150px] max-h-[650px] overflow-auto'>
+                                        {Array(3).fill(0).map((_, i) => (
+                                            <div key={i} className='aspect-square bg-white rounded-lg shadow-md max-w-[130px]'></div>
+                                        ))}
+                                    </div>
+                                    <div className='flex-1 flex flex-col gap-4 min-w-0'>
+                                        <div className='aspect-square flex justify-center items-center bg-white rounded-lg overflow-hidden shadow-md max-w-[650px] max-h-[650px]'>
+                                            <Image
+                                                src={product.mainPhotoUrl}
+                                                alt={product.name}
+                                                width={500}
+                                                height={500}
+                                                className='w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
+                                                onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* <div className='sticky top-0 border flex sm:gap-10 lg:gap-4 flex-1'>
                             <div className='scrollbar flex-1 hidden sm:flex flex-col gap-4 max-w-[150px] max-h-[650px] overflow-auto'>
                                 {Array(3).fill(0).map((_, i) => (
                                     <div key={i} className='aspect-square bg-white rounded-lg shadow-md max-w-[130px]'></div>
@@ -83,7 +106,7 @@ const ProductPage = () => {
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                         <div className='flex-1 flex flex-col gap-4 min-w-0'>
                             <h1 className='text-[36px] font-black text-[#4d6d7e]'>
                                 {product.shortName}
