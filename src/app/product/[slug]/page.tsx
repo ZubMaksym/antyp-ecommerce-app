@@ -8,25 +8,27 @@ import plus from '@/public/icons/shared/plus.svg';
 import minus from '@/public/icons/shared/minus.svg';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/state/store';
-import { addItem } from '@/state/cartState/cartSlice';
+import { addItem, toggleCart } from '@/state/cartState/cartSlice';
 import { FilterName, ProductItem } from '@/types/reducerTypes';
-import { toggleCart } from '@/state/cartState/cartSlice';
 import { incrementQuantity, decrementQuantity, handleQuantityChange } from '@/utils/helpers';
 import ColorThief from 'color-thief-browser';
 import ProductDetailsTable from '@/components/ui/ProductDetailsTable';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination } from 'swiper/modules';
+import { Keyboard, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 const ProductPage = () => {
-    const [product, setProduct] = useState<any | null>(null);
-    const [packaging, setPackaging] = useState<string>('');
-    const slug = usePathname().split('/').pop();
-    const [quantity, setQuantity] = useState(1);
     const [productLoading, setPoductLoading] = useState(true);
-    const imgRef = useRef<HTMLImageElement | null>(null);
+    const [packaging, setPackaging] = useState<string>('');
+    const [quantity, setQuantity] = useState(1);
+    const [product, setProduct] = useState<any | null>(null);
     const [color, setColor] = useState<string | null>(null);
-    const images = product && [product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl];
+    // const [image, setImage] = useState<string>('');
+    const slug = usePathname().split('/').pop();
+    const imgRef = useRef<HTMLImageElement | null>(null);
+    const images = product && [product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl];
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -47,6 +49,7 @@ const ProductPage = () => {
                 const data = await response.json();
                 setProduct(data.result);
                 setPoductLoading(false);
+                // setImage(data.result.mainPhotoUrl);
             } catch (error) {
                 console.error(error);
             }
@@ -94,13 +97,25 @@ const ProductPage = () => {
                             <div className='flex-1 mb-3'>
                                 <div className='lg:sticky top-28'>
                                     <div className='flex sm:gap-10 lg:gap-4'>
-                                        <div className='scrollbar flex-1 hidden sm:flex flex-col gap-4 max-w-[150px] max-h-[650px] overflow-auto'>
-                                            {Array(3).fill(0).map((_, i) => (
-                                                <div key={i} className='aspect-square bg-white border rounded-lg shadow-md max-w-[130px]'></div>
+                                        <div className='scrollbar flex-1 hidden lg:flex flex-col gap-4 max-w-[150px] max-h-[650px] overflow-auto'>
+                                            {images.map((image: string, index: number) => (
+                                                <div key={index} className='aspect-square flex items-center justify-center bg-white rounded-lg shadow-md max-w-[130px]'>
+                                                    <Image
+                                                        src={image}
+                                                        alt={product.name}
+                                                        width={500}
+                                                        height={500}
+                                                        className='place-self-center w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
+                                                        onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
+                                                    />
+                                                </div>
                                             ))}
                                         </div>
-                                        <div className='flex-1 flex flex-col gap-4 min-w-0'>
-                                            <div className='aspect-square flex justify-center items-center bg-white rounded-lg overflow-hidden shadow-md max-w-[650px] max-h-[650px]'>
+                                        <div className='hidden lg:flex flex-1 flex-col min-w-0'>
+                                            <div
+                                                className='aspect-square flex justify-center items-center bg-white rounded-lg overflow-hidden shadow-md
+                                                max-w-[650px] max-h-[650px]'
+                                            >
                                                 <Image
                                                     ref={imgRef}
                                                     src={product.mainPhotoUrl}
@@ -110,28 +125,31 @@ const ProductPage = () => {
                                                     className='hidden lg:block w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
                                                     onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
                                                 />
-                                                <div className='lg:hidden w-full'>
-                                                    <Swiper
-                                                        pagination={{ dynamicBullets: true }}
-                                                        modules={[Pagination]}
-                                                        direction='horizontal'
-                                                    >
-                                                        {images.map((image: string, index: number) => (
-                                                            <SwiperSlide
-                                                                key={index}
-                                                            >
-                                                                <Image
-                                                                    src={image}
-                                                                    alt={product.name}
-                                                                    width={500}
-                                                                    height={500}
-                                                                    className='place-self-center w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
-                                                                    onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
-                                                                />
-                                                            </SwiperSlide>
-                                                        ))}
-                                                    </Swiper>
-                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className='lg:hidden w-full bg-white py-5 rounded-lg flex justify-center'>
+                                            <div className='w-full'>
+                                                <Swiper
+                                                    pagination={{ clickable: true }}
+                                                    navigation={true}
+                                                    modules={[Keyboard, Pagination, Navigation]}
+                                                    className='mobile-swiper'
+                                                >
+                                                    {images.map((image: string, index: number) => (
+                                                        <SwiperSlide key={index}>
+                                                            <Image
+                                                                src={image}
+                                                                alt={product.name}
+                                                                width={500}
+                                                                height={500}
+                                                                className='w-[50%] mx-auto transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
+                                                                onLoadingComplete={(img) =>
+                                                                    img.classList.remove('blur-lg', 'scale-105', 'opacity-0')
+                                                                }
+                                                            />
+                                                        </SwiperSlide>
+                                                    ))}
+                                                </Swiper>
                                             </div>
                                         </div>
                                     </div>
@@ -147,7 +165,8 @@ const ProductPage = () => {
                                 <div className='grid grid-cols-4 gap-x-3 gap-y-6'>
                                     {Array(9).fill(0).map((_, i) => (
                                         <div key={i}
-                                            className='flex justify-center items-center aspect-square bg-white rounded-lg overflow-hidden shadow-md max-w-[190px] max-h-[190px] cursor-pointer hover:ring-1 hover:ring-[#4d6d7e]'>
+                                            className='flex justify-center items-center aspect-square bg-white rounded-lg overflow-hidden shadow-md
+                                            max-w-[190px] max-h-[190px] cursor-pointer hover:ring-1 hover:ring-[#4d6d7e]'>
                                             <Image
                                                 loading='lazy'
                                                 width={150}
@@ -178,7 +197,8 @@ const ProductPage = () => {
                                         <input
                                             type='number'
                                             value={quantity}
-                                            className='text-[#4d6d7e] text-center font-extrabold w-[40px] no-spinner appearance-none outline-none border-none bg-transparent'
+                                            className='text-[#4d6d7e] text-center font-extrabold w-[40px] no-spinner appearance-none 
+                                            outline-none border-none bg-transparent'
                                             onChange={(e: ChangeEvent<HTMLInputElement>) => handleQuantityChange(e, setQuantity)}
 
                                         />
@@ -195,7 +215,8 @@ const ProductPage = () => {
                                         </button>
                                     </div>
                                     <select
-                                        className='text-[#4d6d7e] font-extrabold *:text-[#4d6d7e] *:font-extrabold rounded-xl ml-3 bg-white h-[50px] flex items-center justify-around border border-[#D2DADF] w-full *:text-center'
+                                        className='text-[#4d6d7e] font-extrabold *:text-[#4d6d7e] *:font-extrabold rounded-xl ml-3
+                                        bg-white h-[50px] flex items-center justify-around border border-[#D2DADF] w-full *:text-center'
                                         onChange={(e) => setPackaging(e.target.value)}
                                     >
                                         {
