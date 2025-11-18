@@ -107,10 +107,10 @@ const ProductPage = () => {
                                                     alt={product.name}
                                                     width={500}
                                                     height={500}
-                                                    className='hidden md:block w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
+                                                    className='hidden lg:block w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
                                                     onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
                                                 />
-                                                <div className='md:hidden w-full'>
+                                                <div className='lg:hidden w-full'>
                                                     <Swiper
                                                         pagination={{ dynamicBullets: true }}
                                                         modules={[Pagination]}
@@ -125,13 +125,13 @@ const ProductPage = () => {
                                                                     alt={product.name}
                                                                     width={500}
                                                                     height={500}
-                                                                    className='place-self-center w-[70%] h-auto object-contain'
+                                                                    className='place-self-center w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
+                                                                    onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
                                                                 />
                                                             </SwiperSlide>
                                                         ))}
                                                     </Swiper>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>
