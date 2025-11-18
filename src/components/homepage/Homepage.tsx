@@ -19,7 +19,7 @@ const Homepage = () => {
     const [bestsellerProducts, setBestsellerProducts] = useState<Array<any> | null>(null);
     const [bestsellerProductsError, setBestsellerProductsError] = useState<string | null>(null);
     const router = useRouter();
-    const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 6, totalCount: 0 });
+    const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 12, totalCount: 0 });
     const dispatch = useDispatch();
 
     const resetAll = () => {

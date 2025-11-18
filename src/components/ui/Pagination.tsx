@@ -51,7 +51,7 @@ const Pagination = ({ totalPages, setCurrentPage, currentPage, scrollTopValue }:
             <button className='rotate-90 cursor-pointer mt-2' onClick={setPrevPage}>
                 <Image src={caret} width={40} height={40} alt='previous page' />
             </button>
-            <div className='flex *:first:ml-0 *:ml-[6px] sm:*:ml-3'>
+            <div className='flex *:first:ml-0 *:ml-[10px] mt-2 sm:*:ml-3'>
                 {pages.map((page, ind) => (
                     page === '...' ? (
                         <span key={ind} className='flex items-center justify-center w-[25px] h-[25px] sm:w-[30px] sm:h-[30px] text-[#4d6d7e]'>

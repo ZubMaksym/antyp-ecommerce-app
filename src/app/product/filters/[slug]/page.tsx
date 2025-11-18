@@ -126,9 +126,9 @@ const CategoryPage = () => {
             <div className=''>
                 <Link
                     href='/'
-                    className='flex text-[#4d6d7e] font-bold ml-[25px] mt-[20px] lg:mb-[30px] text-[32px] relative transition-all duration-300
+                    className='flex w-[130px] text-[#4d6d7e] font-bold ml-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] text-[22px] relative transition-all duration-300
                     hover:text-[#737373] after:absolute after:left-[5px] after:bottom-0 after:h-[2px] after:bg-[#737373]
-                    after:w-0 hover:after:w-[175px] after:transition-all after:duration-300'
+                    after:w-0 hover:after:w-[120px] after:transition-all after:duration-300'
                 >
                     {/* <Image
                         className='rotate-90'
@@ -150,8 +150,8 @@ const CategoryPage = () => {
                 </div>
             </div>
             <MobileFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
-            <div className='mx-[15px] my-[15px] flex flex-row justify-between sm:items-center'>
-                <span className='block lg:hidden text-[24px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>
+            <div className='mx-[15px] my-[5px] flex flex-row justify-between items-center'>
+                <span className='block lg:hidden text-[20px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>
                     Found Products: {products?.length}
                 </span>
                 <FiltersButton setIsOpen={setIsFiltersOpen} />

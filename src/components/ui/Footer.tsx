@@ -5,6 +5,8 @@ import Link from 'next/link';
 
 
 const Footer = () => {
+    const year = new Date().getFullYear();
+
     return (
         <footer className='px-5 py-[55px] bg-[#4D6D7E] min-h-[355px] flex flex-col justify-center items-center'>
             <div className='w-full flex flex-col xl:flex-row justify-between flex-wrap max-w-[1600px] lg:h-[250px] text-white'>
@@ -94,7 +96,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className='text-white text-[18px] mt-[30px] lg:mt-0'>
-                © 2025 Antyp
+                © {year} Antyp
             </div>
         </footer>
     );
