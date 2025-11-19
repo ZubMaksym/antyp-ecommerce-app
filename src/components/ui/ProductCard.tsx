@@ -20,7 +20,7 @@ const ProductCard = ({ onCardClick, product }: ProductCardProps) => {
     return (
         <div
             tabIndex={0}
-            className='md:aspect-[88/100] cursor-pointer'
+            className='md:aspect-[88/100] flex flex-col justify-between cursor-pointer'
             onClick={onCardClick}
         >
             <div className='relative md:aspect-[95/100] flex flex-col items-center justify-center bg-white rounded-xl shadow-md py-[30px]'>

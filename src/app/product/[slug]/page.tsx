@@ -14,6 +14,7 @@ import { incrementQuantity, decrementQuantity, handleQuantityChange } from '@/ut
 import ColorThief from 'color-thief-browser';
 import ProductDetailsTable from '@/components/ui/ProductDetailsTable';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { useRouter } from 'next/navigation';
 import { Keyboard, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -33,6 +34,7 @@ const ProductPage = () => {
     const slug = usePathname().split('/').pop();
     const imgRef = useRef<HTMLImageElement | null>(null);
     const images = product && [product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl];
+    const router = useRouter();
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -120,7 +122,7 @@ const ProductPage = () => {
                 {
                     product && (
                         <div className='w-full max-w-[1720px] mx-auto px-6 mt-[55px] flex flex-col lg:flex-row gap-10'>
-                            <div className='flex-1 mb-3'>
+                            <div className='flex-1 mb-1'>
                                 <div className='lg:sticky top-28'>
                                     <div className='flex sm:gap-10 lg:gap-4'>
                                         <div className='scrollbar flex-1 hidden lg:flex flex-col gap-4 max-w-[150px] max-h-[650px] overflow-auto'>
@@ -153,7 +155,7 @@ const ProductPage = () => {
                                                 />
                                             </div>
                                         </div>
-                                        <div className='lg:hidden w-full bg-white py-5 rounded-lg flex justify-center'>
+                                        <div className='lg:hidden w-full bg-white py-10 rounded-lg flex justify-center'>
                                             <div className='w-full'>
                                                 <Swiper
                                                     pagination={{ clickable: true }}
@@ -182,88 +184,94 @@ const ProductPage = () => {
                                 </div>
                             </div>
                             <div className='flex-1 flex flex-col gap-4 min-w-0'>
-                                <h1 className='text-[36px] font-black text-[#4d6d7e]'>
-                                    {product.shortName}
-                                </h1>
-                                <h2 className='text-[18px] text-[#4d6d7e]'>
-                                    {product.name}
-                                </h2>
-                                <div className='grid grid-cols-4 gap-x-3 gap-y-6'>
-                                    {relatedProducts?.map((relatedProduct: ProductItem, i: number) => (
-                                        <div key={relatedProduct.id}
-                                            className='flex justify-center items-center aspect-square bg-white rounded-lg overflow-hidden shadow-md
-                                            max-w-[190px] max-h-[190px] cursor-pointer hover:ring-1 hover:ring-[#4d6d7e]'>
-                                            <Image
-                                                loading='lazy'
-                                                width={150}
-                                                height={150}
-                                                src={relatedProduct.mainPhotoUrl}
-                                                alt='product image'
-                                                className={classNames(
-                                                    'transition duration-500 w-[70%] ease-in-out',
-                                                    {
-                                                        'hover:rotate-10': i % 2 === 0,
-                                                        'hover:-rotate-10': i % 2 !== 0,
-                                                    }
-                                                )}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className='flex justify-between'>
-                                    <div className='rounded-xl bg-white w-[145px] h-[50px] flex items-center justify-around border border-[#D2DADF]'>
-                                        <button className='ml-3 cursor-pointer' onClick={() => decrementQuantity(quantity, setQuantity)}>
-                                            <Image
-                                                src={minus}
-                                                alt='minus'
-                                                width={20}
-                                                height={20}
-                                            />
-                                        </button>
-                                        <input
-                                            type='number'
-                                            value={quantity}
-                                            className='text-[#4d6d7e] text-center font-extrabold w-[40px] no-spinner appearance-none 
-                                            outline-none border-none bg-transparent'
-                                            onChange={(e: ChangeEvent<HTMLInputElement>) => handleQuantityChange(e, setQuantity)}
-
-                                        />
-                                        <button
-                                            className='mr-3 cursor-pointer'
-                                            onClick={() => incrementQuantity(quantity, setQuantity)}
-                                        >
-                                            <Image
-                                                src={plus}
-                                                alt='plus'
-                                                width={20}
-                                                height={20}
-                                            />
-                                        </button>
+                                <div className='lg:sticky lg:top-28 xl:top-22'>
+                                    <h1 className='text-[36px] font-black text-[#4d6d7e]'>
+                                        {product.shortName}
+                                    </h1>
+                                    <h2 className='text-[18px] text-[#4d6d7e]'>
+                                        {product.name}
+                                    </h2>
+                                    <h3 className='text-[20px] text-[#4d6d7e] font-medium mt-5'>Товари цього виробника:</h3>
+                                    <div className='grid grid-cols-4 gap-x-3 gap-y-6 mt-3'>
+                                        {relatedProducts?.map((relatedProduct: ProductItem, i: number) => (
+                                            <div
+                                                key={relatedProduct.id}
+                                                className='flex justify-center items-center aspect-square bg-white rounded-lg overflow-hidden shadow-md
+                                                max-w-[190px] max-h-[190px] cursor-pointer hover:ring-1 hover:ring-[#4d6d7e]'
+                                                onClick={() => router.push(`/product/${relatedProduct.slug}`)}
+                                            >
+                                                <Image
+                                                    loading='lazy'
+                                                    width={150}
+                                                    height={150}
+                                                    src={relatedProduct.mainPhotoUrl}
+                                                    alt='product image'
+                                                    className={classNames(
+                                                        'transition duration-500 w-[70%] ease-in-out',
+                                                        {
+                                                            'hover:rotate-10': i % 2 === 0,
+                                                            'hover:-rotate-10': i % 2 !== 0,
+                                                        }
+                                                    )}
+                                                />
+                                            </div>
+                                        ))}
                                     </div>
-                                    <select
-                                        className='text-[#4d6d7e] font-extrabold *:text-[#4d6d7e] *:font-extrabold rounded-xl ml-3
+                                    <div className='flex justify-between mt-4'>
+                                        <div className='rounded-xl bg-white w-[145px] h-[50px] flex items-center justify-around border border-[#D2DADF]'>
+                                            <button className='ml-3 cursor-pointer' onClick={() => decrementQuantity(quantity, setQuantity)}>
+                                                <Image
+                                                    src={minus}
+                                                    alt='minus'
+                                                    width={20}
+                                                    height={20}
+                                                />
+                                            </button>
+                                            <input
+                                                type='number'
+                                                value={quantity}
+                                                className='text-[#4d6d7e] text-center font-extrabold w-[40px] no-spinner appearance-none 
+                                            outline-none border-none bg-transparent'
+                                                onChange={(e: ChangeEvent<HTMLInputElement>) => handleQuantityChange(e, setQuantity)}
+
+                                            />
+                                            <button
+                                                className='mr-3 cursor-pointer'
+                                                onClick={() => incrementQuantity(quantity, setQuantity)}
+                                            >
+                                                <Image
+                                                    src={plus}
+                                                    alt='plus'
+                                                    width={20}
+                                                    height={20}
+                                                />
+                                            </button>
+                                        </div>
+                                        <select
+                                            className='text-[#4d6d7e] font-extrabold *:text-[#4d6d7e] *:font-extrabold rounded-xl ml-3
                                         bg-white h-[50px] flex items-center justify-around border border-[#D2DADF] w-full *:text-center'
-                                        onChange={(e) => setPackaging(e.target.value)}
+                                            onChange={(e) => setPackaging(e.target.value)}
+                                        >
+                                            {
+                                                product.packagings.map((pack: FilterName) => (
+                                                    <option
+                                                        key={pack.id}
+                                                        value={pack.name}
+                                                    >
+                                                        {pack.name}
+                                                    </option>
+                                                ))
+                                            }
+                                        </select>
+                                    </div>
+                                    <Button
+                                        apearence='primary'
+                                        classname='h-[45px] w-full my-3'
+                                        onClick={() => addToCart(product)}
                                     >
-                                        {
-                                            product.packagings.map((pack: FilterName) => (
-                                                <option
-                                                    key={pack.id}
-                                                    value={pack.name}
-                                                >
-                                                    {pack.name}
-                                                </option>
-                                            ))
-                                        }
-                                    </select>
+                                        <span className='flex justify-center px-3 font-extrabold'>Add to cart</span>
+                                    </Button>
                                 </div>
-                                <Button
-                                    apearence='primary'
-                                    classname='h-[45px] mb-3'
-                                    onClick={() => addToCart(product)}
-                                >
-                                    <span className='flex justify-center px-3 font-extrabold'>Add to cart</span>
-                                </Button>
                             </div>
                         </div>
                     )

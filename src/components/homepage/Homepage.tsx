@@ -71,7 +71,7 @@ const Homepage = () => {
                 <h2 className='text-center mb-[40px] text-[32px] text-[#4d6d7e] font-bold'>
                     Browse By Category
                 </h2>
-                <div id='categories' className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 mx-auto justify-around gap-y-5 max-w-[1720px] *:mx-auto'>
+                <div id='categories' className='flex justify-center gap-10 mx-auto flex-wrap'>
                     {
                         categoriess.map((data, ind) => (
                             <Link 

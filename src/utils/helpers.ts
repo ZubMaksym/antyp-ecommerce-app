@@ -26,6 +26,11 @@ export const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>, handleCha
     }
 };
 
-export function rgbToHex(r: number, g: number, b: number) {
-    return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('');
+export function getPrevNextCategory(categories: { name: string; route: string; image: string }[], currentCategory: string) {
+    const index = categories.findIndex(c => c.route === currentCategory);
+
+    return {
+        prevCategory: index > 0 ? categories[index - 1] : null,
+        nextCategory: index < categories.length - 1 ? categories[index + 1] : null
+    };
 }

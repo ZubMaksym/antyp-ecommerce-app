@@ -16,6 +16,9 @@ import Link from 'next/link';
 // import Image from 'next/image';
 // import carret from '@/public/icons/shared/caretDropdownBold.svg';
 import GoUpButton from '@/components/ui/GoUpButton';
+import { getPrevNextCategory } from '@/utils/helpers';
+import { categoriess } from '@/utils/data';
+import { IPrevNext } from '@/types/helperTypes';
 
 const CategoryPage = () => {
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -43,6 +46,7 @@ const CategoryPage = () => {
     const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 6, totalCount: 0 });
     const [categoryChanged, setCategoryChanges] = useState(false);
     const [prodReq, setProdReq] = useState(false);
+    const [prevNextCategory, setPrevNextCategory] = useState<IPrevNext>();
 
     useEffect(() => {
         dispatch(resetFilters());
@@ -121,57 +125,67 @@ const CategoryPage = () => {
         totalCount,
     ]);
 
+    useEffect(() => {
+        const prevNext = getPrevNextCategory(categoriess, categoryName);
+        setPrevNextCategory(prevNext);
+    }, []);
+
     return (
-        <section className='mb-[40px] flex flex-col lg:flex-row justify-center'>
-            <div className=''>
+        <section className=''>
+            <div className='flex max-w-[1660px] justify-between h-[100px] mx-auto'>
                 <Link
-                    href='/'
-                    className='flex items-center w-[140px] text-[#4d6d7e] font-bold ml-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] text-[22px] relative transition-all duration-300
+                    href={prevNextCategory?.prevCategory === null ? '/' : '/product/filters/' + prevNextCategory?.prevCategory.route}
+                    className='flex items-center w-fit text-[#4d6d7e] font-bold ml-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] text-[22px] relative transition-all duration-300
                     hover:text-[#737373] after:absolute after:left-[5px] after:bottom-0 after:h-[2px] after:bg-[#737373]
-                    after:w-0 hover:after:w-[132px] after:transition-all after:duration-300'
+                    after:w-0 hover:after:w-full after:transition-all after:duration-300'
                 >
-                    {/* <Image
-                        className='rotate-90'
-                        width={50}
-                        height={50}
-                        src={carret}
-                        alt=''
-                    /> */}
-                    <span className='text-[30px]'>&#8678;</span>
+                    <span className='text-[30px] mb-1'>&#8678;</span>
                     <div className='ml-1'>
-                        Homepage
+                        {prevNextCategory?.prevCategory === null ? 'Homepage' : prevNextCategory?.prevCategory.name}
                     </div>
                 </Link>
-                {/* <div className='text-[#4d6d7e] font-bold mx-[20px] mt-[20px] mb-[30px] text-[32px]'>
-                    Back To Homepage
-                </div> */}
-                <div className='lg:sticky top-25 hidden lg:block'>
-                    <DesktopFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
+                <Link
+                    href={prevNextCategory?.nextCategory === null ? '/' : '/product/filters/' + prevNextCategory?.nextCategory.route}
+                    className='flex items-center w-fit text-[#4d6d7e] font-bold mr-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] text-[22px] relative transition-all duration-300
+                    hover:text-[#737373] after:absolute after:left-[5px] after:bottom-0 after:h-[2px] after:bg-[#737373]
+                    after:w-0 hover:after:w-full after:transition-all after:duration-300'
+                >
+                    <div className='mr-1'>
+                        {prevNextCategory?.nextCategory === null ? 'Homepage' : prevNextCategory?.nextCategory.name}
+                    </div>
+                    <span className='text-[30px] mt-[15px] rotate-180'>&#8678;</span>
+                </Link>
+            </div>
+            <div className='mb-[40px] flex flex-col lg:flex-row justify-center'>
+                <div className=''>
+                    <div className='lg:sticky top-25 hidden lg:block'>
+                        <DesktopFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
+                    </div>
                 </div>
+                <MobileFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
+                <div className='mx-[15px] my-[5px] flex flex-row justify-between items-center'>
+                    <span className='block lg:hidden text-[20px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>
+                        Found Products: {products?.length}
+                    </span>
+                    <FiltersButton setIsOpen={setIsFiltersOpen} />
+                </div>
+                <div className='flex flex-col w-full justify-between max-w-[1320px]'>
+                    <Products products={products} loading={productsLoading} productsLoadedOnce={productsLoadedOnce} />
+                    {
+                        products && (
+                            <div className='self-center'>
+                                <Pagination
+                                    scrollTopValue={0}
+                                    totalPages={totalPages}
+                                    currentPage={currentPage}
+                                    setCurrentPage={setCurrentPage}
+                                />
+                            </div>
+                        )
+                    }
+                </div>
+                <GoUpButton />
             </div>
-            <MobileFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
-            <div className='mx-[15px] my-[5px] flex flex-row justify-between items-center'>
-                <span className='block lg:hidden text-[20px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>
-                    Found Products: {products?.length}
-                </span>
-                <FiltersButton setIsOpen={setIsFiltersOpen} />
-            </div>
-            <div className='flex flex-col w-full justify-between max-w-[1320px]'>
-                <Products products={products} loading={productsLoading} productsLoadedOnce={productsLoadedOnce} />
-                {
-                    products && (
-                        <div className='self-center'>
-                            <Pagination
-                                scrollTopValue={0}
-                                totalPages={totalPages}
-                                currentPage={currentPage}
-                                setCurrentPage={setCurrentPage}
-                            />
-                        </div>
-                    )
-                }
-            </div>
-            <GoUpButton />
         </section>
     );
 };
