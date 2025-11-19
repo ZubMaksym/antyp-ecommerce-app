@@ -18,6 +18,9 @@ import { Keyboard, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+// http://138.199.224.156:2007/product?ProductType=cider&Manufacturers=64f431ff-cd30-40ab-83df-9ee4cedc18cb
+
+
 
 const ProductPage = () => {
     const [productLoading, setPoductLoading] = useState(true);
@@ -25,6 +28,7 @@ const ProductPage = () => {
     const [quantity, setQuantity] = useState(1);
     const [product, setProduct] = useState<any | null>(null);
     const [color, setColor] = useState<string | null>(null);
+    const [relatedProducts, setRelatedProducts] = useState<ProductItem[]>();
     // const [image, setImage] = useState<string>('');
     const slug = usePathname().split('/').pop();
     const imgRef = useRef<HTMLImageElement | null>(null);
@@ -56,6 +60,28 @@ const ProductPage = () => {
         };
         fetchProduct();
     }, [slug]);
+
+    useEffect(() => {
+        const fetchRelatedProducts = async () => {
+            if (product) {
+                try {
+                    const response = await fetch(`http://138.199.224.156:2007/product?Manufacturers=${product.manufacturer.id}`);
+
+                    if (!response.ok) {
+                        throw new Error(`API Error ${response.status} ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    setRelatedProducts(data.result.items);
+                    // setPoductLoading(false);
+                    // setImage(data.result.mainPhotoUrl);
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        };
+        fetchRelatedProducts();
+    }, [slug, product]);
 
     useEffect(() => {
         if (product && product.packagings.length > 0) {
@@ -163,15 +189,15 @@ const ProductPage = () => {
                                     {product.name}
                                 </h2>
                                 <div className='grid grid-cols-4 gap-x-3 gap-y-6'>
-                                    {Array(9).fill(0).map((_, i) => (
-                                        <div key={i}
+                                    {relatedProducts?.map((relatedProduct: ProductItem, i: number) => (
+                                        <div key={relatedProduct.id}
                                             className='flex justify-center items-center aspect-square bg-white rounded-lg overflow-hidden shadow-md
                                             max-w-[190px] max-h-[190px] cursor-pointer hover:ring-1 hover:ring-[#4d6d7e]'>
                                             <Image
                                                 loading='lazy'
                                                 width={150}
                                                 height={150}
-                                                src={product.mainPhotoUrl}
+                                                src={relatedProduct.mainPhotoUrl}
                                                 alt='product image'
                                                 className={classNames(
                                                     'transition duration-500 w-[70%] ease-in-out',
