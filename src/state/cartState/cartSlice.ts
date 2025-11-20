@@ -7,11 +7,23 @@ export interface CartSlice {
     isCartOpen?: boolean;
 }
 
+// const savedState = typeof window !== 'undefined'
+//     ? localStorage.getItem('cart')
+//     : null;
+
 const initialState: CartSlice = {
     items: [],
     totalQuantity: 0,
     isCartOpen: false
 };
+
+// const initialState: CartSlice = savedState
+//     ? JSON.parse(savedState)
+//     : {
+//         items: [],
+//         totalQuantity: 0,
+//         isCartOpen: false
+//     };
 
 const cartSlice = createSlice({
     name: 'cart',
@@ -52,9 +64,12 @@ const cartSlice = createSlice({
                 state.items = state.items.filter((i) => i.id !== itemId);
                 state.totalQuantity -= 1;
             }
+        },
+        hydrateCart(state, action) {
+            return action.payload;
         }
     }
 });
 
-export const { addItem, toggleCart, removeItem, incrementItemQuantity, decrementItemQuantity, changeItemQuantity } = cartSlice.actions;
+export const {hydrateCart ,addItem, toggleCart, removeItem, incrementItemQuantity, decrementItemQuantity, changeItemQuantity } = cartSlice.actions;
 export default cartSlice.reducer;
