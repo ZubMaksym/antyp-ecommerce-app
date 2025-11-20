@@ -70,3 +70,10 @@ export interface FilterSkeletonProps {
 export interface ProductDetailsTableProps {
     product: ProductItem;
 }
+
+export interface InputProps {
+    className: string;
+    type: 'text' | 'number';
+    placeholder: string;
+    id: string;
+}
