@@ -196,8 +196,13 @@ const ProductPage = () => {
                                         {relatedProducts?.map((relatedProduct: ProductItem, i: number) => (
                                             <div
                                                 key={relatedProduct.id}
-                                                className='flex justify-center items-center aspect-square bg-white rounded-lg overflow-hidden shadow-md
-                                                max-w-[190px] max-h-[190px] cursor-pointer hover:ring-1 hover:ring-[#4d6d7e]'
+                                                className={classNames(
+                                                    'flex justify-center items-center aspect-square bg-white rounded-lg overflow-hidden shadow-md max-w-[190px] max-h-[190px] cursor-pointer hover:ring-1 hover:ring-[#4d6d7e]',
+                                                    {
+                                                        'hover:*:rotate-10': i % 2 === 0,
+                                                        'hover:*:-rotate-10': i % 2 !== 0,
+                                                    }
+                                                )}
                                                 onClick={() => router.push(`/product/${relatedProduct.slug}`)}
                                             >
                                                 <Image
@@ -206,13 +211,7 @@ const ProductPage = () => {
                                                     height={150}
                                                     src={relatedProduct.mainPhotoUrl}
                                                     alt='product image'
-                                                    className={classNames(
-                                                        'transition duration-500 w-[70%] ease-in-out',
-                                                        {
-                                                            'hover:rotate-10': i % 2 === 0,
-                                                            'hover:-rotate-10': i % 2 !== 0,
-                                                        }
-                                                    )}
+                                                    className='w-[70%] transition duration-500 ease-in-out'
                                                 />
                                             </div>
                                         ))}

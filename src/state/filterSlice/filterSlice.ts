@@ -301,7 +301,10 @@ export const filterSlice = createSlice({
         setIbuRange: (state, action: PayloadAction<[number, number]>) => {
             state.selectedIBU.min = action.payload[0];
             state.selectedIBU.max = action.payload[1];
-        }
+        },
+        setFiltersFromUrl: (state, action: PayloadAction<any>) => {
+            Object.assign(state, action.payload);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -381,7 +384,8 @@ export const
         resetFilters,
         resetProducts,
         setAlcoholStrengthRange,
-        setIbuRange
+        setIbuRange,
+        setFiltersFromUrl
     } = filterSlice.actions;
 
 export default filterSlice.reducer;

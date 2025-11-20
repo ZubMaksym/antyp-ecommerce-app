@@ -10,7 +10,7 @@ import { useState } from 'react';
 import MobileNav from './MobileNav';
 import { navLinksData } from '@/utils/data';
 import Modal from './Modal';
-import SearchInput from './SearchInput';
+import Search from './Search';
 import antypLogo from '@/public/icons/header/antypLogo1.svg';
 import Cart from '../cart/Cart';
 import { useSelector } from 'react-redux';
@@ -120,7 +120,7 @@ const Header = () => {
                 </div>
             </div>
             <Modal isOpen={isSearchOpen} setIsOpen={setIsSearchOpen} title='Search'>
-                <SearchInput />
+                <Search isOpen={isSearchOpen} setIsOpen={setIsSearchOpen}/>
             </Modal>
             <Modal isOpen={isCartOpen!} setIsOpen={() => dispatch(toggleCart())} title='Shopping cart'>
                 <Cart />

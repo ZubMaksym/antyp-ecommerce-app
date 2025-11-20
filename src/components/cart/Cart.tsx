@@ -9,17 +9,24 @@ import plus from '@/public/icons/shared/plus.svg';
 import minus from '@/public/icons/shared/minus.svg';
 import Button from '../ui/Button';
 import { incrementItemQuantity, decrementItemQuantity, changeItemQuantity } from '@/state/cartState/cartSlice';
-
+import { useRouter } from 'next/navigation';
+import { toggleCart } from '@/state/cartState/cartSlice';
 
 const Cart = () => {
     const { items, totalQuantity } = useSelector((state: RootState) => state.cart);
     const dispatch = useDispatch<AppDispatch>();
+    const router = useRouter();
 
     if (items.length === 0) return (
         <div className='w-full flex justify-center'>
             <div className='text-[#4d6d7e] text-[18px]'>Your cart is currently empty</div>
         </div>
     );
+
+    const handleProductClick = (productSlug: string) => {
+        dispatch(toggleCart());
+        router.push(`/product/${productSlug}`);
+    };
 
     return (
         <div className='scrollbar overflow-y-scroll max-h-[calc(100vh-170px)] *:first:mt-0 *:mt-5'>
@@ -39,7 +46,10 @@ const Cart = () => {
                             />
                         </button>
                         <div className='flex items-center'>
-                            <div className='flex justify-center items-center rounded bg-white sm:min-w-[130px] sm:w-[130px] sm:h-[130px] min-w-[100px] w-[100px] h-[100px]'>
+                            <div 
+                                className='cursor-pointer flex justify-center items-center rounded bg-white sm:min-w-[130px] sm:w-[130px] sm:h-[130px] min-w-[100px] w-[100px] h-[100px]'
+                                onClick={() => handleProductClick(item.slug)}
+                            >
                                 <Image
                                     className='w-full h-full object-contain'
                                     loading='lazy'
@@ -87,9 +97,6 @@ const Cart = () => {
                                         </button>
                                     </div>
                                 </div>
-                                {/* <div className='text-[#4d6d7e] font-extrabold text-[16px]'>
-                                    Total quantity: {totalQuantity}
-                                </div> */}
                             </div>
                         </div>
                     </div>
