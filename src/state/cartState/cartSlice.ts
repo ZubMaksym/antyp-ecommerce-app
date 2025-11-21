@@ -7,39 +7,27 @@ export interface CartSlice {
     isCartOpen?: boolean;
 }
 
-// const savedState = typeof window !== 'undefined'
-//     ? localStorage.getItem('cart')
-//     : null;
-
 const initialState: CartSlice = {
     items: [],
     totalQuantity: 0,
     isCartOpen: false
 };
 
-// const initialState: CartSlice = savedState
-//     ? JSON.parse(savedState)
-//     : {
-//         items: [],
-//         totalQuantity: 0,
-//         isCartOpen: false
-//     };
-
 const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
         incrementItemQuantity(state, action) {
-            const item = state.items.find(i => i.id === action.payload);
+            const item = state.items.find(i => (i.id === action.payload.id && i.packaging === action.payload.packaging));
             if (item && item.quantity < 9999) item.quantity++;
         },
         decrementItemQuantity(state, action) {
-            const item = state.items.find(i => i.id === action.payload);
+            const item = state.items.find(i => (i.id === action.payload.id && i.packaging === action.payload.packaging));
             if (item && item.quantity > 1) item.quantity--;
         },
         changeItemQuantity(state, action) {
-            const { id, value } = action.payload;
-            const item = state.items.find(i => i.id === id);
+            const { id, value, packaging } = action.payload;
+            const item = state.items.find(i => (i.id === id && i.packaging === packaging));
             if (!item) return;
 
             if (value < 1) item.quantity = 1;
@@ -51,19 +39,20 @@ const cartSlice = createSlice({
         },
         addItem: (state, action: PayloadAction<ProductItemCart>) => {
             const item = action.payload;
-            const existingItem = state.items.find((i) => i.id === item.id);
+            const existingItem = state.items.find((i) => (i.id === item.id && i.packaging === item.packaging));
             if (!existingItem) {
                 state.items.push(item);
                 state.totalQuantity += 1;
             }
         },
         removeItem: (state, action) => {
-            const itemId = action.payload.id;
-            const existingItem = state.items.find((i) => i.id === itemId);
-            if (existingItem) {
-                state.items = state.items.filter((i) => i.id !== itemId);
-                state.totalQuantity -= 1;
-            }
+            const { id, packaging } = action.payload;
+
+            state.items = state.items.filter(
+                (i) => !(i.id === id && i.packaging === packaging)
+            );
+
+            state.totalQuantity -= 1;
         },
         hydrateCart(state, action) {
             return action.payload;
@@ -71,5 +60,5 @@ const cartSlice = createSlice({
     }
 });
 
-export const {hydrateCart ,addItem, toggleCart, removeItem, incrementItemQuantity, decrementItemQuantity, changeItemQuantity } = cartSlice.actions;
+export const { hydrateCart, addItem, toggleCart, removeItem, incrementItemQuantity, decrementItemQuantity, changeItemQuantity } = cartSlice.actions;
 export default cartSlice.reducer;

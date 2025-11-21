@@ -33,7 +33,7 @@ const Cart = () => {
         <div className='scrollbar overflow-y-scroll max-h-[calc(100vh-170px)] *:first:mt-0 *:mt-5'>
             {
                 items.map((item) => (
-                    <div className='flex border-b pb-5 w-[98%] border-[#CAD3D8] gap-1' key={item.id}>
+                    <div className='flex border-b pb-5 w-[98%] border-[#CAD3D8] gap-1' key={`${item.id}${item.packaging}`}>
                         <button
                             className='h-[20px] cursor-pointer'
                             onClick={() => dispatch(removeItem(item))}
@@ -71,7 +71,7 @@ const Cart = () => {
                                     <div className='rounded-xl w-[100px] h-[26px] flex items-center justify-around border border-[#D2DADF]'>
                                         <button
                                             className='ml-3 cursor-pointer'
-                                            onClick={() => dispatch(decrementItemQuantity(item.id))}>
+                                            onClick={() => dispatch(decrementItemQuantity(item))}>
                                             <Image
                                                 src={minus}
                                                 alt='minus'
@@ -83,11 +83,11 @@ const Cart = () => {
                                             type='number'
                                             value={item.quantity}
                                             className='text-[#4d6d7e] text-center font-extrabold w-[50px] no-spinner appearance-none outline-none border-none bg-transparent'
-                                            onChange={(e) => dispatch(changeItemQuantity({ id: item.id, value: Number(e.target.value) }))}
+                                            onChange={(e) => dispatch(changeItemQuantity({ id: item.id, value: Number(e.target.value), packaging: item.packaging }))}
                                         />
                                         <button
                                             className='mr-3 cursor-pointer'
-                                            onClick={() => dispatch(incrementItemQuantity(item.id))}
+                                            onClick={() => dispatch(incrementItemQuantity(item))}
                                         >
                                             <Image
                                                 src={plus}

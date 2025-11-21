@@ -5,6 +5,7 @@ import { RootState } from '@/state/store';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/state/store';
+import Button from '@/components/ui/Button';
 
 const CheckoutPage = () => {
     const { items, totalQuantity } = useSelector((state: RootState) => state.cart);
@@ -63,16 +64,21 @@ const CheckoutPage = () => {
                             type='number'
                         />
                     </div>
+                    <div className='mt-4'>
+                        <Button apearence='primary' classname='w-full h-[45px]'>
+                            Оформити замовлення
+                        </Button>
+                    </div>
                 </form>
             </div>
             <div className=''>
                 <h1 className='text-[24px] font-black text-[#4d6d7e] mb-3'>
                     Обрані товари
                 </h1>
-                <div className='scrollbar overflow-y-scroll max-h-[calc(100vh-320px)] h-fit *:first:mt-0 *:mt-5'>
+                <div className='scrollbar overflow-y-scroll sm:w-[500px] max-h-[calc(100vh-320px)] h-fit *:first:mt-0 *:mt-5'>
                     {
                         items.map((item) => (
-                            <div className='flex pb-5 w-[98%]' key={item.id}>
+                            <div className='flex pb-2 w-[98%]' key={item.id}>
                                 <div className='flex items-center'>
                                     <div
                                         className='cursor-pointer flex justify-center items-center rounded bg-white sm:min-w-[130px] sm:w-[130px] sm:h-[130px] min-w-[100px] w-[100px] h-[100px]'
@@ -91,13 +97,11 @@ const CheckoutPage = () => {
                                             {item.shortName}
                                         </div>
                                         <div className='flex flex-col gap-3 mt-2 w-fit'>
-                                            <div className='text-[#4d6d7e] flex justify-center border border-[#CAD3D8] rounded-xl px-2 font-extrabold text-[16px]'>
-                                                Packaging: {item.packaging}
+                                            <div className='text-[#4d6d7e] text-[18px]'>
+                                                Packaging: <span className='text-[16px] border border-[#CAD3D8] rounded-xl px-2 font-extrabold text-[16px]'>{item.packaging}</span>
                                             </div>
-                                            <div className='rounded-xl border border-[#D2DADF]'>
-                                                <div className='text-[#4d6d7e] text-center font-extrabold w-[50px] no-spinner appearance-none outline-none border-none bg-transparent'>
-                                                    Quantity: {item.quantity}
-                                                </div>
+                                            <div className='text-[#4d6d7e] text-[18px]'>
+                                                Quantity: <span className='text-[16px] border border-[#CAD3D8] rounded-xl px-2 font-extrabold text-[16px]'>{item.quantity}</span>
                                             </div>
                                         </div>
                                     </div>
