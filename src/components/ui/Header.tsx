@@ -59,12 +59,12 @@ const Header = () => {
             <div className='absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-62/100 text-[22px] lg:text-[32px] text-[#8E4E2F] font-extrabold'>
                 <Link href='/' className='flex justify-between items-center'>
                     <Image
-                        loading='lazy'
                         width={100}
                         height={100}
                         className='mt-1 w-[100px] lg:w-[130px]'
                         src={antypLogo}
                         alt='beer icon'
+                        priority
                     />
                     <div className='absolute w-full mt-[52px] lg:mt-[72px]'>
                         <span className='flex justify-center'>Antyp</span>
@@ -78,20 +78,20 @@ const Header = () => {
                         onClick={() => setIsSearchOpen(!isSearchOpen)}
                     >
                         <Image
-                            loading='lazy'
                             width={25}
                             height={25}
                             src={searchSVG}
                             alt='search icon'
+                            priority
                         />
                     </button>
                     <Link href='/login' className='lg:flex justify-center items-center cursor-pointer hidden h-[40px] w-[40px]'>
                         <Image
-                            loading='lazy'
                             width={25}
                             height={25}
                             src={profileSVG}
                             alt='profile icon'
+                            priority
                         />
                     </Link>
                     <button
@@ -101,11 +101,11 @@ const Header = () => {
                         <div className='relative h-[40px] flex justify-center'>
                             <Image
                                 className=''
-                                loading='lazy'
                                 width={30}
                                 height={30}
                                 src={cartSVG}
                                 alt='cart icon'
+                                priority
                             />
                             <div className={classNames(
                                 'font-bold text-white w-4 h-4 text-[11px] bg-[#4d6d7e] absolute top-0 right-0 rounded-[50%]',

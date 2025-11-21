@@ -21,7 +21,7 @@ const CheckoutPage = () => {
 
     const onSubmit: SubmitHandler<CheckoutFormFields> = (data) => {
         console.log(data);
-    }
+    };
 
     return (
         <div className='relative w-full flex flex-col lg:flex-row justify-center items-start sm:items-center lg:items-start gap-10 max-w-[1280px] mx-auto py-3 px-3'>

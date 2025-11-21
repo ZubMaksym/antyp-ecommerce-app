@@ -13,6 +13,7 @@ const FiltersButton = ({ setIsOpen }: FiltersButtonProps) => {
                 alt='filter icon'
                 width={22}
                 height={22}
+                priority
             />
             {/* <div className='text-[22px] text-white font-black'>
                 Filters

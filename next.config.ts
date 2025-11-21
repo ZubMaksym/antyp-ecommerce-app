@@ -9,7 +9,10 @@ const nextConfig: NextConfig = {
       new URL('http://138.199.224.156:9010/**'),
     ],
   },
-  allowedDevOrigins: ['http://26.118.106.156:3000']
+  allowedDevOrigins: ['http://26.118.106.156:3000'],
+  experimental: {
+    svgr: true,
+  },
 };
 
 export default nextConfig;

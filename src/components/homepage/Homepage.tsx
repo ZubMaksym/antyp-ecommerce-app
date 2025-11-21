@@ -87,6 +87,7 @@ const Homepage = () => {
                                         height={350}
                                         className='w-full h-full'
                                         alt={data.name}
+                                        priority
                                     />
                                 </CategoryCard>
                             </Link>

@@ -134,6 +134,7 @@ const CategoryPage = () => {
         <section className=''>
             <div className='flex max-w-[1660px] justify-between h-[100px] mx-auto'>
                 <Link
+                    prefetch={true}
                     href={prevNextCategory?.prevCategory === null ? '/' : '/product/filters/' + prevNextCategory?.prevCategory.route}
                     className='flex items-center w-fit text-[#4d6d7e] font-bold ml-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] text-[22px] relative transition-all duration-300
                     hover:text-[#737373] after:absolute after:left-[5px] after:bottom-0 after:h-[2px] after:bg-[#737373]
@@ -141,17 +142,28 @@ const CategoryPage = () => {
                 >
                     <span className='text-[30px] mb-1'>&#8678;</span>
                     <div className='ml-1'>
-                        {prevNextCategory?.prevCategory === null ? 'Homepage' : prevNextCategory?.prevCategory.name}
+                        {
+                            prevNextCategory?.prevCategory === null
+                                ? 'Homepage'
+                                : prevNextCategory?.prevCategory.name
+
+                        }
                     </div>
                 </Link>
                 <Link
+                    prefetch={true}
                     href={prevNextCategory?.nextCategory === null ? '/' : '/product/filters/' + prevNextCategory?.nextCategory.route}
                     className='flex items-center w-fit text-[#4d6d7e] font-bold mr-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] text-[22px] relative transition-all duration-300
                     hover:text-[#737373] after:absolute after:left-[5px] after:bottom-0 after:h-[2px] after:bg-[#737373]
                     after:w-0 hover:after:w-full after:transition-all after:duration-300'
                 >
                     <div className='mr-1'>
-                        {prevNextCategory?.nextCategory === null ? 'Homepage' : prevNextCategory?.nextCategory.name}
+                        {
+                            prevNextCategory?.nextCategory === null
+                                ? 'Homepage'
+                                : prevNextCategory?.nextCategory.name
+
+                        }
                     </div>
                     <span className='text-[30px] mt-[15px] rotate-180'>&#8678;</span>
                 </Link>
