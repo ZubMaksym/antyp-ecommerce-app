@@ -10,3 +10,10 @@ export interface IPrevNext {
         image: string;
     } | null;
 }
+
+// export interface CheckoutFormFields {
+//     firstName: string;
+//     lastName: string;
+//     company: string;
+//     phoneNumber: number;
+// }

@@ -1,5 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
 import { ProductItem } from './reducerTypes';
+import { InferType } from 'yup';
+import { CheckoutFormValidationSchema } from '@/schemas/CheckoutFormValidationSchema';
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
 
 export interface ModalProps {
     isOpen: boolean;
@@ -72,8 +75,13 @@ export interface ProductDetailsTableProps {
 }
 
 export interface InputProps {
+    register?: UseFormRegister<CheckoutFormFields>;
+    errors?: FieldErrors<CheckoutFormFields> | undefined;
+    errorMessage?: string | undefined;
     className: string;
     type: 'text' | 'number';
     placeholder: string;
-    id: string;
+    id: 'firstName' | 'lastName' | 'company' | 'phoneNumber';
 }
+
+export type CheckoutFormFields = InferType<typeof CheckoutFormValidationSchema>;

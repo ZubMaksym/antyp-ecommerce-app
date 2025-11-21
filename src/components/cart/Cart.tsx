@@ -107,7 +107,11 @@ const Cart = () => {
                 Total products: {totalQuantity}
             </div>
             <Link href='/checkout'>
-                <Button apearence='primary' classname='font-bold text-[22px] w-[98%] mt-5 mb-1 h-[52px]'>
+                <Button 
+                    apearence='primary' 
+                    classname='font-bold text-[22px] w-[98%] mt-5 mb-1 h-[52px]'
+                    onClick={() => dispatch(toggleCart())}
+                >
                     Checkout
                 </Button>
             </Link>
