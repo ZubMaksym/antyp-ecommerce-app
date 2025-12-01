@@ -72,9 +72,9 @@ const CheckoutPage = () => {
                             className='w-full h-[45px]'
                             placeholder={`Компанія (опціонально)`}
                             type='text'
-                            register={register}
-                            errors={errors}
-                            errorMessage={errors.company?.message}
+                            // register={register}
+                            // errors={errors}
+                            // errorMessage={errors.company?.message}
                         />
                     </div>
                     <div className='mt-[2px]'>

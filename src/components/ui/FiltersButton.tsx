@@ -15,9 +15,6 @@ const FiltersButton = ({ setIsOpen }: FiltersButtonProps) => {
                 height={22}
                 priority
             />
-            {/* <div className='text-[22px] text-white font-black'>
-                Filters
-            </div> */}
         </button>
     );
 };

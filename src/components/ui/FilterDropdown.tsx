@@ -1,6 +1,5 @@
 import { FilterDropdownProps } from '@/types/componentTypes';
 import { useState } from 'react';
-// import caret from '@/public/icons/shared/caretDropdown.svg';
 import caret from '@/public/icons/shared/caretDropdownBold.svg';
 import Image from 'next/image';
 import classNames from 'classnames';

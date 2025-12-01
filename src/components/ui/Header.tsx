@@ -1,5 +1,4 @@
 'use client';
-// import beerSVG from '@/public/icons/header/beer.svg';
 import cartSVG from '@/public/icons/header/cart.svg';
 import searchSVG from '@/public/icons/header/search.svg';
 import profileSVG from '@/public/icons/header/profile.svg';
@@ -22,7 +21,6 @@ import { useDispatch } from 'react-redux';
 const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
-    // const [isCartOpen, setIsCartOpen] = useState(false);
     const { items, isCartOpen } = useSelector((state: RootState) => state.cart);
     const dispatch = useDispatch<AppDispatch>();
 

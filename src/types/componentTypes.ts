@@ -84,4 +84,9 @@ export interface InputProps {
     id: 'firstName' | 'lastName' | 'company' | 'phoneNumber';
 }
 
-export type CheckoutFormFields = InferType<typeof CheckoutFormValidationSchema>;
+export interface CheckoutFormFields {
+    firstName: string;
+    lastName: string;
+    company?: string;
+    phoneNumber: string;
+}

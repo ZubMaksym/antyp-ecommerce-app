@@ -1,5 +1,3 @@
-
-
 import { scrollTo } from '@/utils/helpers';
 import { useEffect, useState } from 'react';
 
@@ -14,7 +12,6 @@ const GoUpButton = () => {
 
         window.addEventListener('scroll', handleScroll);
 
-        // викликаємо одразу, щоб стан був коректним при першому рендері
         handleScroll();
 
         return () => window.removeEventListener('scroll', handleScroll);

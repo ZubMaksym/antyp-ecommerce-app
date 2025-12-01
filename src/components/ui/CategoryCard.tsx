@@ -2,7 +2,6 @@ import { CategoryCardProps } from '@/types/componentTypes';
 
 
 const CategoryCard = ({ children, subtitle }: CategoryCardProps) => {
-
     return (
         <button className=''>
             <div

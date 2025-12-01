@@ -1,6 +1,5 @@
 import Button from './Button';
 import { ProductCardProps } from '@/types/componentTypes';
-// import beerImage from '@/public/icons/PLP_Kolsch.webp';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';
 import { addItem } from '@/state/cartState/cartSlice';

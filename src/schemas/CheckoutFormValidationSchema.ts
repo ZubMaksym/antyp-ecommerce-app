@@ -7,9 +7,9 @@ export const CheckoutFormValidationSchema = yup.object({
     lastName: yup
         .string()
         .required(`Це поле обов'язкове`),
-    company: yup
-        .string()
-        .optional(),
+    // company: yup
+    //     .string()
+    //     .notRequired(),
     phoneNumber: yup
         .string()
         .required(`Це поле обов'язкове`)
