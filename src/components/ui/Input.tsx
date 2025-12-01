@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import classNames from 'classnames';
 import { InputProps } from '@/types/componentTypes';
 
@@ -26,4 +26,4 @@ const Input = ({type, className, placeholder, id, register, errors, errorMessage
   );
 };
 
-export default Input
+export default Input;
