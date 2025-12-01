@@ -13,6 +13,7 @@ import usePagination from '@/hooks/usePagination';
 import { useDispatch } from 'react-redux';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
 import GoUpButton from '../ui/GoUpButton';
+import banner from '@/public/banner222.png';
 
 
 const Homepage = () => {
@@ -60,7 +61,15 @@ const Homepage = () => {
 
     return (
         <section className='mb-[40px] flex flex-col items-center'>
-            <div className='w-full h-[350px] px-[20px] py-[45px] md:px-[30px] md:py-[55px]'>
+            <div
+                className='w-full h-[450px] px-[20px] py-[45px] md:px-[30px] md:py-[55px]'
+                style={{
+                    backgroundImage: `url(${banner.src})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',     // розтягує по всій ширині
+                    backgroundPosition: 'center 40%',    // показує верхню частину картинки
+                }}
+            >
                 <h1 className='xl:w-[800px] lg:w-[700px] w-full flex text-center text-[36px] md:text-[42px] lg:text-start xl:text-[48px] font-black text-[#4d6d7e] animate-fadeUp'>
                     Leading distributor of regional beer in Ukraine
                 </h1>
@@ -68,14 +77,14 @@ const Homepage = () => {
             <div
                 className='w-full sm:px-[20px] px-[10px] animate-fadeUp'
             >
-                <h2 className='text-center mb-[40px] text-[32px] text-[#4d6d7e] font-bold'>
+                <h2 className='text-center mb-[40px] mt-[50px] text-[32px] text-[#4d6d7e] font-bold'>
                     Browse By Category
                 </h2>
                 <div id='categories' className='flex justify-center gap-10 mx-auto flex-wrap'>
                     {
                         categoriess.map((data, ind) => (
-                            <Link 
-                                href={`/product/filters/${data.route}`} 
+                            <Link
+                                href={`/product/filters/${data.route}`}
                                 key={ind}
                                 onClick={resetAll}
                             >
@@ -117,7 +126,7 @@ const Homepage = () => {
                                 key={product.id}
                                 product={product}
                                 onCardClick={() => router.push(`/product/${product.slug}`)}
-                                
+
                             />
                         ))}
                     </>
