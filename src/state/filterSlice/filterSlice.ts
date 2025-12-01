@@ -68,7 +68,7 @@ export const fetchFilters = createAsyncThunk<
     'filter/fetchFilters',
     async (filters) => {
         const { category, ...rest } = filters;
-        let url = `http://138.199.224.156:2007/product/filters-metadata?ProductType=${category}`;
+        let url = `https://138.199.224.156:444/product/filters-metadata?ProductType=${category}`;
 
         Object.entries(rest).forEach(([key, arr]) => {
             if (arr.length > 0) {
@@ -90,7 +90,7 @@ export const fetchFilters = createAsyncThunk<
 export const fetchInitialProducts = createAsyncThunk<ProductItem[], { category: string }>(
     'filter/fetchInitialProducts',
     async ({ category }) => {
-        const response = await fetch(`http://138.199.224.156:2007/product?ProductType=${category}`);
+        const response = await fetch(`https://138.199.224.156:444/product?ProductType=${category}`);
         if (!response.ok) {
             throw new Error(`API error ${response.status} ${response.statusText}`);
         }
@@ -167,7 +167,7 @@ export const fetchProducts = createAsyncThunk<
         }
 
         const response = await fetch(
-            `http://138.199.224.156:2007/product?Page=${currentPage}&PageSize=${productPerPage}&ProductType=${categoryName}&${params.toString()}`
+            `https://138.199.224.156:444/product?Page=${currentPage}&PageSize=${productPerPage}&ProductType=${categoryName}&${params.toString()}`
         );
 
         if (!response.ok) {
@@ -365,7 +365,6 @@ export const filterSlice = createSlice({
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.productsLoading = false;
                 state.productsError = action.error.message || 'Error. Request rejected';
-                // state.productsLoadedOnce = true;
             });
     }
 });

@@ -46,7 +46,7 @@ const ProductPage = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`http://138.199.224.156:2007/product/${slug}`);
+                const response = await fetch(`https://138.199.224.156:444/product/${slug}`);
 
                 if (!response.ok) {
                     throw new Error(`API Error ${response.status} ${response.statusText}`);
@@ -67,7 +67,7 @@ const ProductPage = () => {
         const fetchRelatedProducts = async () => {
             if (product) {
                 try {
-                    const response = await fetch(`http://138.199.224.156:2007/product?Manufacturers=${product.manufacturer.id}`);
+                    const response = await fetch(`https://138.199.224.156:444/product?Manufacturers=${product.manufacturer.id}`);
 
                     if (!response.ok) {
                         throw new Error(`API Error ${response.status} ${response.statusText}`);
