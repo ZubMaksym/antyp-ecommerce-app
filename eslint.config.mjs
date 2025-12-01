@@ -32,6 +32,18 @@ const eslintConfig = [
       "react/react-in-jsx-scope": "off", // No import React
       "react/prop-types": "off", // no prop types
       "@typescript-eslint/no-explicit-any": "off",
+
+
+      // '@typescript-eslint/no-explicit-any': 'off',
+      // '@typescript-eslint/no-unused-vars': 'off',
+      // 'no-unused-vars': 'off',
+      // 'react-hooks/exhaustive-deps': 'off',
+      // 'no-console': 'off',
+      // 'semi': 'off',
+      // 'quotes': 'off',
+      // 'jsx-quotes': 'off',
+      // 'react/react-in-jsx-scope': 'off',
+      // 'react/prop-types': 'off',
     },
   },
 ];
