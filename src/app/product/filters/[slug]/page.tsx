@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import type { AppDispatch, RootState } from '@/state/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProducts } from '@/state/filterSlice/filterSlice';
@@ -12,7 +11,13 @@ import { fetchFilters } from '@/state/filterSlice/filterSlice';
 import usePagination from '@/hooks/usePagination';
 import Pagination from '@/components/ui/Pagination';
 import Products from '@/components/filtersPage/Products';
-
+import Link from 'next/link';
+import GoUpButton from '@/components/ui/GoUpButton';
+import { getPrevNextCategory } from '@/utils/helpers';
+import { categoriess } from '@/utils/data';
+import { IPrevNext } from '@/types/helperTypes';
+import classNames from 'classnames';
+import { usePathname } from 'next/navigation';
 
 const CategoryPage = () => {
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -33,11 +38,14 @@ const CategoryPage = () => {
         selectedAlcoholStrength,
         selectedIBU,
         totalCount,
-        productsLoadedOnce
+        productsLoadedOnce,
+        productsLoading
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
     const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 6, totalCount: 0 });
     const [categoryChanged, setCategoryChanges] = useState(false);
+    const [prodReq, setProdReq] = useState(false);
+    const [prevNextCategory, setPrevNextCategory] = useState<IPrevNext>();
 
     useEffect(() => {
         dispatch(resetFilters());
@@ -83,7 +91,9 @@ const CategoryPage = () => {
     ]);
 
     useEffect(() => {
+        if (!categoryChanged) return;
         if (!loading && filters) {
+            console.log('fetch!!!!!!!!!!');
             dispatch(fetchProducts({
                 categoryName,
                 manufacturers: selectedManufacturers,
@@ -101,21 +111,11 @@ const CategoryPage = () => {
                 productPerPage: productPerPage
             }));
             setTotalCount(totalCount);
+            setProdReq(true);
         }
     }, [
-        loading,
-        filters,
-        categoryName,
-        selectedManufacturers,
-        selectedBeerTypes,
-        selectedSeasonTags,
-        selectedPackagings,
-        selectedWaterTypes,
-        selectedCarbonationLevels,
-        selectedSoftDrinkTypes,
-        selectedWineColors,
-        selectedWineSweetness,
         dispatch,
+        filters,
         selectedAlcoholStrength,
         selectedIBU,
         currentPage,
@@ -124,32 +124,99 @@ const CategoryPage = () => {
         totalCount,
     ]);
 
+    useEffect(() => {
+        const prevNext = getPrevNextCategory(categoriess, categoryName);
+        setPrevNextCategory(prevNext);
+    }, []);
+
     return (
-        <section className='mb-[40px] mt-[55px] flex flex-col lg:flex-row justify-center'>
-            <div className='hidden lg:block'>
-                <DesktopFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
-            </div>
-            <MobileFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
-            <div className='mx-[15px] my-[15px] flex flex-col sm:flex-row justify-between sm:items-center'>
-                <FiltersButton setIsOpen={setIsFiltersOpen} />
-                <span className='block lg:hidden text-[24px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>Found Products: {products?.length}</span>
-            </div>
-            <div className='flex flex-col w-full justify-between max-w-[1320px]'>
-                <Products products={products} loading={loading} productsLoadedOnce={productsLoadedOnce} />
+        <section className=''>
+            <div className='flex flex-wrap max-w-[1660px] justify-around h-[100px] mx-auto'>
                 {
-                    products && (
-                        <div className='self-center'>
-                            <Pagination
-                                scrollTopValue={0}
-                                totalPages={totalPages}
-                                currentPage={currentPage}
-                                setCurrentPage={setCurrentPage}
-                            />
-                        </div>
-                    )
+                    categoriess.map((data) => (
+                        <Link
+                            className={classNames(
+                            `flex items-center w-fit text-[#4d6d7e] font-bold ml-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] 
+                            text-[22px] relative transition-all duration-300 hover:text-[#737373] after:absolute after:bottom-0 after:h-[2px] after:bg-[#737373]
+                            after:w-0 hover:after:w-full after:transition-all after:duration-300`,
+                            {
+                                'text-[#737373]': data.route === categoryName 
+                            }
+                            )}
+                            href={`/product/filters/${data.route}`}
+                            key={data.name}
+                        // onClick={resetAll}
+                        >
+                            {data.name}
+                        </Link>
+                    ))
                 }
+                {/* <Link
+                    prefetch={true}
+                    href={prevNextCategory?.prevCategory === null ? '/' : '/product/filters/' + prevNextCategory?.prevCategory.route}
+                    className='flex items-center w-fit text-[#4d6d7e] font-bold ml-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] text-[22px] relative transition-all duration-300
+                    hover:text-[#737373] after:absolute after:left-[5px] after:bottom-0 after:h-[2px] after:bg-[#737373]
+                    after:w-0 hover:after:w-full after:transition-all after:duration-300'
+                >
+                    <span className='text-[30px] mb-1'>&#8678;</span>
+                    <div className='ml-1'>
+                        {
+                            prevNextCategory?.prevCategory === null
+                                ? 'Homepage'
+                                : prevNextCategory?.prevCategory.name
+
+                        }
+                    </div>
+                </Link>
+                <Link
+                    prefetch={true}
+                    href={prevNextCategory?.nextCategory === null ? '/' : '/product/filters/' + prevNextCategory?.nextCategory.route}
+                    className='flex items-center w-fit text-[#4d6d7e] font-bold mr-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] text-[22px] relative transition-all duration-300
+                    hover:text-[#737373] after:absolute after:left-[5px] after:bottom-0 after:h-[2px] after:bg-[#737373]
+                    after:w-0 hover:after:w-full after:transition-all after:duration-300'
+                >
+                    <div className='mr-1'>
+                        {
+                            prevNextCategory?.nextCategory === null
+                                ? 'Homepage'
+                                : prevNextCategory?.nextCategory.name
+
+                        }
+                    </div>
+                    <span className='text-[30px] mt-[15px] rotate-180'>&#8678;</span>
+                </Link> */}
             </div>
-        </section >
+            <div className='mb-[40px] flex flex-col lg:flex-row justify-center'>
+                <div className=''>
+                    <div className='lg:sticky top-25 hidden lg:block'>
+                        <DesktopFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
+                    </div>
+                </div>
+                <MobileFilters isOpen={isFiltersOpen} setIsOpen={setIsFiltersOpen} />
+                <div className='mx-[15px] my-[5px] flex flex-row justify-between items-center'>
+                    <span className='block lg:hidden text-[20px] font-extrabold text-[#4d6d7e] my-[10px] sm:my-0'>
+                        Found Products: {products?.length}
+                    </span>
+                    <FiltersButton setIsOpen={setIsFiltersOpen} />
+                </div>
+                <div className='flex flex-col w-full justify-between max-w-[1320px]'>
+                    <Products products={products} loading={productsLoading} productsLoadedOnce={productsLoadedOnce} />
+                    {
+                        products && (
+                            <div className='self-center'>
+                                <Pagination
+                                    scrollTopValue={0}
+                                    totalPages={totalPages}
+                                    currentPage={currentPage}
+                                    setCurrentPage={setCurrentPage}
+                                />
+                            </div>
+                        )
+                    }
+                </div>
+                <GoUpButton />
+            </div>
+        </section>
     );
 };
 

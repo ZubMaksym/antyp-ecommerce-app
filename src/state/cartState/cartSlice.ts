@@ -1,30 +1,64 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { ProductItem } from '@/types/reducerTypes';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { ProductItemCart } from '@/types/reducerTypes';
 
 export interface CartSlice {
-    items: Array<ProductItem>;
+    items: Array<ProductItemCart>;
     totalQuantity: number;
+    isCartOpen?: boolean;
 }
 
 const initialState: CartSlice = {
     items: [],
-    totalQuantity: 0
+    totalQuantity: 0,
+    isCartOpen: false
 };
 
 const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
-        addItem: (state, action) => {
+        incrementItemQuantity(state, action) {
+            const item = state.items.find(i => (i.id === action.payload.id && i.packaging === action.payload.packaging));
+            if (item && item.quantity < 9999) item.quantity++;
+        },
+        decrementItemQuantity(state, action) {
+            const item = state.items.find(i => (i.id === action.payload.id && i.packaging === action.payload.packaging));
+            if (item && item.quantity > 1) item.quantity--;
+        },
+        changeItemQuantity(state, action) {
+            const { id, value, packaging } = action.payload;
+            const item = state.items.find(i => (i.id === id && i.packaging === packaging));
+            if (!item) return;
+
+            if (value < 1) item.quantity = 1;
+            else if (value > 9999) item.quantity = 9999;
+            else item.quantity = value;
+        },
+        toggleCart: (state) => {
+            state.isCartOpen = !state.isCartOpen;
+        },
+        addItem: (state, action: PayloadAction<ProductItemCart>) => {
             const item = action.payload;
-            const existingItem = state.items.find((i) => i.id === item.id);
+            const existingItem = state.items.find((i) => (i.id === item.id && i.packaging === item.packaging));
             if (!existingItem) {
                 state.items.push(item);
                 state.totalQuantity += 1;
             }
+        },
+        removeItem: (state, action) => {
+            const { id, packaging } = action.payload;
+
+            state.items = state.items.filter(
+                (i) => !(i.id === id && i.packaging === packaging)
+            );
+
+            state.totalQuantity -= 1;
+        },
+        hydrateCart(state, action) {
+            return action.payload;
         }
     }
 });
 
-export const { addItem } = cartSlice.actions;
+export const { hydrateCart, addItem, toggleCart, removeItem, incrementItemQuantity, decrementItemQuantity, changeItemQuantity } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -19,6 +19,8 @@ import { usePathname } from 'next/navigation';
 import RangeSlider from './RangeSlider';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
 import { ModalProps } from '@/types/componentTypes';
+import { useState, useEffect } from 'react';
+import { FilterSkeleton } from '../ui/FilterSkeleton';
 
 const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
     const categoryName: any = usePathname().split('/').pop();
@@ -39,6 +41,41 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
         minMaxIbu
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
+
+    const getVisibleItems = (filter: Result, key: keyof Result) => {
+        if (Array.isArray(filter[key])) {
+            const visibleItems = filter?.[key].filter(item => item.count > 0) || [];
+            return visibleItems;
+        }
+        return [];
+    };
+    
+    const [prevVisibleLengths, setPrevVisibleLengths] = useState<Record<string, number>>({});
+
+    useEffect(() => {
+    if (!loading && filters) {
+        const newLengths: Record<string, number> = {};
+
+        const filterKeys: (keyof Result)[] = [
+            'manufacturers',
+            'beerTypes',
+            'seasonTags',
+            'packagings',
+            'waterTypes',
+            'carbonationLevels',
+            'softDrinkTypes',
+            'wineColors',
+            'wineSweetness'
+        ];
+
+        filterKeys.forEach(key => {
+            const visibleItems = getVisibleItems(filters, key);
+            newLengths[key] = visibleItems.length;
+        });
+
+        setPrevVisibleLengths(newLengths);
+    }
+    }, [loading, filters]);
 
     const getProductsByManufacturer = (manufacturer: FilterName) => {
         dispatch(toggleManufacturers(manufacturer.id));
@@ -82,13 +119,13 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
     };
 
     return (                                                                                                                    //h-[60px] lg:h-[105px] xl:h-[85px]
-        <div className={`pt-3 lg:pt-0 px-4 scrollbar lg:sticky overflow-y-scroll xl:top-[100px] lg:top-[130px] w-full lg:w-[300px] mx-[15px] max-h-[calc(100vh-170px)]`}>
+        <div className={`pt-3 lg:pt-0 px-4 scrollbar overflow-y-scroll xl:top-[100px] lg:top-[130px] w-full lg:w-[300px] mx-[15px] max-h-[calc(100vh-170px)]`}>
             <h2 className='text-[22px] font-black text-[#4d6d7e]'>Filters</h2>
             <FilterDropdown filterName='Manufacturer' isFirst={true} allowOverflow={true}>
                 <div className='flex flex-col *:mt-2 *:first:mt-0'>
                     {
-                        loading
-                            ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                        loading 
+                            ? <FilterSkeleton record={prevVisibleLengths.manufacturers}/>
                             : (
                                 filters?.manufacturers.map((manufacturer) => (
                                     manufacturer.count > 0 && (
@@ -132,7 +169,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.beerTypes}/>
                                 : (
                                     filters?.beerTypes.map((beerType) => (
                                         beerType.count > 0 && (
@@ -161,7 +198,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.seasonTags}/>
                                 : (
                                     filters?.seasonTags.map((seasonTag) => (
                                         seasonTag.count > 0 && (
@@ -190,7 +227,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.waterTypes}/>
                                 : (
                                     filters?.waterTypes.map((waterType) => (
                                         waterType.count > 0 && (
@@ -219,7 +256,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.carbonationLevels}/>
                                 : (
                                     filters?.carbonationLevels.map((carbonationLevel) => (
                                         carbonationLevel.count > 0 && (
@@ -248,7 +285,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.softDrinkTypes}/>
                                 : (
                                     filters?.softDrinkTypes.map((softDrinkType) => (
                                         softDrinkType.count > 0 && (
@@ -277,7 +314,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.wineColors}/>
                                 : (
                                     filters?.wineColors.map((wineColor) => (
                                         wineColor.count > 0 && (
@@ -306,7 +343,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                     <div className='flex flex-col *:mt-2 *:first:mt-0v'>
                         {
                             loading
-                                ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                                ? <FilterSkeleton record={prevVisibleLengths.wineSweetness}/>
                                 : (
                                     filters?.wineSweetness.map((wineSweetness) => (
                                         wineSweetness.count > 0 && (
@@ -333,7 +370,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                 <div className='flex flex-col *:mt-2 *:first:mt-0'>
                     {
                         loading
-                            ? <p className='text-[#4d6d7e] text-[16px] font-medium'>Loading...</p>
+                            ? <FilterSkeleton record={prevVisibleLengths.packagings}/>
                             : (
                                 filters?.packagings.map((packaging) => (
                                     packaging.count > 0 && (

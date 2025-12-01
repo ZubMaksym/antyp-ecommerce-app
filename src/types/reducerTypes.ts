@@ -46,6 +46,18 @@ export interface ProductItem {
     slug: string;
     mainPhotoUrl: string;
     photoUrls: string[];
+    ibu?: number | null;
+    alcoholStrength?: number | null;
+    beerType?: { id: string; name: string } | null;
+    carbonationLevel?: { id: string; name: string } | null;
+    waterType?: { id: string; name: string } | null;
+    softDrinkType?: { id: string; name: string } | null;
+    wineColor?: { id: string; name: string } | null;
+    wineSweetness?: { id: string; name: string } | null;
+    isSparking?: boolean | null;
+    // manufacturer?: { id: string; name: string; shortName: string; aboutUrl?: string | null; photoUrl?: string | null } | null;
+    // packagings?: { id: string; name: string; photoUrl?: string | null }[];
+    // productType?: string;
 }
 
 export interface ProductResponse {
@@ -65,4 +77,9 @@ export interface Manufacturer {
 
 export interface Result {
     manufacturers: Manufacturer[];
+}
+
+export interface ProductItemCart extends ProductItem {
+    quantity: number;
+    packaging: string;
 }

@@ -10,19 +10,21 @@ import { useState } from 'react';
 import MobileNav from './MobileNav';
 import { navLinksData } from '@/utils/data';
 import Modal from './Modal';
-import SearchInput from './SearchInput';
+import Search from './Search';
 import antypLogo from '@/public/icons/header/antypLogo1.svg';
 import Cart from '../cart/Cart';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/state/store';
+import { RootState, AppDispatch } from '@/state/store';
 import classNames from 'classnames';
-import { it } from 'node:test';
+import { toggleCart } from '@/state/cartState/cartSlice';
+import { useDispatch } from 'react-redux';
 
 const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
-    const [isCartOpen, setIsCartOpen] = useState(false);
-    const { items } = useSelector((state: RootState) => state.cart);
+    // const [isCartOpen, setIsCartOpen] = useState(false);
+    const { items, isCartOpen } = useSelector((state: RootState) => state.cart);
+    const dispatch = useDispatch<AppDispatch>();
 
     return (
         <header className='z-50 sticky top-0 left-0 h-[60px] lg:h-[105px] xl:h-[85px] w-full bg-[#f6efe7] flex justify-between items-center border-b border-[#4d6d7e] overflow-hidden'>
@@ -57,12 +59,12 @@ const Header = () => {
             <div className='absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-62/100 text-[22px] lg:text-[32px] text-[#8E4E2F] font-extrabold'>
                 <Link href='/' className='flex justify-between items-center'>
                     <Image
-                        loading='lazy'
                         width={100}
                         height={100}
                         className='mt-1 w-[100px] lg:w-[130px]'
                         src={antypLogo}
                         alt='beer icon'
+                        priority
                     />
                     <div className='absolute w-full mt-[52px] lg:mt-[72px]'>
                         <span className='flex justify-center'>Antyp</span>
@@ -76,34 +78,34 @@ const Header = () => {
                         onClick={() => setIsSearchOpen(!isSearchOpen)}
                     >
                         <Image
-                            loading='lazy'
                             width={25}
                             height={25}
                             src={searchSVG}
                             alt='search icon'
+                            priority
                         />
                     </button>
                     <Link href='/login' className='lg:flex justify-center items-center cursor-pointer hidden h-[40px] w-[40px]'>
                         <Image
-                            loading='lazy'
                             width={25}
                             height={25}
                             src={profileSVG}
                             alt='profile icon'
+                            priority
                         />
                     </Link>
                     <button
                         className='cursor-pointer h-[40px] w-[40px]'
-                        onClick={() => setIsCartOpen(!isCartOpen)}
+                        onClick={() => dispatch(toggleCart())}
                     >
                         <div className='relative h-[40px] flex justify-center'>
                             <Image
                                 className=''
-                                loading='lazy'
                                 width={30}
                                 height={30}
                                 src={cartSVG}
                                 alt='cart icon'
+                                priority
                             />
                             <div className={classNames(
                                 'font-bold text-white w-4 h-4 text-[11px] bg-[#4d6d7e] absolute top-0 right-0 rounded-[50%]',
@@ -118,9 +120,9 @@ const Header = () => {
                 </div>
             </div>
             <Modal isOpen={isSearchOpen} setIsOpen={setIsSearchOpen} title='Search'>
-                <SearchInput />
+                <Search isOpen={isSearchOpen} setIsOpen={setIsSearchOpen}/>
             </Modal>
-            <Modal isOpen={isCartOpen} setIsOpen={setIsCartOpen} title='Shopping cart'>
+            <Modal isOpen={isCartOpen!} setIsOpen={() => dispatch(toggleCart())} title='Shopping cart'>
                 <Cart />
             </Modal>
         </header >

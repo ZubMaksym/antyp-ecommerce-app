@@ -19,8 +19,7 @@ const Modal = ({ isOpen, setIsOpen, children, title }: SearchProps) => {
     if (!portalRoot) return null;
 
     return ReactDOM.createPortal(
-        <aside className={classNames(
-        )}>
+        <aside className=''>
             <div
                 tabIndex={0}
                 className={classNames(

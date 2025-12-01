@@ -103,7 +103,7 @@ export const fetchProducts = createAsyncThunk<
     { items: ProductItem[], totalCount: number },
     {
         categoryName: string;
-        manufacturers: string[]
+        manufacturers: string[];
         beerTypes: string[];
         seasonTags: string[];
         packagings: string[];
@@ -268,6 +268,7 @@ export const filterSlice = createSlice({
             }
         },
         resetFilters: (state) => {
+            state.filters = null;
             state.selectedManufacturers = [];
             state.selectedBeerTypes = [];
             state.selectedSeasonTags = [];
@@ -277,11 +278,21 @@ export const filterSlice = createSlice({
             state.selectedSoftDrinkTypes = [];
             state.selectedWineColors = [];
             state.selectedWineSweetness = [];
-            state.selectedAlcoholStrength = state.minMaxAlcohol;
-            state.selectedIBU = state.minMaxIbu;
+
+            if (state.filters) {
+                state.selectedAlcoholStrength = {
+                    min: 0,
+                    max: 0
+                };
+                state.selectedIBU = {
+                    min: 0,
+                    max: 0
+                };
+            }
         },
         resetProducts: (state) => {
             state.products = [];
+            state.productsLoadedOnce = false;
         },
         setAlcoholStrengthRange: (state, action: PayloadAction<[number, number]>) => {
             state.selectedAlcoholStrength.min = action.payload[0];
@@ -290,7 +301,10 @@ export const filterSlice = createSlice({
         setIbuRange: (state, action: PayloadAction<[number, number]>) => {
             state.selectedIBU.min = action.payload[0];
             state.selectedIBU.max = action.payload[1];
-        }
+        },
+        setFiltersFromUrl: (state, action: PayloadAction<any>) => {
+            Object.assign(state, action.payload);
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -299,14 +313,12 @@ export const filterSlice = createSlice({
                 state.productsError = null;
             })
             .addCase(fetchInitialProducts.fulfilled, (state, action: PayloadAction<any>) => {
-                state.productsLoadedOnce = true;
                 state.productsLoading = false;
                 state.products = action.payload;
             })
             .addCase(fetchInitialProducts.rejected, (state, action) => {
                 state.productsLoading = false;
                 state.productsError = action.error.message || 'Error. Request rejected';
-                state.productsLoadedOnce = true;
             })
 
 
@@ -353,7 +365,7 @@ export const filterSlice = createSlice({
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.productsLoading = false;
                 state.productsError = action.error.message || 'Error. Request rejected';
-                state.productsLoadedOnce = true;
+                // state.productsLoadedOnce = true;
             });
     }
 });
@@ -372,7 +384,8 @@ export const
         resetFilters,
         resetProducts,
         setAlcoholStrengthRange,
-        setIbuRange
+        setIbuRange,
+        setFiltersFromUrl
     } = filterSlice.actions;
 
 export default filterSlice.reducer;

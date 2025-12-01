@@ -19,6 +19,21 @@
   background-color: #4d6d7e;
 }
 
+.mobile-swiper .swiper-pagination-bullet {
+  background: #bbb;
+}
+
+.mobile-swiper .swiper-pagination-bullet-active {
+  background: #4d6d7e !important;
+}
+
+.mobile-swiper .swiper-button-next,
+.mobile-swiper .swiper-button-prev {
+  width: 30px;
+  height: 30px;
+  color: #4d6d7e;
+}
+
 @keyframes fadeUp {
   0% {
     opacity: 0;
@@ -67,4 +82,8 @@ html {
   overflow: hidden;
   touch-action: none;
   /* щоб мобільний скрол теж зупинявся */
+}
+
+.stroke {
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 }

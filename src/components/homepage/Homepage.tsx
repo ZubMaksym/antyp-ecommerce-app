@@ -10,13 +10,22 @@ import { ClipLoader } from 'react-spinners';
 import classNames from 'classnames';
 import Pagination from '../ui/Pagination';
 import usePagination from '@/hooks/usePagination';
+import { useDispatch } from 'react-redux';
+import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
+import GoUpButton from '../ui/GoUpButton';
 
 
 const Homepage = () => {
     const [bestsellerProducts, setBestsellerProducts] = useState<Array<any> | null>(null);
     const [bestsellerProductsError, setBestsellerProductsError] = useState<string | null>(null);
     const router = useRouter();
-    const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 6, totalCount: 0 });
+    const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 12, totalCount: 0 });
+    const dispatch = useDispatch();
+
+    const resetAll = () => {
+        dispatch(resetFilters());
+        dispatch(resetProducts());
+    };
 
     useEffect(() => {
         const fetchBestsellers = async () => {
@@ -34,7 +43,7 @@ const Homepage = () => {
                 setTotalCount(data.result.totalCount);
             } catch (error: any) {
                 setBestsellerProductsError(`Something went wrong while processing the request. We're woking to solve this problem`);
-                console.error(error.message);
+                throw new Error(error.message);
             }
         };
 
@@ -62,10 +71,14 @@ const Homepage = () => {
                 <h2 className='text-center mb-[40px] text-[32px] text-[#4d6d7e] font-bold'>
                     Browse By Category
                 </h2>
-                <div id='categories' className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 mx-auto justify-around gap-y-5 max-w-[1720px] *:mx-auto'>
+                <div id='categories' className='flex justify-center gap-10 mx-auto flex-wrap'>
                     {
                         categoriess.map((data, ind) => (
-                            <Link href={`/product/filters/${data.route}`} key={ind}>
+                            <Link 
+                                href={`/product/filters/${data.route}`} 
+                                key={ind}
+                                onClick={resetAll}
+                            >
                                 <CategoryCard subtitle={data.name}>
                                     {/* <span className='text-white xl:text-[28px] lg:text-[24px] md:text-[28px] text-[22px] font-black'>{data.name}</span> */}
                                     <Image
@@ -74,6 +87,7 @@ const Homepage = () => {
                                         height={350}
                                         className='w-full h-full'
                                         alt={data.name}
+                                        priority
                                     />
                                 </CategoryCard>
                             </Link>
@@ -100,11 +114,10 @@ const Homepage = () => {
                     <>
                         {bestsellerProducts.map((product) => (
                             <ProductCard
-                                name={product.shortName}
-                                shortName={product.name}
                                 key={product.id}
+                                product={product}
                                 onCardClick={() => router.push(`/product/${product.slug}`)}
-                                mainPhotoUrl={product.mainPhotoUrl}
+                                
                             />
                         ))}
                     </>
@@ -116,6 +129,7 @@ const Homepage = () => {
                 setCurrentPage={setCurrentPage}
                 scrollTopValue={700}
             />
+            <GoUpButton />
         </section>
     );
 };

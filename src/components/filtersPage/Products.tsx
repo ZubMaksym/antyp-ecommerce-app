@@ -35,11 +35,11 @@ const Products = ({ products, loading, productsLoadedOnce }: ProductsProps) => {
                 'flex justify-center items-center': products?.length === 0
             }
         )}>
-            <div className='flex flex-col'>
+            <div className='flex flex-col items-center'>
                 <p className='text-[24px] font-black text-[#4d6d7e]'>Nothing found by selected filters. Try Changing them</p>
                 <Button
                     apearence='secondary'
-                    classname='mt-5 w-full h-[35px] mb-2'
+                    classname='mt-5 w-[225px] h-[35px] mb-2'
                     onClick={resetAll}
                 >
                     Clear filters
@@ -48,7 +48,7 @@ const Products = ({ products, loading, productsLoadedOnce }: ProductsProps) => {
         </div>
     );
 
-    if (products && !loading) return (
+    if (products) return (
         <div className={classNames(
             'relative w-full gap-5 max-w-[1320px] min-h-[500px] px-[15px] h-auto',
             {
@@ -58,10 +58,8 @@ const Products = ({ products, loading, productsLoadedOnce }: ProductsProps) => {
         )}>
             {products.map((product) => (
                 <ProductCard
-                    name={product.shortName}
-                    shortName={product.name}
                     key={product.id}
-                    mainPhotoUrl={product.mainPhotoUrl}
+                    product={product}
                     onCardClick={() => router.push(`/product/${product.slug}`)}
                 />
             ))}

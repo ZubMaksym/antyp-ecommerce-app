@@ -1,5 +1,8 @@
 import { Dispatch, SetStateAction } from 'react';
-import { FilterName, ProductItem } from './reducerTypes';
+import { ProductItem } from './reducerTypes';
+import { InferType } from 'yup';
+import { CheckoutFormValidationSchema } from '@/schemas/CheckoutFormValidationSchema';
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
 
 export interface ModalProps {
     isOpen: boolean;
@@ -15,14 +18,12 @@ export interface ButtonProps {
     classname: string;
     apearence: 'primary' | 'secondary';
     children: React.ReactNode;
-    onClick?: () => void;
+    onClick?: any;
 }
 
 export interface ProductCardProps {
-    name: string;
-    shortName: string;
+    product: ProductItem;
     onCardClick: () => void;
-    mainPhotoUrl: string;
 }
 
 export interface CategoryCardProps {
@@ -64,3 +65,23 @@ export interface ProductsProps {
     loading: boolean;
     productsLoadedOnce: boolean;
 }
+
+export interface FilterSkeletonProps {
+    record: number
+}
+
+export interface ProductDetailsTableProps {
+    product: ProductItem;
+}
+
+export interface InputProps {
+    register?: UseFormRegister<CheckoutFormFields>;
+    errors?: FieldErrors<CheckoutFormFields> | undefined;
+    errorMessage?: string | undefined;
+    className: string;
+    type: 'text' | 'number';
+    placeholder: string;
+    id: 'firstName' | 'lastName' | 'company' | 'phoneNumber';
+}
+
+export type CheckoutFormFields = InferType<typeof CheckoutFormValidationSchema>;
