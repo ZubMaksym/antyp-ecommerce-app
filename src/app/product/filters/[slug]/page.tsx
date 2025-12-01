@@ -136,13 +136,11 @@ const CategoryPage = () => {
                     categoriess.map((data) => (
                         <Link
                             className={classNames(
-                                `flex items-center w-fit text-[#4d6d7e] font-bold lg:mt-[30px] lg:mb-[30px] 
-                                text-[22px] relative transition-all duration-300 hover:text-[#737373] after:absolute after:bottom-0 after:h-[2px] after:bg-[#737373]
-                                after:w-0 hover:after:w-full after:transition-all after:duration-300`,
+                                `lg:mt-[30px] lg:mb-[30px] flex items-center`,
                                 {
-                                    'text-[#737373]': data.route === categoryName,
                                     'pointer-events-none': data.route === categoryName
                                 }
+                                
                             )}
                             href={`/product/filters/${data.route}`}
                             key={data.name}
@@ -150,7 +148,15 @@ const CategoryPage = () => {
                             tabIndex={data.route === categoryName ? -1 : undefined}
                         // onClick={resetAll}
                         >
-                            <span className='mx-5'>{data.name}</span>
+                            <span className={classNames(
+                                `mx-5 flex items-center w-fit text-[#4d6d7e] font-bold 
+                                text-[22px] relative transition-all duration-300 hover:text-[#737373] after:absolute after:bottom-0 after:h-[2px] after:bg-[#737373]
+                                after:w-0 hover:after:w-full after:transition-all after:duration-300`,
+                                {
+                                    'text-[#737373]': data.route === categoryName,
+                                    'pointer-events-none border-b-2': data.route === categoryName
+                                }
+                            )}>{data.name}</span>
                         </Link>
                     ))
                 }
