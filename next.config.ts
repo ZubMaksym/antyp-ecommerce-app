@@ -3,16 +3,37 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      new URL('https://ddappsfa.blob.core.windows.net/**'),
-      new URL('https://www.antyp.com.ua/**'),
-      new URL('http://138.199.224.156:2007/**'),
-      new URL('http://138.199.224.156:9010/**'),
+      {
+        protocol: 'https',
+        hostname: 'ddappsfa.blob.core.windows.net',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.antyp.com.ua',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '9010',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: '138.199.224.156',
+        port: '2007',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: '138.199.224.156',
+        port: '9010',
+        pathname: '/**',
+      },
     ],
   },
   allowedDevOrigins: ['http://26.118.106.156:3000'],
-  experimental: {
-    svgr: true,
-  },
 };
 
 export default nextConfig;

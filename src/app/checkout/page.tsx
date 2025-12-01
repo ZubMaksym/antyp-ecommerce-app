@@ -24,7 +24,7 @@ const CheckoutPage = () => {
     };
 
     return (
-        <div className='relative w-full flex flex-col lg:flex-row justify-center items-start sm:items-center lg:items-start gap-10 max-w-[1280px] mx-auto py-3 px-3'>
+        <div className='relative w-full flex flex-col lg:flex-row justify-center items-start sm:items-center lg:items-start gap-10 max-w-[1280px] mx-auto py-3 px-3 mb-20'>
             <div className=''>
                 <h1 className='text-[24px] font-black text-[#4d6d7e]'>
                     Оформлення замовлення

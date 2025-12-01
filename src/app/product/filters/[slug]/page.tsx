@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
 import type { AppDispatch, RootState } from '@/state/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProducts } from '@/state/filterSlice/filterSlice';
@@ -13,12 +12,12 @@ import usePagination from '@/hooks/usePagination';
 import Pagination from '@/components/ui/Pagination';
 import Products from '@/components/filtersPage/Products';
 import Link from 'next/link';
-// import Image from 'next/image';
-// import carret from '@/public/icons/shared/caretDropdownBold.svg';
 import GoUpButton from '@/components/ui/GoUpButton';
 import { getPrevNextCategory } from '@/utils/helpers';
 import { categoriess } from '@/utils/data';
 import { IPrevNext } from '@/types/helperTypes';
+import classNames from 'classnames';
+import { usePathname } from 'next/navigation';
 
 const CategoryPage = () => {
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
@@ -132,8 +131,27 @@ const CategoryPage = () => {
 
     return (
         <section className=''>
-            <div className='flex max-w-[1660px] justify-between h-[100px] mx-auto'>
-                <Link
+            <div className='flex flex-wrap max-w-[1660px] justify-around h-[100px] mx-auto'>
+                {
+                    categoriess.map((data) => (
+                        <Link
+                            className={classNames(
+                            `flex items-center w-fit text-[#4d6d7e] font-bold ml-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] 
+                            text-[22px] relative transition-all duration-300 hover:text-[#737373] after:absolute after:bottom-0 after:h-[2px] after:bg-[#737373]
+                            after:w-0 hover:after:w-full after:transition-all after:duration-300`,
+                            {
+                                'text-[#737373]': data.route === categoryName 
+                            }
+                            )}
+                            href={`/product/filters/${data.route}`}
+                            key={data.name}
+                        // onClick={resetAll}
+                        >
+                            {data.name}
+                        </Link>
+                    ))
+                }
+                {/* <Link
                     prefetch={true}
                     href={prevNextCategory?.prevCategory === null ? '/' : '/product/filters/' + prevNextCategory?.prevCategory.route}
                     className='flex items-center w-fit text-[#4d6d7e] font-bold ml-[15px] mt-[10px] lg:ml-[25px] lg:mt-[30px] lg:mb-[30px] text-[22px] relative transition-all duration-300
@@ -166,7 +184,7 @@ const CategoryPage = () => {
                         }
                     </div>
                     <span className='text-[30px] mt-[15px] rotate-180'>&#8678;</span>
-                </Link>
+                </Link> */}
             </div>
             <div className='mb-[40px] flex flex-col lg:flex-row justify-center'>
                 <div className=''>
