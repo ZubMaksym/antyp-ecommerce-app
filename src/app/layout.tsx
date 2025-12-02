@@ -20,6 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+
     <html lang='en'>
       <body
         className={`${cooperFont.className} bg-[#F6EFE7]`}
@@ -35,5 +36,6 @@ export default function RootLayout({
         <div id='portal'></div>
       </body>
     </html>
+
   );
 }

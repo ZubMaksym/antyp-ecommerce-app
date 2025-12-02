@@ -27,7 +27,7 @@ const Search = ({ isOpen, setIsOpen }: ModalProps) => {
                     setData([]);
                     return;
                 }
-                const res = await fetch(`http://138.199.224.156:2007/product?Name=${input}`);
+                const res = await fetch(`https://138.199.224.156:444/product?Name=${input}`);
                 if (!res.ok) throw new Error('Error searching');
                 const data = await res.json();
                 setData(data.result.items);
@@ -57,7 +57,7 @@ const Search = ({ isOpen, setIsOpen }: ModalProps) => {
             />
             <div className='scrollbar overflow-y-scroll max-h-[calc(100vh-220px)] mt-3 *:first:mt-0 *:mt-3'>
                 {
-                    data 
+                    data
                         ? (
                             data.map((item: ProductItem) => (
                                 <div

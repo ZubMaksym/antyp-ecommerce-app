@@ -13,7 +13,7 @@ import usePagination from '@/hooks/usePagination';
 import { useDispatch } from 'react-redux';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
 import GoUpButton from '../ui/GoUpButton';
-import banner from '@/public/banner222.png';
+import banner from '@/public/banner222.webp';
 
 
 const Homepage = () => {
@@ -66,8 +66,8 @@ const Homepage = () => {
                 style={{
                     backgroundImage: `url(${banner.src})`,
                     backgroundRepeat: 'no-repeat',
-                    backgroundSize: 'cover',     // розтягує по всій ширині
-                    backgroundPosition: 'center 40%',    // показує верхню частину картинки
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center 40%',
                 }}
             >
                 <h1 className='xl:w-[800px] lg:w-[700px] w-full flex text-center text-[36px] md:text-[42px] lg:text-start xl:text-[48px] font-black text-[#4d6d7e] animate-fadeUp'>
