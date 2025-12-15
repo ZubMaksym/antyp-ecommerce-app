@@ -50,7 +50,7 @@ const Products = ({ products, loading, productsLoadedOnce }: ProductsProps) => {
 
     if (products) return (
         <div className={classNames(
-            'relative w-full gap-5 max-w-[1320px] min-h-[500px] px-[15px] h-auto',
+            'relative w-full gap-5 max-w-[1320px] sm:min-h-[500px] px-[15px] h-auto',
             {
                 'grid xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 grid-cols-1': products?.length !== 0,
                 'flex justify-center items-center': products?.length === 0
