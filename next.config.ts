@@ -23,9 +23,14 @@ const nextConfig: NextConfig = {
         hostname: '138.199.224.156',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: '62.171.154.171',
+        pathname: '/**',
+      }
     ],
   },
-  allowedDevOrigins: ['https://138.199.224.156:444/'],
+  allowedDevOrigins: ['http://62.171.154.171:5000/'],
 };
 
 export default nextConfig;
