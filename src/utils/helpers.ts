@@ -11,26 +11,17 @@ export const incrementQuantity = (quantity: number, handleChangeQuantity: Dispat
     if (quantity < 9999) handleChangeQuantity(quantity + 1);
 };
 
-export const decrementQuantity = (quantity: number, handleChangeQuantity: Dispatch<SetStateAction<number>>) => {
-    if (quantity > 1) handleChangeQuantity(quantity - 1);
+export const decrementQuantity = (quantity: number, handleChangeQuantity: Dispatch<SetStateAction<number>>, multiplicity: number) => {
+    if (quantity > multiplicity) handleChangeQuantity(quantity - 1);
 };
 
-export const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>, handleChangeQuantity: Dispatch<SetStateAction<number>>) => {
+export const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>, handleChangeQuantity: Dispatch<SetStateAction<number>>, multiplicity: number) => {
     const val = Number(e.target.value);
-    if (val < 1) {
-        handleChangeQuantity(1);
+    if (val < multiplicity) {
+        handleChangeQuantity(multiplicity);
     } else if (val > 9999) {
         handleChangeQuantity(9999);
     } else {
         handleChangeQuantity(val);
     }
 };
-
-export function getPrevNextCategory(categories: { name: string; route: string; image: string }[], currentCategory: string) {
-    const index = categories.findIndex(c => c.route === currentCategory);
-
-    return {
-        prevCategory: index > 0 ? categories[index - 1] : null,
-        nextCategory: index < categories.length - 1 ? categories[index + 1] : null
-    };
-}

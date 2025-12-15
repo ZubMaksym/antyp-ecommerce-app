@@ -13,7 +13,6 @@ import Pagination from '@/components/ui/Pagination';
 import Products from '@/components/filtersPage/Products';
 import Link from 'next/link';
 import GoUpButton from '@/components/ui/GoUpButton';
-import { getPrevNextCategory } from '@/utils/helpers';
 import { categoriess } from '@/utils/data';
 import { IPrevNext } from '@/types/helperTypes';
 import classNames from 'classnames';
@@ -123,11 +122,6 @@ const CategoryPage = () => {
         setTotalCount,
         totalCount,
     ]);
-
-    useEffect(() => {
-        const prevNext = getPrevNextCategory(categoriess, categoryName);
-        setPrevNextCategory(prevNext);
-    }, []);
 
     return (
         <section className=''>

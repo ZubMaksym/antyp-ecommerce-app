@@ -71,7 +71,7 @@ const Cart = () => {
                                     <div className='rounded-xl w-[100px] h-[26px] flex items-center justify-around border border-[#D2DADF]'>
                                         <button
                                             className='ml-3 cursor-pointer'
-                                            onClick={() => dispatch(decrementItemQuantity(item))}>
+                                            onClick={() => dispatch(decrementItemQuantity({ id: item.id, packaging: item.packaging, multiplicity: item.multiplicity }))}>
                                             <Image
                                                 src={minus}
                                                 alt='minus'
@@ -83,7 +83,7 @@ const Cart = () => {
                                             type='number'
                                             value={item.quantity}
                                             className='text-[#4d6d7e] text-center font-extrabold w-[50px] no-spinner appearance-none outline-none border-none bg-transparent'
-                                            onChange={(e) => dispatch(changeItemQuantity({ id: item.id, value: Number(e.target.value), packaging: item.packaging }))}
+                                            onChange={(e) => dispatch(changeItemQuantity({ id: item.id, value: Number(e.target.value), packaging: item.packaging, multiplicity: item.multiplicity}))}
                                         />
                                         <button
                                             className='mr-3 cursor-pointer'

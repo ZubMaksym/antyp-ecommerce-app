@@ -30,7 +30,6 @@ const ProductPage = () => {
     const [product, setProduct] = useState<any | null>(null);
     const [color, setColor] = useState<string | null>(null);
     const [relatedProducts, setRelatedProducts] = useState<ProductItem[]>();
-    // const [image, setImage] = useState<string>('');
     const slug = usePathname().split('/').pop();
     const imgRef = useRef<HTMLImageElement | null>(null);
     const images = product && [product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl];
@@ -54,8 +53,8 @@ const ProductPage = () => {
 
                 const data = await response.json();
                 setProduct(data.result);
+                setQuantity(data.result.multiplicity || 1);
                 setPoductLoading(false);
-                // setImage(data.result.mainPhotoUrl);
             } catch (error) {
                 console.error(error);
             }
@@ -75,8 +74,6 @@ const ProductPage = () => {
 
                     const data = await response.json();
                     setRelatedProducts(data.result.items);
-                    // setPoductLoading(false);
-                    // setImage(data.result.mainPhotoUrl);
                 } catch (error) {
                     console.error(error);
                 }
@@ -218,7 +215,7 @@ const ProductPage = () => {
                                     </div>
                                     <div className='flex justify-between mt-4'>
                                         <div className='rounded-xl bg-white w-[145px] h-[50px] flex items-center justify-around border border-[#D2DADF]'>
-                                            <button className='ml-3 cursor-pointer' onClick={() => decrementQuantity(quantity, setQuantity)}>
+                                            <button className='ml-3 cursor-pointer' onClick={() => decrementQuantity(quantity, setQuantity , product.multiplicity)}>
                                                 <Image
                                                     src={minus}
                                                     alt='minus'
@@ -231,7 +228,7 @@ const ProductPage = () => {
                                                 value={quantity}
                                                 className='text-[#4d6d7e] text-center font-extrabold w-[40px] no-spinner appearance-none 
                                             outline-none border-none bg-transparent'
-                                                onChange={(e: ChangeEvent<HTMLInputElement>) => handleQuantityChange(e, setQuantity)}
+                                                onChange={(e: ChangeEvent<HTMLInputElement>) => handleQuantityChange(e, setQuantity, product.multiplicity)}
 
                                             />
                                             <button
@@ -286,10 +283,7 @@ const ProductPage = () => {
                         {product.shortName}
                     </h3>
                     <p className='text-[18px] font-medium mt-5 mb-8'>
-                        Best Day’s Dark Diamond is a rich, dark Mexican-style lager with smooth roasted malt character, a touch of cocoa, and a clean, crisp finish. Balanced and drinkable, this lager brings depth without heaviness.
-                        This beer is made in partnership with Protect Our Winters (POW), a nonprofit dedicated to protect clean air, clean water, and a healthy environment for everyone. All proceeds from the sale of this beer will support POW’s mission to protect the places we live and the lifestyles we love from climate change. Learn more about the partnership here.
-                        The playful artwork on the packaging was created by artist and POW partner, Hannah Eddy.
-                        Pairs well with: Snowboarding, Après-ski, Stargazing in the Backcountry
+                        {product.description || 'No description available for this product.'}
                     </p>
                     <div className='text-[18px] font-bold'>
                         7 Natural Ingredients

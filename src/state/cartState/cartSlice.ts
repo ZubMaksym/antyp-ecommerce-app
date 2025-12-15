@@ -22,15 +22,16 @@ const cartSlice = createSlice({
             if (item && item.quantity < 9999) item.quantity++;
         },
         decrementItemQuantity(state, action) {
-            const item = state.items.find(i => (i.id === action.payload.id && i.packaging === action.payload.packaging));
-            if (item && item.quantity > 1) item.quantity--;
+            const { id, packaging, multiplicity } = action.payload;
+            const item = state.items.find(i => (i.id === id && i.packaging === packaging));
+            if (item && item.quantity > (multiplicity || 1)) item.quantity--;
         },
         changeItemQuantity(state, action) {
-            const { id, value, packaging } = action.payload;
+            const { id, value, packaging, multiplicity } = action.payload;
             const item = state.items.find(i => (i.id === id && i.packaging === packaging));
             if (!item) return;
 
-            if (value < 1) item.quantity = 1;
+            if (value < (multiplicity || 1)) item.quantity = (multiplicity || 1);
             else if (value > 9999) item.quantity = 9999;
             else item.quantity = value;
         },

@@ -56,6 +56,8 @@ export interface ProductItem {
     wineSweetness?: { id: string; name: string } | null;
     isSparking?: boolean | null;
     packagings: Packaging[];
+    multiplicity: number;
+    description: string;
     // manufacturer?: { id: string; name: string; shortName: string; aboutUrl?: string | null; photoUrl?: string | null } | null;
     // packagings?: { id: string; name: string; photoUrl?: string | null }[];
     // productType?: string;

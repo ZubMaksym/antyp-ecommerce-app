@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { FilterName, ProductItem } from './reducerTypes';
-import { InferType } from 'yup';
-import { CheckoutFormValidationSchema } from '@/schemas/CheckoutFormValidationSchema';
+import { ProductItemCart } from './reducerTypes';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
 
 export interface ModalProps {
@@ -90,4 +89,9 @@ export interface CheckoutFormFields {
     lastName: string;
     company?: string;
     phoneNumber: string;
+}
+
+export interface AddToCartButtonProps {
+    product: ProductItem;
+    handleClick: (e: React.MouseEvent, item: ProductItemCart) => void;
 }
