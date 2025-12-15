@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react';
-import { ProductItem } from './reducerTypes';
+import { FilterName, ProductItem } from './reducerTypes';
 import { InferType } from 'yup';
 import { CheckoutFormValidationSchema } from '@/schemas/CheckoutFormValidationSchema';
 import { FieldErrors, UseFormRegister } from 'react-hook-form';
@@ -36,6 +36,7 @@ export interface FilterDropdownProps {
     children: React.ReactNode;
     isFirst?: boolean;
     allowOverflow: boolean;
+    filterOptions?: FilterName[];
 }
 
 export interface CheckBoxProps {

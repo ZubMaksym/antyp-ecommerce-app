@@ -55,6 +55,7 @@ export interface ProductItem {
     wineColor?: { id: string; name: string } | null;
     wineSweetness?: { id: string; name: string } | null;
     isSparking?: boolean | null;
+    packagings: Packaging[];
     // manufacturer?: { id: string; name: string; shortName: string; aboutUrl?: string | null; photoUrl?: string | null } | null;
     // packagings?: { id: string; name: string; photoUrl?: string | null }[];
     // productType?: string;
@@ -82,4 +83,10 @@ export interface Result {
 export interface ProductItemCart extends ProductItem {
     quantity: number;
     packaging: string;
+}
+
+export interface Packaging {
+    id: string;
+    name: string;
+    photoUrl: string | null;
 }

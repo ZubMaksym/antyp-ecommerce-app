@@ -193,8 +193,8 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                 </FilterDropdown>
             }
             {
-                categoryName === 'beer' &&
-                <FilterDropdown filterName='Season Tags' allowOverflow={true}>
+                (categoryName === 'beer') &&
+                <FilterDropdown filterName='Season Tags' allowOverflow={true} filterOptions={filters?.seasonTags}>
                     <div className='flex flex-col *:mt-2 *:first:mt-0'>
                         {
                             loading

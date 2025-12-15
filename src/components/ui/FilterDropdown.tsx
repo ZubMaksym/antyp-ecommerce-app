@@ -3,10 +3,22 @@ import { useState } from 'react';
 import caret from '@/public/icons/shared/caretDropdownBold.svg';
 import Image from 'next/image';
 import classNames from 'classnames';
+import { FilterName } from '@/types/reducerTypes';
 
 
-const FilterDropdown = ({ filterName, children, isFirst }: FilterDropdownProps) => {
+const FilterDropdown = ({ filterName, children, isFirst, filterOptions }: FilterDropdownProps) => {
     const [isFilterOpen, setIsFilterOpen] = useState(isFirst ? true : false);
+    // const [optionCount, setOptionCount] = useState(0);
+
+    const availableOptions = filterOptions?.map((option: FilterName) => {
+        if (option.count !== 0){
+            return option;
+        }
+    })
+
+    if (availableOptions && availableOptions[0] === undefined){
+        return
+    }
 
     return (
         <div
@@ -33,7 +45,7 @@ const FilterDropdown = ({ filterName, children, isFirst }: FilterDropdownProps) 
             <div className='my-3'>
                 {
                     isFilterOpen && (
-                        <div className=''>
+                        <div>
                             {children}
                         </div>
                     )
