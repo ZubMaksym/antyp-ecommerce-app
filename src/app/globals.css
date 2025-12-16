@@ -34,6 +34,21 @@
   color: #4d6d7e;
 }
 
+.desktop-swiper .swiper-pagination-bullet {
+  background: #bbb;
+}
+
+.desktop-swiper .swiper-pagination-bullet-active {
+  background: #4d6d7e !important;
+}
+
+.desktop-swiper .swiper-button-next,
+.desktop-swiper .swiper-button-prev {
+  width: 40px;
+  height: 40px;
+  color: #4d6d7e;
+}
+
 @keyframes fadeUp {
   0% {
     opacity: 0;
@@ -81,7 +96,6 @@ html {
 .no-scroll {
   overflow: hidden;
   touch-action: none;
-  /* щоб мобільний скрол теж зупинявся */
 }
 
 .stroke {

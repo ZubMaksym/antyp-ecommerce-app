@@ -19,8 +19,7 @@ import { Keyboard, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-// http://138.199.224.156:2007/product?ProductType=cider&Manufacturers=64f431ff-cd30-40ab-83df-9ee4cedc18cb
-
+import ProductImageCarousel from '@/components/ui/ProductImageCarousel';
 
 
 const ProductPage = () => {
@@ -34,6 +33,8 @@ const ProductPage = () => {
     const imgRef = useRef<HTMLImageElement | null>(null);
     const images = product && [product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl];
     const router = useRouter();
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const [activeSlide, setActiveSlide] = useState(0);
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -103,12 +104,13 @@ const ProductPage = () => {
                 setColor(`rgb(${r}, ${g}, ${b})`);
             };
         }
+        console.log('Color extracted:', color);
     }, [product]);
 
     if (productLoading) {
         return (
             <div className='h-[calc(100vh-170px)] flex justify-center items-center'>
-                <div className='text-[24px] text-[#4d6d7e] font-black'> Loading...</div>
+                <div className='text-[24px] text-[#4d6d7e] font-black'>Loading...</div>
             </div>
         );
     }
@@ -139,7 +141,11 @@ const ProductPage = () => {
                                         <div className='hidden lg:flex flex-1 flex-col min-w-0'>
                                             <div
                                                 className='aspect-square flex justify-center items-center bg-white rounded-lg overflow-hidden shadow-md
-                                                max-w-[650px] max-h-[650px]'
+                                                max-w-[650px] max-h-[650px] cursor-pointer'
+                                                onClick={() => {
+                                                    setActiveSlide(0);
+                                                    setIsFullscreen(true);
+                                                }}
                                             >
                                                 <Image
                                                     ref={imgRef}
@@ -153,7 +159,9 @@ const ProductPage = () => {
                                             </div>
                                         </div>
                                         <div className='lg:hidden w-full bg-white py-10 rounded-lg flex justify-center'>
-                                            <div className='w-full'>
+                                            <div
+                                                className='w-full'
+                                            >
                                                 <Swiper
                                                     pagination={{ clickable: true }}
                                                     navigation={true}
@@ -171,6 +179,10 @@ const ProductPage = () => {
                                                                 onLoadingComplete={(img) =>
                                                                     img.classList.remove('blur-lg', 'scale-105', 'opacity-0')
                                                                 }
+                                                                onClick={() => {
+                                                                    setActiveSlide(0);
+                                                                    setIsFullscreen(true);
+                                                                }}
                                                             />
                                                         </SwiperSlide>
                                                     ))}
@@ -215,7 +227,7 @@ const ProductPage = () => {
                                     </div>
                                     <div className='flex justify-between mt-4'>
                                         <div className='rounded-xl bg-white w-[145px] h-[50px] flex items-center justify-around border border-[#D2DADF]'>
-                                            <button className='ml-3 cursor-pointer' onClick={() => decrementQuantity(quantity, setQuantity , product.multiplicity)}>
+                                            <button className='ml-3 cursor-pointer' onClick={() => decrementQuantity(quantity, setQuantity, product.multiplicity)}>
                                                 <Image
                                                     src={minus}
                                                     alt='minus'
@@ -289,8 +301,8 @@ const ProductPage = () => {
                         <div className=''>
                             {product.ingredients.length} Natural Ingredients:
                             <ul className=''>
-                                {product.ingredients.map((ingredient: {id: string, name: string}) => (
-                                    <li 
+                                {product.ingredients.map((ingredient: { id: string, name: string }) => (
+                                    <li
                                         className=''
                                         key={ingredient.id}
                                     >
@@ -308,11 +320,16 @@ const ProductPage = () => {
                     <div className='flex h-[3px] bg-white'></div>
                     <div className='flex'>
                         <ProductDetailsTable product={product} />
-                        {/* <div className='h-full w-[3px] bg-white'></div> */}
                     </div>
                 </div>
-                {/* </div> */}
             </div>
+            {isFullscreen && images && (
+                <ProductImageCarousel
+                    images={images}
+                    setIsFullscreen={setIsFullscreen}
+                    activeSlide={activeSlide}
+                />
+            )}
         </section>
     );
 };

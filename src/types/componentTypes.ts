@@ -95,3 +95,9 @@ export interface AddToCartButtonProps {
     product: ProductItem;
     handleClick: (e: React.MouseEvent, item: ProductItemCart) => void;
 }
+
+export interface ProductImageCarouselProps {
+    images: string[];
+    setIsFullscreen: (value: boolean) => void;
+    activeSlide: number;
+}
