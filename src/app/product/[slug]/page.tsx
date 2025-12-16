@@ -290,7 +290,12 @@ const ProductPage = () => {
                             {product.ingredients.length} Natural Ingredients:
                             <ul className=''>
                                 {product.ingredients.map((ingredient: {id: string, name: string}) => (
-                                    <li className=''>{ingredient.name}</li>
+                                    <li 
+                                        className=''
+                                        key={ingredient.id}
+                                    >
+                                        {ingredient.name}
+                                    </li>
                                 ))}
                             </ul>
                         </div>
