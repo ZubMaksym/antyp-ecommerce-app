@@ -2,7 +2,7 @@ import { ProductDetailsTableProps } from '@/types/componentTypes';
 
 const ProductDetailsTable = ({ product }: ProductDetailsTableProps) => {
     return (
-        <div className='*:flex *:justify-between'>
+        <div className='*:flex *:justify-between w-full'>
             {
                 product.ibu !== null && (
                     <div className=''>
@@ -72,6 +72,38 @@ const ProductDetailsTable = ({ product }: ProductDetailsTableProps) => {
                     <div className=''>
                         <span>SPARKING:</span>
                         <span className='ml-5'>{product.isSparking}</span>
+                    </div>
+                )
+            }
+            {
+                product.protein !== null && (
+                    <div className=''>
+                        <span>PROTEIN:</span>
+                        <span className='ml-5'>{product.protein} g (г)</span>
+                    </div>
+                )
+            }
+            {
+                product.fat !== null && (
+                    <div className=''>
+                        <span>FAT:</span>
+                        <span className='ml-5'>{product.fat} g (г)</span>
+                    </div>
+                )
+            }
+            {
+                product.carbohydrate !== null && (
+                    <div className=''>
+                        <span>CARBOHYDRATE:</span>
+                        <span className='ml-5'>{product.carbohydrate} g (г)</span>
+                    </div>
+                )
+            }
+            {
+                product.sugar !== null && (
+                    <div className=''>
+                        <span>SUGAR:</span>
+                        <span className='ml-5'>{product.sugar} g (г)</span>
                     </div>
                 )
             }

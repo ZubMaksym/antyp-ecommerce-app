@@ -27,7 +27,7 @@ const Search = ({ isOpen, setIsOpen }: ModalProps) => {
                     setData([]);
                     return;
                 }
-                const res = await fetch(`https://138.199.224.156:444/product?Name=${input}`);
+                const res = await fetch(`http://62.171.154.171:5000/product?Name=${input}`);
                 if (!res.ok) throw new Error('Error searching');
                 const data = await res.json();
                 setData(data.result.items);

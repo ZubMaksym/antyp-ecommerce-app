@@ -286,12 +286,19 @@ const ProductPage = () => {
                         {product.description || 'No description available for this product.'}
                     </p>
                     <div className='text-[18px] font-bold'>
-                        7 Natural Ingredients
+                        <div className=''>
+                            {product.ingredients.length} Natural Ingredients:
+                            <ul className=''>
+                                {product.ingredients.map((ingredient: {id: string, name: string}) => (
+                                    <li className=''>{ingredient.name}</li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div className='text-[18px] font-bold '>
                     <div className='text-[18px] font-bold'>
-                        Product Details
+                        Product Details per 100 g (г)
                     </div>
                     <div className='flex h-[3px] bg-white'></div>
                     <div className='flex'>

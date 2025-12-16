@@ -44,6 +44,12 @@ const cartSlice = createSlice({
             if (!existingItem) {
                 state.items.push(item);
                 state.totalQuantity += 1;
+            } else{ 
+                if (existingItem.quantity + item.quantity <= 9999) {
+                    existingItem.quantity += item.quantity;
+                } else {
+                    existingItem.quantity = 9999;
+                }
             }
         },
         removeItem: (state, action) => {
