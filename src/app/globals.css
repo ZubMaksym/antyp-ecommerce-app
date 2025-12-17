@@ -49,6 +49,10 @@
   color: #4d6d7e;
 }
 
+.desktop-swiper .swiper-button-next {
+  
+}
+
 @keyframes fadeUp {
   0% {
     opacity: 0;

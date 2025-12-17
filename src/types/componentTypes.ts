@@ -98,6 +98,7 @@ export interface AddToCartButtonProps {
 
 export interface ProductImageCarouselProps {
     images: string[];
-    setIsFullscreen: (value: boolean) => void;
     activeSlide: number;
+    isFullscreen: boolean;
+    setIsFullscreen: Dispatch<SetStateAction<boolean>>;
 }

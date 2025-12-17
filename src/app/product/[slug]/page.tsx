@@ -20,6 +20,7 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import ProductImageCarousel from '@/components/ui/ProductImageCarousel';
+import beerTestImage from '@/public/icons/PLP_Kolsch.webp';
 
 
 const ProductPage = () => {
@@ -30,11 +31,12 @@ const ProductPage = () => {
     const [color, setColor] = useState<string | null>(null);
     const [relatedProducts, setRelatedProducts] = useState<ProductItem[]>();
     const slug = usePathname().split('/').pop();
-    const imgRef = useRef<HTMLImageElement | null>(null);
-    const images = product && [product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl, product.mainPhotoUrl];
+    const mainImgRef = useRef<HTMLImageElement | null>(null);
+    const images = product && [product.mainPhotoUrl, beerTestImage];
     const router = useRouter();
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [activeSlide, setActiveSlide] = useState(0);
+    const [mainImage, setMainImage] = useState(null);
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -56,6 +58,7 @@ const ProductPage = () => {
                 setProduct(data.result);
                 setQuantity(data.result.multiplicity || 1);
                 setPoductLoading(false);
+                setMainImage(data.result.mainPhotoUrl);
             } catch (error) {
                 console.error(error);
             }
@@ -90,22 +93,23 @@ const ProductPage = () => {
     }, [product]);
 
     useEffect(() => {
-        if (!imgRef.current) return;
+        if (!product) return;
+        if (!mainImgRef.current) return;
 
-        const img = imgRef.current;
+        const img = mainImgRef.current;
         const thief = new ColorThief();
 
-        if (img.complete) {
+        const setColorFromMainPhoto = () => {
             const [r, g, b] = thief.getColor(img);
             setColor(`rgb(${r}, ${g}, ${b})`);
+        };
+
+        if (img.complete) {
+            setColorFromMainPhoto();
         } else {
-            img.onload = () => {
-                const [r, g, b] = thief.getColor(img);
-                setColor(`rgb(${r}, ${g}, ${b})`);
-            };
+            img.onload = setColorFromMainPhoto;
         }
-        console.log('Color extracted:', color);
-    }, [product]);
+    }, [product]); // ✅ ТІЛЬКИ product
 
     if (productLoading) {
         return (
@@ -126,7 +130,13 @@ const ProductPage = () => {
                                     <div className='flex sm:gap-10 lg:gap-4'>
                                         <div className='scrollbar flex-1 hidden lg:flex flex-col gap-4 max-w-[150px] max-h-[650px] overflow-auto'>
                                             {images.map((image: string, index: number) => (
-                                                <div key={index} className='aspect-square flex items-center justify-center bg-white rounded-lg shadow-md max-w-[130px]'>
+                                                <div key={index} className={classNames(
+                                                    'aspect-square flex items-center justify-center bg-white rounded-lg shadow-md max-w-[130px] cursor-pointer',
+                                                    {
+                                                        'opacity-70': mainImage !== image,
+                                                        'hover:opacity-100': mainImage === image,
+                                                    }
+                                                )}>
                                                     <Image
                                                         src={image}
                                                         alt={product.name}
@@ -134,6 +144,7 @@ const ProductPage = () => {
                                                         height={500}
                                                         className='place-self-center w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
                                                         onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
+                                                        onClick={() => setMainImage(images[index])}
                                                     />
                                                 </div>
                                             ))}
@@ -148,14 +159,16 @@ const ProductPage = () => {
                                                 }}
                                             >
                                                 <Image
-                                                    ref={imgRef}
-                                                    src={product.mainPhotoUrl}
+                                                    src={mainImage || ''}
                                                     alt={product.name}
                                                     width={500}
                                                     height={500}
                                                     className='hidden lg:block w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
-                                                    onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
+                                                    onLoadingComplete={(img) =>
+                                                        img.classList.remove('blur-lg', 'scale-105', 'opacity-0')
+                                                    }
                                                 />
+                                                <Image ref={mainImgRef} src={product.mainPhotoUrl} alt='' className='hidden' width={500} height={500}/>
                                             </div>
                                         </div>
                                         <div className='lg:hidden w-full bg-white py-10 rounded-lg flex justify-center'>
@@ -326,8 +339,9 @@ const ProductPage = () => {
             {isFullscreen && images && (
                 <ProductImageCarousel
                     images={images}
-                    setIsFullscreen={setIsFullscreen}
                     activeSlide={activeSlide}
+                    isFullscreen={isFullscreen}
+                    setIsFullscreen={setIsFullscreen}
                 />
             )}
         </section>
