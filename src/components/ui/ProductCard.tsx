@@ -12,7 +12,7 @@ const ProductCard = ({ onCardClick, product }: ProductCardProps) => {
     const dispatch = useDispatch<AppDispatch>();
 
     const handleClick = (e: React.MouseEvent, item: ProductItemCart) => {
-        e.stopPropagation();
+        e.stopPropagation()
         dispatch(addItem(item));
         dispatch(toggleCart());
     };
@@ -48,7 +48,7 @@ const ProductCard = ({ onCardClick, product }: ProductCardProps) => {
                         }
                     />
                 </div>
-                <AddToCartButton product={product} handleClick={handleClick}/>
+                <AddToCartButton product={product} handleClick={handleClick} isMobile={false}/>
             </div>
             <div className=''>
                 <div className='text-[22px] font-black text-[#4d6d7e]'>
@@ -57,15 +57,7 @@ const ProductCard = ({ onCardClick, product }: ProductCardProps) => {
                 <div className='text-[#4d6d7e] text-[18px]'>
                     {product.shortName}
                 </div>
-                <Button
-                    classname='md:hidden block mx-auto mt-3 w-[100%] h-[35px]'
-                    apearence='secondary'
-                    onClick={(e: React.MouseEvent) => handleClick(e, { ...product, quantity: product.multiplicity || 1, packaging: product.packagings[0].name })}
-                >
-                    <div className='flex justify-center px-3 font-extrabold'>
-                        <span>Add To Cart</span>
-                    </div>
-                </Button>
+                <AddToCartButton product={product} handleClick={handleClick} isMobile={true}/>
             </div>
         </div>
     );

@@ -130,13 +130,17 @@ const ProductPage = () => {
                                     <div className='flex sm:gap-10 lg:gap-4'>
                                         <div className='scrollbar flex-1 hidden lg:flex flex-col gap-4 max-w-[150px] max-h-[650px] overflow-auto'>
                                             {images.map((image: string, index: number) => (
-                                                <div key={index} className={classNames(
-                                                    'aspect-square flex items-center justify-center bg-white rounded-lg shadow-md max-w-[130px] cursor-pointer',
-                                                    {
-                                                        'opacity-70': mainImage !== image,
-                                                        'hover:opacity-100': mainImage === image,
-                                                    }
-                                                )}>
+                                                <div 
+                                                    key={index} 
+                                                    className={classNames(
+                                                        'aspect-square flex items-center justify-center bg-white rounded-lg shadow-md max-w-[130px] cursor-pointer',
+                                                        {
+                                                            'opacity-70': mainImage !== image,
+                                                            'hover:opacity-100': mainImage === image,
+                                                        }
+                                                    )}
+                                                    onClick={() => setMainImage(images[index])}
+                                                >
                                                     <Image
                                                         src={image}
                                                         alt={product.name}
@@ -144,7 +148,6 @@ const ProductPage = () => {
                                                         height={500}
                                                         className='place-self-center w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
                                                         onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
-                                                        onClick={() => setMainImage(images[index])}
                                                     />
                                                 </div>
                                             ))}
@@ -302,7 +305,6 @@ const ProductPage = () => {
                 className='w-full mt-10 text-white px-6 py-[60px] flex flex-col lg:flex-row justify-around items-center gap-20'
                 style={{ backgroundColor: color ?? '#4d6d7e' }}
             >
-                {/* <div className='max-w-[1660px] flex items-center justify-between mx-auto'> */}
                 <div className='flex h-full flex-col max-w-[925px]'>
                     <h3 className='stroke h-auto text-[50px] font-black'>
                         {product.shortName}

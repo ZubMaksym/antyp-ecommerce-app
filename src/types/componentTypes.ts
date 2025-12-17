@@ -94,6 +94,7 @@ export interface CheckoutFormFields {
 export interface AddToCartButtonProps {
     product: ProductItem;
     handleClick: (e: React.MouseEvent, item: ProductItemCart) => void;
+    isMobile: boolean;
 }
 
 export interface ProductImageCarouselProps {
