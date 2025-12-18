@@ -25,7 +25,7 @@ const AddToCartButton = ({ product, handleClick, isMobile }: AddToCartButtonProp
                                 key={p.name}
                                 className='px-3 py-1 rounded font-bold text-[#4d6d7e] cursor-pointer'
                                 onClick={(e) => {
-                                    handleClick(e, { ...product, quantity: product.multiplicity || 1, packaging: p.name })
+                                    handleClick(e, { ...product, quantity: product.multiplicity || 1, packaging: p.name });
                                 }}
                             >
                                 {p.name}
@@ -46,18 +46,18 @@ const AddToCartButton = ({ product, handleClick, isMobile }: AddToCartButtonProp
                         }
                     )}
                     onClick={(e) => {
-                        e.stopPropagation()
+                        e.stopPropagation();
                         product.packagings.length <= 1 
                             ? handleClick(e, { ...product, quantity: product.multiplicity || 1, packaging: product.packagings[0].name }) 
-                            : setIsOpen(!isOpen)
+                            : setIsOpen(!isOpen);
                     }}
                 >
                     <div className='flex justify-center px-3 font-extrabold'>
                         <span>Add To Cart</span>
                     </div>
                 </button>
-        </div >
-    )};
+        </div >);
+    }
 
     return (
         <div className='relative group mx-auto hidden md:block w-[95%]'>

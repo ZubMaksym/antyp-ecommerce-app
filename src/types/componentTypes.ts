@@ -84,11 +84,30 @@ export interface InputProps {
     id: 'firstName' | 'lastName' | 'company' | 'phoneNumber';
 }
 
+export interface UsernameInputProps {
+    register?: UseFormRegister<LoginFormFields>;
+    errors?: FieldErrors<LoginFormFields> | undefined;
+    errorMessage?: string | undefined;
+    classname?: string;
+}
+
+export interface PasswordInputProps {
+    register?: UseFormRegister<LoginFormFields>;
+    errors?: FieldErrors<LoginFormFields> | undefined;
+    errorMessage?: string | undefined;
+    classname?: string;
+}
+
 export interface CheckoutFormFields {
     firstName: string;
     lastName: string;
     company?: string;
     phoneNumber: string;
+}
+
+export interface LoginFormFields {
+    username: string;
+    password: string;
 }
 
 export interface AddToCartButtonProps {
