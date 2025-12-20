@@ -121,4 +121,5 @@ export interface ProductImageCarouselProps {
     activeSlide: number;
     isFullscreen: boolean;
     setIsFullscreen: Dispatch<SetStateAction<boolean>>;
+    initalSlide?: number;
 }

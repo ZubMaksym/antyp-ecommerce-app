@@ -8,7 +8,7 @@ import { ProductImageCarouselProps } from '@/types/componentTypes';
 import useForbidBodyScroll from '@/hooks/useForbidBodyScroll';
 
 
-const ProductImageCarousel = ({ images, activeSlide, isFullscreen, setIsFullscreen }: ProductImageCarouselProps) => {
+const ProductImageCarousel = ({ images, activeSlide, isFullscreen, setIsFullscreen, initalSlide }: ProductImageCarouselProps) => {
 
     useForbidBodyScroll(isFullscreen, 20000);
 
@@ -31,7 +31,7 @@ const ProductImageCarousel = ({ images, activeSlide, isFullscreen, setIsFullscre
                 onClick={(e) => e.stopPropagation()}
             >
                 <Swiper
-                    initialSlide={activeSlide}
+                    initialSlide={initalSlide || 0}
                     navigation={{
                         nextEl: '.custom-next',
                         prevEl: '.custom-prev',

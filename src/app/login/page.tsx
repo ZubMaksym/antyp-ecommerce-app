@@ -9,11 +9,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginValidationSchema } from '@/schemas/LoginValidationSchema';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
+import { JwtPayload } from '@/types/helperTypes';
 
 
 const LoginPage = () => {
     const router = useRouter();
-    const [accessToken, setAccessToken] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormFields>({
@@ -35,7 +36,6 @@ const LoginPage = () => {
                     password: data.password,
                     twoFactorCode: '',
                 }),
-                credentials: 'include',
             });
 
             if (!res.ok) {
@@ -43,8 +43,14 @@ const LoginPage = () => {
             }
 
             const result = await res.json();
-            setAccessToken(result.accessToken);
-            if (result.role === 'ADMIN') router.push('/admin');
+            const accessToken = result.accessToken;
+            const decoded = jwtDecode<JwtPayload>(accessToken);
+
+            if (decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'Admin') {
+                router.push('/admin');
+            } else {
+                router.push('/user');
+            }
         } catch (error: any) {
             console.error(error);
             setError(error.message || 'Something went wrong');
@@ -52,7 +58,7 @@ const LoginPage = () => {
     };
 
     return (
-        <section className='mt-[30px] mb-[40px] flex justify-center'>
+        <section className='mt-[30px] mb-[40px] flex justify-center h-[500px]'>
             <div className='flex flex-col justify-center items-center'>
                 <h1 className='text-[38px] font-black text-center text-[#4d6d7e]'>Sign In</h1>
                 <form
