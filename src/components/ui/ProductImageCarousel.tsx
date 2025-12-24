@@ -6,9 +6,11 @@ import 'swiper/css/navigation';
 import Image from 'next/image';
 import { ProductImageCarouselProps } from '@/types/componentTypes';
 import useForbidBodyScroll from '@/hooks/useForbidBodyScroll';
+import { ChevronRight, ChevronLeft } from 'lucide-react'
+import { useRef, useEffect } from 'react';
 
 
-const ProductImageCarousel = ({ images, activeSlide, isFullscreen, setIsFullscreen, initalSlide }: ProductImageCarouselProps) => {
+const ProductImageCarousel = ({ images, isFullscreen, setIsFullscreen, initalSlide, setMainImage }: ProductImageCarouselProps) => {
 
     useForbidBodyScroll(isFullscreen, 20000);
 
@@ -40,6 +42,10 @@ const ProductImageCarousel = ({ images, activeSlide, isFullscreen, setIsFullscre
                     keyboard
                     modules={[Navigation, Pagination, Keyboard]}
                     className='w-full h-full desktop-swiper'
+                    onSlideChange={(swiper) => {
+                        const index = swiper.activeIndex;
+                        setMainImage(images[index]);
+                    }}
                 >
                     {images.map((image: string, index: number) => (
                         <SwiperSlide
@@ -57,11 +63,11 @@ const ProductImageCarousel = ({ images, activeSlide, isFullscreen, setIsFullscre
                         </SwiperSlide>
                     ))}
                 </Swiper>
-                <button className='custom-prev absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 z-10 text-white text-[32px] rounded-[50%] bg-[#4d6d7e] cursor-pointer'>
-                    <span>&#x21e6;</span>
+                <button className='flex justify-center items-center custom-prev absolute left-2 top-1/2 -translate-y-1/2 w-10 h-10 z-10 text-white text-[32px] rounded-[50%] bg-[#4d6d7e] cursor-pointer'>
+                    <ChevronLeft size={35}/>
                 </button>
-                <button className='custom-next absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 z-10 text-white text-[32px] rounded-[50%] bg-[#4d6d7e] cursor-pointer'>
-                    <span>&#x21e8;</span>
+                <button className='flex justify-center items-center custom-next absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 z-10 text-white text-[32px] rounded-[50%] bg-[#4d6d7e] cursor-pointer'>
+                    <ChevronRight size={35}/>
                 </button>
             </div>
         </div>

@@ -22,6 +22,7 @@ import 'swiper/css/navigation';
 import ProductImageCarousel from '@/components/ui/ProductImageCarousel';
 import beerTestImage from '@/public/icons/PLP_Kolsch.webp';
 import { motion, AnimatePresence } from 'framer-motion';
+import useForbidBodyScroll from '@/hooks/useForbidBodyScroll';
 
 
 const ProductPage = () => {
@@ -37,14 +38,26 @@ const ProductPage = () => {
     const router = useRouter();
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [activeSlide, setActiveSlide] = useState(0);
-    const [mainImage, setMainImage] = useState(null);
-
+    const [mainImage, setMainImage] = useState('');
+    const mobileSwiperRef = useRef<any>(null);
+    
     const dispatch = useDispatch<AppDispatch>();
 
     const addToCart = (item: ProductItem) => {
         dispatch(addItem({ ...item, quantity, packaging: packaging }));
         dispatch(toggleCart());
     };
+
+    useForbidBodyScroll(isFullscreen, 20000);
+
+    useEffect(() => {
+        if (!isFullscreen && mobileSwiperRef.current && mainImage) {
+            const index = images.indexOf(mainImage);
+            if (index !== -1) {
+                mobileSwiperRef.current.slideTo(index, 0);
+            }
+        }
+    }, [isFullscreen, mainImage]);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -110,7 +123,8 @@ const ProductPage = () => {
         } else {
             img.onload = setColorFromMainPhoto;
         }
-    }, [product]); // ✅ ТІЛЬКИ product
+    }, [product]);
+
 
     if (productLoading) {
         return (
@@ -198,6 +212,7 @@ const ProductPage = () => {
                                                         navigation={true}
                                                         modules={[Keyboard, Pagination, Navigation]}
                                                         className='mobile-swiper'
+                                                        onSwiper={(swiper) => (mobileSwiperRef.current = swiper)}
                                                         onSlideChange={(swiper) => {
                                                             const index = swiper.activeIndex;
                                                             setMainImage(images[index]);
@@ -217,7 +232,7 @@ const ProductPage = () => {
                                                                         img.classList.remove('blur-lg', 'scale-105', 'opacity-0')
                                                                     }
                                                                     onClick={() => {
-                                                                        setActiveSlide(0);
+                                                                        setActiveSlide(index);
                                                                         setIsFullscreen(true);
                                                                     }}
                                                                 />
@@ -370,10 +385,10 @@ const ProductPage = () => {
             {isFullscreen && images && (
                 <ProductImageCarousel
                     images={images}
-                    activeSlide={activeSlide}
                     isFullscreen={isFullscreen}
                     setIsFullscreen={setIsFullscreen}
                     initalSlide={mainImage ? images.indexOf(mainImage) : 0}
+                    setMainImage={setMainImage}
                 />
             )}
         </section>

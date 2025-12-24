@@ -3,7 +3,7 @@ import UsernameInput from '@/components/ui/UsernameInput';
 import { PasswordInput } from '@/components/ui/PasswordInput';
 import Button from '@/components/ui/Button';
 import Link from 'next/link';
-import { useForm, SubmitHandler } from 'react-hook-form'; // <- Ось тут
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { LoginFormFields } from '@/types/componentTypes';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoginValidationSchema } from '@/schemas/LoginValidationSchema';
@@ -19,7 +19,7 @@ const LoginPage = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormFields>({
         resolver: yupResolver(LoginValidationSchema),
-        mode: 'onChange',
+        mode: 'onSubmit',
     });
 
     const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
