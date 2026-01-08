@@ -62,7 +62,7 @@ const ProductPage = () => {
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const response = await fetch(`http://62.171.154.171:5000/product/${slug}`);
+                const response = await fetch(`http://62.171.154.171:21000/product/${slug}`);
 
                 if (!response.ok) {
                     throw new Error(`API Error ${response.status} ${response.statusText}`);
@@ -84,7 +84,7 @@ const ProductPage = () => {
         const fetchRelatedProducts = async () => {
             if (product) {
                 try {
-                    const response = await fetch(`http://62.171.154.171:5000/product?Manufacturers=${product.manufacturer.id}`);
+                    const response = await fetch(`http://62.171.154.171:21000/product?Manufacturers=${product.manufacturer.id}`);
 
                     if (!response.ok) {
                         throw new Error(`API Error ${response.status} ${response.statusText}`);
@@ -139,7 +139,7 @@ const ProductPage = () => {
             <div className='flex justify-center'>
                 <AnimatePresence mode='wait'>
                     {
-                        product && (
+                        
                             <motion.div
                                 key={product.id}
                                 initial={{ opacity: 0, y: 20 }}
@@ -341,7 +341,7 @@ const ProductPage = () => {
                                     </div>
                                 </div>
                             </motion.div>
-                        )
+                        
                     }
                 </AnimatePresence>
             </div>

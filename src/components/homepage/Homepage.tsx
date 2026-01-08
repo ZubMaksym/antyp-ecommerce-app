@@ -32,7 +32,7 @@ const Homepage = () => {
         const fetchBestsellers = async () => {
             try {
                 setBestsellerProductsError(null);
-                const response = await fetch(`http://62.171.154.171:5000/product?Page=${currentPage}&PageSize=${productPerPage}`);
+                const response = await fetch(`http://62.171.154.171:21000/product?Page=${currentPage}&PageSize=${productPerPage}`);
 
                 if (!response.ok) {
                     setBestsellerProductsError(`Something went wrong while processing the request. We're woking to solve this problem`);

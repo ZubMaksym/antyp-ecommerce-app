@@ -30,7 +30,7 @@ const nextConfig: NextConfig = {
       }
     ],
   },
-  allowedDevOrigins: ['http://62.171.154.171:5000/'],
+  allowedDevOrigins: ['http://62.171.154.171:21000/'],
 };
 
 export default nextConfig;

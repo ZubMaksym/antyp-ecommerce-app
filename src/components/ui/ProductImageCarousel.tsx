@@ -6,8 +6,7 @@ import 'swiper/css/navigation';
 import Image from 'next/image';
 import { ProductImageCarouselProps } from '@/types/componentTypes';
 import useForbidBodyScroll from '@/hooks/useForbidBodyScroll';
-import { ChevronRight, ChevronLeft } from 'lucide-react'
-import { useRef, useEffect } from 'react';
+import { ChevronRight, ChevronLeft } from 'lucide-react';
 
 
 const ProductImageCarousel = ({ images, isFullscreen, setIsFullscreen, initalSlide, setMainImage }: ProductImageCarouselProps) => {
