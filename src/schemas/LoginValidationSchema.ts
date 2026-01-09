@@ -1,10 +1,11 @@
 import * as yup from 'yup';
 
 export const LoginValidationSchema = yup.object({
-    username: yup
+    email: yup
         .string()
-        .required('Це поле обов\'язкове'),
+        .required('This field is required')
+        .email('Invalid email address'),
     password: yup
         .string()
-        .required('Це поле обов\'язкове'),
+        .required('This field is required'),
 });

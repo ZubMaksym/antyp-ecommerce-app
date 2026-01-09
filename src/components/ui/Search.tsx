@@ -7,12 +7,13 @@ import { ModalProps } from '@/types/componentTypes';
 
 const Search = ({ isOpen, setIsOpen }: ModalProps) => {
     const [input, setInput] = useState('');
-    const [data, setData] = useState<ProductItem[]>([]);
+    const [data, setData] = useState<ProductItem[] | string>([]);
     const router = useRouter();
 
     const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setInput(value);
+        console.log(data);
     };
 
     const handleProductClick = (productSlug: string) => {
@@ -30,7 +31,12 @@ const Search = ({ isOpen, setIsOpen }: ModalProps) => {
                 const res = await fetch(`http://62.171.154.171:21000/product?Name=${input}`);
                 if (!res.ok) throw new Error('Error searching');
                 const data = await res.json();
-                setData(data.result.items);
+                if (data.result.items.length > 0) {
+                    setData(data.result.items);
+                } else {
+                    setData('Nothing found');
+                }
+                // setData(data.result.items);
             };
             fetchProductByName();
         }, 300);
@@ -55,33 +61,33 @@ const Search = ({ isOpen, setIsOpen }: ModalProps) => {
                 placeholder='Search our store'
                 className='w-full text-[#4d6d7e] font-black h-[50px] border-b border-[#CBCECD] focus:outline-0 px-7 placeholder:text-[16px] placeholder:text-[#6E8792] placeholder:font-black'
             />
-            <div className='scrollbar overflow-y-scroll max-h-[calc(100vh-220px)] mt-3 *:first:mt-0 *:mt-3'>
+            <div className=''>
                 {
-                    data
-                        ? (
-                            data.map((item: ProductItem) => (
-                                <div
-                                    key={item.id}
-                                    className='flex items-center cursor-pointer'
-                                    onClick={() => handleProductClick(item.slug)}
-                                >
-                                    <div className='flex justify-center items-center rounded bg-white sm:min-w-[130px] sm:w-[130px] sm:h-[130px] min-w-[100px] w-[100px] h-[100px]'>
-                                        <Image
-                                            className='w-full h-full object-contain rounded'
-                                            loading='lazy'
-                                            src={item.mainPhotoUrl}
-                                            width={250}
-                                            height={250}
-                                            alt={`${item.shortName} photo`}
-                                        />
+                    Array.isArray(data) && data.length > 0 
+                        ? ( <div className='scrollbar overflow-y-scroll max-h-[calc(100vh-220px)] mt-3 *:first:mt-0 *:mt-3'>
+                                {data.map((item: ProductItem) => (
+                                    <div
+                                        key={item.id}
+                                        className='flex items-center cursor-pointer'
+                                        onClick={() => handleProductClick(item.slug)}
+                                    >
+                                        <div className='flex justify-center items-center rounded bg-white sm:min-w-[130px] sm:w-[130px] sm:h-[130px] min-w-[100px] w-[100px] h-[100px]'>
+                                            <Image
+                                                className='w-full h-full object-contain rounded'
+                                                loading='lazy'
+                                                src={item.mainPhotoUrl}
+                                                width={250}
+                                                height={250}
+                                                alt={`${item.shortName} photo`}
+                                            />
+                                        </div>
+                                        <div className='mx-3 text-[#4d6d7e] font-black text-[16px]'>
+                                            {item.name}
+                                        </div>
                                     </div>
-                                    <div className='mx-3 text-[#4d6d7e] font-black text-[16px]'>
-                                        {item.name}
-                                    </div>
-                                </div>
-                            ))
-                        )
-                        : <div className=''>Nothing found</div>
+                                ))}
+                            </div>)   
+                        : (<div className='flex justify-center text-[#4d6d7e] text-[18px] font-bold items-center mt-10'>{data as string}</div>)
                 }
             </div>
         </div>

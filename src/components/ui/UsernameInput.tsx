@@ -4,13 +4,13 @@ const UsernameInput = ({ register, errors, errorMessage }: UsernameInputProps) =
   return (
     <>
       <input
-        {...register?.('username')}
+        {...register?.('email')}
         type='text'
-        placeholder='Username'
+        placeholder='Email'
         className='block w-full text-[#4d6d7e] font-black h-[50px] border-b border-[#CBCECD] focus:outline-0 placeholder:text-[16px] placeholder:text-[#6E8792] placeholder:font-bold'
       />
       {
-        errors?.['username'] && <p className='w-full text-red-500'>{errorMessage}</p>
+        errors?.['email'] && <p className='w-full text-red-500'>{errorMessage}</p>
       }
     </>
   );

@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { JwtPayload } from '@/types/helperTypes';
+import { body } from 'framer-motion/client';
 
 
 const LoginPage = () => {
@@ -26,13 +27,14 @@ const LoginPage = () => {
         try {
             setError(null);
 
-            const res = await fetch('http://62.171.154.171:5000/login', {
+            const res = await fetch('http://62.171.154.171:21000/api/Auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'accept': '*/*',
                 },
                 body: JSON.stringify({
-                    username: data.username,
+                    email: data.email,
                     password: data.password,
                     twoFactorCode: '',
                 }),
@@ -43,7 +45,8 @@ const LoginPage = () => {
             }
 
             const result = await res.json();
-            const accessToken = result.accessToken;
+            const accessToken = result.result.accessToken;
+            // console.log(result);
             const decoded = jwtDecode<JwtPayload>(accessToken);
 
             if (decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'Admin') {
@@ -68,7 +71,7 @@ const LoginPage = () => {
                     <UsernameInput
                         register={register}
                         errors={errors}
-                        errorMessage={errors.username?.message}
+                        errorMessage={errors.email?.message}
                     />
                     <PasswordInput
                         register={register}

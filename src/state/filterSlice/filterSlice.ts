@@ -26,6 +26,82 @@ export interface FilterSlice {
     totalCount: number;
 }
 
+// Helper function to load filters from localStorage for a specific category
+export const loadFiltersFromStorage = (category: string | null = null): Partial<FilterSlice> => {
+    if (typeof window === 'undefined') {
+        return {};
+    }
+    
+    try {
+        const saved = localStorage.getItem('filters');
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            // Only load filters if category matches (or if no category specified for backward compatibility)
+            if (category && parsed.category !== category) {
+                return {};
+            }
+            return {
+                selectedManufacturers: parsed.selectedManufacturers || [],
+                selectedBeerTypes: parsed.selectedBeerTypes || [],
+                selectedSeasonTags: parsed.selectedSeasonTags || [],
+                selectedPackagings: parsed.selectedPackagings || [],
+                selectedWaterTypes: parsed.selectedWaterTypes || [],
+                selectedCarbonationLevels: parsed.selectedCarbonationLevels || [],
+                selectedSoftDrinkTypes: parsed.selectedSoftDrinkTypes || [],
+                selectedWineColors: parsed.selectedWineColors || [],
+                selectedWineSweetness: parsed.selectedWineSweetness || [],
+                selectedAlcoholStrength: parsed.selectedAlcoholStrength || { min: 0, max: 0 },
+                selectedIBU: parsed.selectedIBU || { min: 0, max: 0 },
+            };
+        }
+    } catch (error) {
+        console.error('Error loading filters from localStorage:', error);
+    }
+    
+    return {};
+};
+
+// Helper function to save filters to localStorage with category
+export const saveFiltersToStorage = (filters: Partial<FilterSlice>, category?: string) => {
+    if (typeof window === 'undefined') {
+        return;
+    }
+    
+    try {
+        const filtersToSave = {
+            category: category || null,
+            selectedManufacturers: filters.selectedManufacturers || [],
+            selectedBeerTypes: filters.selectedBeerTypes || [],
+            selectedSeasonTags: filters.selectedSeasonTags || [],
+            selectedPackagings: filters.selectedPackagings || [],
+            selectedWaterTypes: filters.selectedWaterTypes || [],
+            selectedCarbonationLevels: filters.selectedCarbonationLevels || [],
+            selectedSoftDrinkTypes: filters.selectedSoftDrinkTypes || [],
+            selectedWineColors: filters.selectedWineColors || [],
+            selectedWineSweetness: filters.selectedWineSweetness || [],
+            selectedAlcoholStrength: filters.selectedAlcoholStrength || { min: 0, max: 0 },
+            selectedIBU: filters.selectedIBU || { min: 0, max: 0 },
+        };
+        localStorage.setItem('filters', JSON.stringify(filtersToSave));
+    } catch (error) {
+        console.error('Error saving filters to localStorage:', error);
+    }
+};
+
+// Helper function to clear filters from localStorage
+export const clearFiltersFromStorage = () => {
+    if (typeof window === 'undefined') {
+        return;
+    }
+    
+    try {
+        localStorage.removeItem('filters');
+    } catch (error) {
+        console.error('Error clearing filters from localStorage:', error);
+    }
+};
+
+// Don't load filters on initial state - we'll load them per category via hydrateFilters action
 const initialState: FilterSlice = {
     filters: null,
     loading: false,
@@ -268,6 +344,10 @@ export const filterSlice = createSlice({
             }
         },
         resetFilters: (state) => {
+            // Clear localStorage first to prevent FilterHydrator from saving old state
+            clearFiltersFromStorage();
+            
+            // Reset all filter arrays
             state.filters = null;
             state.selectedManufacturers = [];
             state.selectedBeerTypes = [];
@@ -278,17 +358,16 @@ export const filterSlice = createSlice({
             state.selectedSoftDrinkTypes = [];
             state.selectedWineColors = [];
             state.selectedWineSweetness = [];
-
-            if (state.filters) {
-                state.selectedAlcoholStrength = {
-                    min: 0,
-                    max: 0
-                };
-                state.selectedIBU = {
-                    min: 0,
-                    max: 0
-                };
-            }
+            
+            // Always reset alcohol strength and IBU ranges
+            state.selectedAlcoholStrength = {
+                min: 0,
+                max: 0
+            };
+            state.selectedIBU = {
+                min: 0,
+                max: 0
+            };
         },
         resetProducts: (state) => {
             state.products = [];
@@ -304,6 +383,41 @@ export const filterSlice = createSlice({
         },
         setFiltersFromUrl: (state, action: PayloadAction<any>) => {
             Object.assign(state, action.payload);
+        },
+        hydrateFilters: (state, action: PayloadAction<Partial<FilterSlice>>) => {
+            if (action.payload.selectedManufacturers !== undefined) {
+                state.selectedManufacturers = action.payload.selectedManufacturers;
+            }
+            if (action.payload.selectedBeerTypes !== undefined) {
+                state.selectedBeerTypes = action.payload.selectedBeerTypes;
+            }
+            if (action.payload.selectedSeasonTags !== undefined) {
+                state.selectedSeasonTags = action.payload.selectedSeasonTags;
+            }
+            if (action.payload.selectedPackagings !== undefined) {
+                state.selectedPackagings = action.payload.selectedPackagings;
+            }
+            if (action.payload.selectedWaterTypes !== undefined) {
+                state.selectedWaterTypes = action.payload.selectedWaterTypes;
+            }
+            if (action.payload.selectedCarbonationLevels !== undefined) {
+                state.selectedCarbonationLevels = action.payload.selectedCarbonationLevels;
+            }
+            if (action.payload.selectedSoftDrinkTypes !== undefined) {
+                state.selectedSoftDrinkTypes = action.payload.selectedSoftDrinkTypes;
+            }
+            if (action.payload.selectedWineColors !== undefined) {
+                state.selectedWineColors = action.payload.selectedWineColors;
+            }
+            if (action.payload.selectedWineSweetness !== undefined) {
+                state.selectedWineSweetness = action.payload.selectedWineSweetness;
+            }
+            if (action.payload.selectedAlcoholStrength !== undefined) {
+                state.selectedAlcoholStrength = action.payload.selectedAlcoholStrength;
+            }
+            if (action.payload.selectedIBU !== undefined) {
+                state.selectedIBU = action.payload.selectedIBU;
+            }
         },
     },
     extraReducers: (builder) => {
@@ -384,7 +498,8 @@ export const
         resetProducts,
         setAlcoholStrengthRange,
         setIbuRange,
-        setFiltersFromUrl
+        setFiltersFromUrl,
+        hydrateFilters
     } = filterSlice.actions;
 
 export default filterSlice.reducer;

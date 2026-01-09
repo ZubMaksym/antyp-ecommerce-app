@@ -2,7 +2,7 @@ import { FilterSkeletonProps } from '@/types/componentTypes';
 
 export const FilterSkeleton = ({record}: FilterSkeletonProps) => {
   return (
-    <>
+    <div className='*:mt-4 *:first:mt-0'>
         {
             Array(record || 0).fill(0).map((_, idx) => (
                 <div key={idx} className='animate-pulse flex items-center gap-2 w-[60%]'>
@@ -11,6 +11,6 @@ export const FilterSkeleton = ({record}: FilterSkeletonProps) => {
                 </div>
             ))
         }
-    </>
+    </div>
   );
 };

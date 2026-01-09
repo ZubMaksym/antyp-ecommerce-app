@@ -1,12 +1,12 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import type { AppDispatch, RootState } from '@/state/store';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProducts } from '@/state/filterSlice/filterSlice';
 import FiltersButton from '@/components/ui/FiltersButton';
 import DesktopFilters from '@/components/filtersPage/DesktopFilters';
 import MobileFilters from '@/components/filtersPage/MobileFilters';
-import { resetProducts, resetFilters } from '@/state/filterSlice/filterSlice';
+import { resetProducts, resetFilters, hydrateFilters, loadFiltersFromStorage, clearFiltersFromStorage } from '@/state/filterSlice/filterSlice';
 import { fetchFilters } from '@/state/filterSlice/filterSlice';
 import usePagination from '@/hooks/usePagination';
 import Pagination from '@/components/ui/Pagination';
@@ -45,12 +45,52 @@ const CategoryPage = () => {
     const [categoryChanged, setCategoryChanges] = useState(false);
     const [prodReq, setProdReq] = useState(false);
     const [prevNextCategory, setPrevNextCategory] = useState<IPrevNext>();
+    const [prevCategory, setPrevCategory] = useState<string | null>(null);
 
     useEffect(() => {
-        dispatch(resetFilters());
-        dispatch(resetProducts());
-        setCategoryChanges(true);
-    }, [categoryName, dispatch]);
+        // Get previous category from sessionStorage (persists across remounts)
+        let actualPrevCategory = prevCategory;
+        if (typeof window !== 'undefined') {
+            const stored = sessionStorage.getItem('prevCategory');
+            if (stored) {
+                actualPrevCategory = stored;
+            }
+        }
+        
+        // Check if category actually changed
+        if (actualPrevCategory !== null && actualPrevCategory !== categoryName) {
+            // Category changed - clear localStorage FIRST, then reset filters
+            // This prevents FilterHydrator from saving old filters with new category
+            console.log('pass 1 - category changed from', actualPrevCategory, 'to', categoryName);
+            clearFiltersFromStorage();
+            dispatch(resetFilters());
+            dispatch(resetProducts());
+            setCategoryChanges(true);
+        } else if (prevCategory === null) {
+            // Initial load or page refresh - try to load from localStorage for this category
+            // prevCategory === null means component just mounted (refresh or first visit)
+            console.log('pass 2 - initial load or page refresh');
+            const savedFilters = loadFiltersFromStorage(categoryName);
+            if (savedFilters && Object.keys(savedFilters).length > 0) {
+                console.log('pass 3 - found saved filters');
+                // Found saved filters for this category - restore them
+                dispatch(hydrateFilters(savedFilters));
+            }
+            dispatch(resetProducts());
+            setCategoryChanges(true);
+        } else {
+            // Same category navigation (not a refresh) - filters should persist
+            // prevCategory !== null means we're navigating within the same session
+            console.log('same category - filters persist');
+            setCategoryChanges(true);
+        }
+        
+        // Update both state and sessionStorage
+        setPrevCategory(categoryName);
+        if (typeof window !== 'undefined') {
+            sessionStorage.setItem('prevCategory', categoryName);
+        }
+    }, [categoryName, prevCategory, dispatch]);
 
     useEffect(() => {
         setCurrentPage(1);
@@ -85,7 +125,6 @@ const CategoryPage = () => {
         selectedSoftDrinkTypes,
         selectedWineColors,
         selectedWineSweetness,
-        setCurrentPage,
         categoryChanged,
     ]);
 
