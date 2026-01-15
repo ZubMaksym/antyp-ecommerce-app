@@ -4,15 +4,16 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
-import {useForm, SubmitHandler} from 'react-hook-form';
+import {useForm, SubmitHandler, FieldErrors} from 'react-hook-form';
 import { CheckoutFormFields } from '@/types/componentTypes';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckoutFormValidationSchema } from '@/schemas/CheckoutFormValidationSchema';
+import PhoneNumberInput from '@/components/ui/PhoneNumberInput';
 
 const CheckoutPage = () => {
     const { items, totalQuantity } = useSelector((state: RootState) => state.cart);
 
-    const { register, handleSubmit, formState: { errors } } = useForm<CheckoutFormFields>({
+    const { register, handleSubmit, formState: { errors }, control } = useForm<CheckoutFormFields>({
         resolver: yupResolver(CheckoutFormValidationSchema),
         mode: 'onChange',
     });
@@ -88,6 +89,13 @@ const CheckoutPage = () => {
                             errors={errors}
                             errorMessage={errors.phoneNumber?.message}
                         />
+                        {/* <PhoneNumberInput
+                            className='w-full h-[45px]'
+                            control={control}
+                            name='phoneNumber'
+                            errors={errors}
+                            errorMessage={errors.phoneNumber?.message}
+                        /> */}
                     </div>
                     <div className='mt-4'>
                         <Button apearence='primary' classname='w-full h-[45px]'>

@@ -49,10 +49,6 @@
   color: #4d6d7e;
 }
 
-.desktop-swiper .swiper-button-next {
-  
-}
-
 @keyframes fadeUp {
   0% {
     opacity: 0;
@@ -104,4 +100,15 @@ html {
 
 .stroke {
   text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset;
+  box-shadow: 0 0 0px 1000px #ffffff inset;
+  -webkit-text-fill-color: #4d6d7e;
+  transition: background-color 5000s ease-in-out 0s;
 }

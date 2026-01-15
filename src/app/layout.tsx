@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import Header from '@/components/ui/Header';
 import Footer from '@/components/ui/Footer';
 import Providers from '@/components/provider/Provider';
+import { AuthProvider } from '@/components/auth/AuthProvider';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -26,12 +27,14 @@ export default function RootLayout({
         className={`${cooperFont.className} bg-[#F6EFE7]`}
       >
         <Providers>
-          <div className='flex justify-center items-center h-[40px] w-full bg-[#4d6d7e]'>
-            <span className='text-white font-extrabold text-[14px] text-center mx-[20px]'>Distributor of the best regional producers</span>
-          </div>
-          <Header />
-          {children}
-          <Footer />
+          <AuthProvider>
+            <div className='flex justify-center items-center h-[40px] w-full bg-[#4d6d7e]'>
+              <span className='text-white font-extrabold text-[14px] text-center mx-[20px]'>Distributor of the best regional producers</span>
+            </div>
+            <Header />
+            {children}
+            <Footer />
+          </AuthProvider>
         </Providers>
         <div id='portal'></div>
       </body>

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@react-input/mask": "^2.0.4",
     "@reduxjs/toolkit": "^2.9.0",
     "classnames": "^2.5.1",
     "color-thief-browser": "^2.0.2",

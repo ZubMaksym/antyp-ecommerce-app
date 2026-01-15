@@ -6,7 +6,7 @@ import CategoryCard from '../ui/CategoryCard';
 import { categoriess } from '@/utils/data';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ClipLoader } from 'react-spinners';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import classNames from 'classnames';
 import Pagination from '../ui/Pagination';
 import usePagination from '@/hooks/usePagination';
@@ -112,13 +112,7 @@ const Homepage = () => {
                 }
             )}>
                 {!bestsellerProducts ? (
-                    <div className=''>
-                        <ClipLoader
-                            aria-label='Loading Spinner'
-                            color='#4d6d7e'
-                            size={60}
-                        />
-                    </div>
+                    <LoadingSpinner size={60} height="h-auto" showMessage={false} color="#4d6d7e" />
                 ) : (
                     <>
                         {bestsellerProducts.map((product) => (

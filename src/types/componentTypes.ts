@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from 'react';
 import { FilterName, ProductItem } from './reducerTypes';
 import { ProductItemCart } from './reducerTypes';
-import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import { Control, FieldErrors, UseFormRegister } from 'react-hook-form';
 
 export interface ModalProps {
     isOpen: boolean;
@@ -18,6 +18,7 @@ export interface ButtonProps {
     apearence: 'primary' | 'secondary';
     children: React.ReactNode;
     onClick?: any;
+    disabled?: boolean;
 }
 
 export interface ProductCardProps {
@@ -85,15 +86,22 @@ export interface InputProps {
 }
 
 export interface UsernameInputProps {
-    register?: UseFormRegister<LoginFormFields>;
-    errors?: FieldErrors<LoginFormFields> | undefined;
+    register?: UseFormRegister<LoginFormFields | RegisterFormFields>;
+    errors?: FieldErrors<LoginFormFields | RegisterFormFields> | undefined;
     errorMessage?: string | undefined;
     classname?: string;
 }
 
 export interface PasswordInputProps {
-    register?: UseFormRegister<LoginFormFields>;
-    errors?: FieldErrors<LoginFormFields> | undefined;
+    register?: UseFormRegister<LoginFormFields | RegisterFormFields>;
+    errors?: FieldErrors<LoginFormFields | RegisterFormFields> | undefined;
+    errorMessage?: string | undefined;
+    classname?: string;
+}
+
+export interface ConfirmPasswordInputProps {
+    register?: UseFormRegister<RegisterFormFields>;
+    errors?: FieldErrors<RegisterFormFields> | undefined;
     errorMessage?: string | undefined;
     classname?: string;
 }
@@ -110,6 +118,12 @@ export interface LoginFormFields {
     password: string;
 }
 
+export interface RegisterFormFields {
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
+
 export interface AddToCartButtonProps {
     product: ProductItem;
     handleClick: (e: React.MouseEvent, item: ProductItemCart) => void;
@@ -122,4 +136,27 @@ export interface ProductImageCarouselProps {
     setIsFullscreen: Dispatch<SetStateAction<boolean>>;
     initalSlide?: number;
     setMainImage: Dispatch<SetStateAction<string>>;
+}
+
+export interface AuthLayoutProps {
+    children: React.ReactNode;
+    title: string;
+    type: 'login' | 'register';
+}
+
+export interface LoadingSpinnerProps {
+    message?: string;
+    height?: string;
+    size?: number;
+    color?: string;
+    showMessage?: boolean;
+}
+
+export interface PhoneNumberInputProps {
+    control: Control<any>;
+    name: string;
+    className?: string;
+    placeholder?: string;
+    errors?: FieldErrors;
+    errorMessage?: string;
 }
