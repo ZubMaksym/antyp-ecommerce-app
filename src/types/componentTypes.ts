@@ -80,9 +80,18 @@ export interface InputProps {
     errors?: FieldErrors<CheckoutFormFields> | undefined;
     errorMessage?: string | undefined;
     className: string;
-    type: 'text' | 'number';
+    type: 'text' | 'number' | 'tel';
     placeholder: string;
-    id: 'firstName' | 'lastName' | 'company' | 'phoneNumber';
+    id: 'firstName' | 'lastName' | 'company';
+}
+
+export interface PhoneNumberInputProps {
+    control: Control<CheckoutFormFields>;
+    name: 'phoneNumber';
+    className?: string;
+    placeholder?: string;
+    errors?: FieldErrors<CheckoutFormFields>;
+    errorMessage?: string;
 }
 
 export interface UsernameInputProps {
@@ -150,13 +159,4 @@ export interface LoadingSpinnerProps {
     size?: number;
     color?: string;
     showMessage?: boolean;
-}
-
-export interface PhoneNumberInputProps {
-    control: Control<any>;
-    name: string;
-    className?: string;
-    placeholder?: string;
-    errors?: FieldErrors;
-    errorMessage?: string;
 }

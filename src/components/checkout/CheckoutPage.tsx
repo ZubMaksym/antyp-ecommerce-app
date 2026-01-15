@@ -1,5 +1,6 @@
 'use client';
 import Input from '@/components/ui/Input';
+import PhoneNumberInput from '@/components/ui/PhoneNumberInput';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
 import Image from 'next/image';
@@ -8,7 +9,6 @@ import {useForm, SubmitHandler, FieldErrors} from 'react-hook-form';
 import { CheckoutFormFields } from '@/types/componentTypes';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckoutFormValidationSchema } from '@/schemas/CheckoutFormValidationSchema';
-import PhoneNumberInput from '@/components/ui/PhoneNumberInput';
 
 const CheckoutPage = () => {
     const { items, totalQuantity } = useSelector((state: RootState) => state.cart);
@@ -80,22 +80,14 @@ const CheckoutPage = () => {
                         <label htmlFor='phoneNumber' className='ml-[1px] text-[#4d6d7e] font-medium'>
                             Phone Number
                         </label>
-                        <Input
-                            id='phoneNumber'
+                        <PhoneNumberInput
+                            control={control}
+                            name='phoneNumber'
                             className='w-full h-[45px]'
-                            placeholder={`06612346789`}
-                            type='text'
-                            register={register}
+                            placeholder='+38 (___) ___-__-__'
                             errors={errors}
                             errorMessage={errors.phoneNumber?.message}
                         />
-                        {/* <PhoneNumberInput
-                            className='w-full h-[45px]'
-                            control={control}
-                            name='phoneNumber'
-                            errors={errors}
-                            errorMessage={errors.phoneNumber?.message}
-                        /> */}
                     </div>
                     <div className='mt-4'>
                         <Button apearence='primary' classname='w-full h-[45px]'>

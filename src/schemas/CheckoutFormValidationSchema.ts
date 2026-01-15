@@ -1,9 +1,5 @@
 import * as yup from 'yup';
-
-// Нормалізація перед валідацією
-const normalizePhoneForValidation = (value: string) => {
-  return value.replace(/\D/g, ''); // залишаємо тільки цифри
-};
+import { operatorCodes } from '@/utils/data';
 
 export const CheckoutFormValidationSchema = yup.object({
   firstName: yup
@@ -17,10 +13,16 @@ export const CheckoutFormValidationSchema = yup.object({
     .required(`Це поле обов'язкове`)
     .test(
       'is-valid-phone',
-      'Номер телефона має відповідати формату 0123456789',
+      'Номер телефона має відповідати формату +38 (012) 345-67-89',
       (value) => {
-        const digits = value ? normalizePhoneForValidation(value) : '';
-        return /^0\d{9}$/.test(digits);
+        return /^\+38 \(\d{3}\) \d{3}-\d{2}-\d{2}$/.test(value);
       }
-    ),
+    ).test(
+      'is-valid-operator-code',
+      'Неправильний код оператора',
+      (value) => {
+        const operatorCode = value.slice(5, 8);
+        return operatorCodes.includes(operatorCode);
+      }
+    )
 });

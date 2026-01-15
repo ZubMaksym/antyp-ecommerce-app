@@ -51,3 +51,12 @@ export const categoriess = [
         image: 'https://www.antyp.com.ua/wp-content/uploads/2021/12/%D0%BF%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D1%8F4.jpg'
     },
 ];
+
+export const operatorCodes = [
+    '050', '066', '075', '095', '099', // Vodafone
+    '039', '067', '068', '077', '096', '097', '098', // Київстар
+    '063', '073', '093', // Lifecell
+    '091', // 3Mob
+    '092', // PEOPLEnet
+    '094'  // Інтертелеком
+];

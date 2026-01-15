@@ -1,31 +1,13 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import { InputProps } from '@/types/componentTypes';
-import { useMask } from '@react-input/mask';
 
 const Input = ({type, className, placeholder, id, register, errors, errorMessage}: InputProps) => {
-  const inputRef = useMask({
-    mask: '+__ (___) ___-__-__',
-    replacement: { _: /\d/ },
-    showMask: true,
-  });
-
-  const {
-    ref: rhfRef,
-    ...restRegister
-  } = register!(id);
-
   return (
     <>
       <input
-        {...restRegister}
+        {...register!(id)}
         id={id}
-        ref={(el) => {
-          rhfRef(el);
-          if (id === 'phoneNumber') {
-            inputRef.current = el as HTMLInputElement;
-          }
-        }}
         className={classNames(
             className,
             'rounded-lg bg-white text-[#4d6d7e] px-3 placeholder:text-[16px] placeholder:text-[#6E8792]',
@@ -35,23 +17,13 @@ const Input = ({type, className, placeholder, id, register, errors, errorMessage
             }
         )}
         type={type}
-        autoComplete={id === 'phoneNumber' ? 'tel-country-code' : 'on'}
+        autoComplete={
+          id === 'firstName' ? 'given-name' :
+          id === 'lastName' ? 'family-name' :
+          'off'
+        }
         placeholder={placeholder}
-        onPaste={() => console.log('paste')}
-        onInput={(e: ChangeEvent<HTMLInputElement>) => {
-          if (e.target.value.startsWith('+0') && id === 'phoneNumber') {
-            console.log('onInput');
-            // e.target.value = e.target.value.replace('+0_ (_', '+38 (0_');
-          }
-        }}
-        onChange={(e) => {
-          if (e.target.value.startsWith('+0') && id === 'phoneNumber') {
-            console.log('onChange');
-            e.target.value = e.target.value.replace('+0_ (_', '+38 (0_');
-          }
-          // restRegister.onChange(e);
-        }}
-    />
+      />
       {
         errors?.[id] && <p className='text-red-500'>{errorMessage}</p>
       }
