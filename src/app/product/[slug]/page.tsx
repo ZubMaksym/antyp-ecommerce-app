@@ -23,6 +23,7 @@ import ProductImageCarousel from '@/components/ui/ProductImageCarousel';
 import beerTestImage from '@/public/icons/PLP_Kolsch.webp';
 import { motion, AnimatePresence } from 'framer-motion';
 import useForbidBodyScroll from '@/hooks/useForbidBodyScroll';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 
 const ProductPage = () => {
@@ -129,7 +130,7 @@ const ProductPage = () => {
     if (productLoading) {
         return (
             <div className='h-[calc(100vh-170px)] flex justify-center items-center'>
-                <div className='text-[24px] text-[#4d6d7e] font-black'>Loading...</div>
+                <LoadingSpinner message="Loading..." height="auto" />
             </div>
         );
     }

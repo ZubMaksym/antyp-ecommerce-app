@@ -5,6 +5,7 @@ import { ProductsProps } from '@/types/componentTypes';
 import Button from '../ui/Button';
 import { useDispatch } from 'react-redux';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
+import LoadingSpinner from '../ui/LoadingSpinner';
 
 const Products = ({ products, loading, productsLoadedOnce }: ProductsProps) => {
     const router = useRouter();
@@ -23,7 +24,9 @@ const Products = ({ products, loading, productsLoadedOnce }: ProductsProps) => {
                 'flex justify-center items-center': products?.length === 0
             }
         )}>
-            <p className='absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-[24px] font-black text-[#4d6d7e]'>Loading...</p>
+            <div className='absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2'>
+                <LoadingSpinner message="Loading..." height="auto" />
+            </div>
         </div>
     );
 
