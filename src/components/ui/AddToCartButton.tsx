@@ -7,7 +7,7 @@ const AddToCartButton = ({ product, handleClick, isMobile }: AddToCartButtonProp
 
     if (isMobile) {
         return (
-            <div className='relative group mx-auto md:hidden block w-full mt-3'>
+            <div className='relative group mx-auto md:hidden block w-full mt-3 mt-auto'>
                 <div className={classNames(
                     `absolute bottom-full left-0 w-full z-10
                     bg-white border rounded-lg shadow-lg

@@ -5,6 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { getAccessToken } from '@/auth/token';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import Link from 'next/link';
 
 const AdminDashboard = () => {
     const { isLoading, canAccess } = useAuth('Admin');
@@ -39,12 +40,17 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="container mx-auto px-4 py-8 h-[calc(100vh-105px)]">
-            <h1 className="text-3xl font-bold mb-4">Admin Dashboard</h1>
-            <p className="text-gray-600">Welcome to the admin panel. You have Admin privileges.</p>
-            {/* <button onClick={logOut} className='bg-blue-500 text-white px-4 py-2 rounded-md'>
-                log out
-            </button> */}
+        <div className='h-[calc(100vh-105px)]'>
+            <aside className='shadow-xl border-[#4d6d7e] w-[250px] h-full'>
+                <h1 className='text-[#4d6d7e] text-2xl font-black py-5 px-4 border-b border-[#4d6d7e]'>
+                    Admin Dashboard
+                </h1>
+                <div className='flex flex-col *:text-[#4d6d7e] *:text-[18px] *:font-bold *:py-3 *:px-4 *:hover:bg-[#d7cdc3]'>
+                    <Link href='/admin/orders'>Orders</Link>
+                    <Link href='/admin/products'>Products</Link>
+                    <Link href='/admin/users'>Users</Link>
+                </div>
+            </aside>
         </div>
     );
 };

@@ -6,7 +6,7 @@ import CategoryCard from '../ui/CategoryCard';
 import { categoriess } from '@/utils/data';
 import Link from 'next/link';
 import Image from 'next/image';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import ProductCardSkeleton from '@/components/ui/ProductCardSkeleton';
 import classNames from 'classnames';
 import Pagination from '../ui/Pagination';
 import usePagination from '@/hooks/usePagination';
@@ -105,14 +105,13 @@ const Homepage = () => {
                 </div>
             </div>
             <div className={classNames(
-                'w-full max-w-[1720px] px-[30px] mt-[55px]',
-                {
-                    'grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 h-auto min-h-[430px]': bestsellerProducts,
-                    'flex justify-center items-center h-[250px]': !bestsellerProducts
-                }
+                'w-full max-w-[1720px] sm:px-[30px] px-[10px] mt-[55px]',
+                'grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-2 gap-5 h-auto'
             )}>
                 {!bestsellerProducts ? (
-                    <LoadingSpinner size={60} height="h-auto" showMessage={false} color="#4d6d7e" />
+                    Array.from({ length: productPerPage }).map((_, index) => (
+                        <ProductCardSkeleton key={index} />
+                    ))
                 ) : (
                     <>
                         {bestsellerProducts.map((product) => (
