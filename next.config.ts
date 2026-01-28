@@ -27,10 +27,15 @@ const nextConfig: NextConfig = {
         protocol: 'http',
         hostname: '62.171.154.171',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 's3.danilapainter.studio',
+        pathname: '/**',
       }
     ],
   },
-  allowedDevOrigins: ['http://62.171.154.171:21000/'],
+  allowedDevOrigins: ['https://api.danilapainter.studio', 'https://s3.danilapainter.studio'],
 };
 
 export default nextConfig;

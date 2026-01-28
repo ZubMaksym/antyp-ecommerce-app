@@ -15,6 +15,7 @@ import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
 import GoUpButton from '../ui/GoUpButton';
 import banner from '@/public/banner222.webp';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const Homepage = () => {
     const [bestsellerProducts, setBestsellerProducts] = useState<Array<any> | null>(null);
@@ -32,7 +33,7 @@ const Homepage = () => {
         const fetchBestsellers = async () => {
             try {
                 setBestsellerProductsError(null);
-                const response = await fetch(`http://62.171.154.171:21000/product?Page=${currentPage}&PageSize=${productPerPage}`);
+                const response = await fetch(`${API_BASE_URL}/product?Page=${currentPage}&PageSize=${productPerPage}`);
 
                 if (!response.ok) {
                     setBestsellerProductsError(`Something went wrong while processing the request. We're woking to solve this problem`);
