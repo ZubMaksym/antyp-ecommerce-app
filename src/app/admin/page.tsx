@@ -6,6 +6,7 @@ import { getAccessToken } from '@/auth/token';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
+import { clearAccessToken } from '@/auth/token';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -28,8 +29,8 @@ const AdminDashboard = () => {
         });
 
         if (!res.ok) throw new Error(await res.text());
-        
 
+        clearAccessToken();
         router.push('/login');
     };
 

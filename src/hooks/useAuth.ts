@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import { JwtPayload } from '@/types/helperTypes';
 import { getAccessToken, subscribeToToken } from '@/auth/token';
 import { initializeAuth } from '@/api/fetchWithAuth';
+import { clearAccessToken } from '@/auth/token';
 
 export interface AuthState {
     isAuthenticated: boolean;
@@ -27,6 +28,16 @@ export const useAuth = (requiredRole?: 'Admin' | 'User') => {
         role: null,
         isLoading: true,
     });
+
+    // const logout = () => {
+    //     clearAccessToken();
+    //     // setAuthState({
+    //     //     isAuthenticated: false,
+    //     //     token: null,
+    //     //     role: null,
+    //     //     isLoading: false,
+    //     // });
+    // }
 
     // Decode token and extract role
     const decodeToken = useCallback((token: string | null): 'Admin' | 'User' | null => {

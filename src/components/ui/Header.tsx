@@ -1,7 +1,6 @@
 'use client';
 import cartSVG from '@/public/icons/header/cart.svg';
 import searchSVG from '@/public/icons/header/search.svg';
-import profileSVG from '@/public/icons/header/profile.svg';
 import Image from 'next/image';
 import { Sling as Hamburger } from 'hamburger-react';
 import Link from 'next/link';
@@ -18,7 +17,7 @@ import classNames from 'classnames';
 import { toggleCart } from '@/state/cartState/cartSlice';
 import { useDispatch } from 'react-redux';
 import { useAuth } from '@/hooks/useAuth';
-import { usePathname } from 'next/navigation';
+import { User } from 'lucide-react';
 
 const Header = () => {
     const [isNavOpen, setIsNavOpen] = useState(false);
@@ -26,18 +25,12 @@ const Header = () => {
     const { items, isCartOpen } = useSelector((state: RootState) => state.cart);
     const dispatch = useDispatch<AppDispatch>();
     const { role, isAuthenticated } = useAuth();
-    const [profileLink, setProfileLink] = useState<string>('/login');
-    const pathname = usePathname();
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            setProfileLink(role === 'Admin' ? '/admin' : '/dashboard');
-        } else {
-            setProfileLink('/login');
-        }
-        console.log('role', role);
-        console.log('isAuthenticated', isAuthenticated);
-    }, [role, isAuthenticated]);
+    const profileLink = !isAuthenticated
+        ? '/login'
+        : role === 'Admin'
+            ? '/admin'
+            : '/user';
 
     return (
         <header className='z-50 sticky top-0 left-0 h-[60px] lg:h-[105px] xl:h-[85px] w-full bg-[#f6efe7] flex justify-between items-center border-b border-[#4d6d7e] overflow-hidden'>
@@ -99,12 +92,12 @@ const Header = () => {
                         />
                     </button>
                     <Link href={profileLink} className='lg:flex justify-center items-center cursor-pointer hidden h-[40px] w-[40px]'>
-                        <Image
+                        <User 
                             width={25}
                             height={25}
-                            src={profileSVG}
-                            alt='profile icon'
-                            priority
+                            strokeWidth={isAuthenticated ? 2.7 : 1.5}
+                            color='#4d6d7e'
+                            className='cursor-pointer'
                         />
                     </Link>
                     <button
