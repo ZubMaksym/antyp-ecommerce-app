@@ -15,7 +15,7 @@ import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
 import GoUpButton from '../ui/GoUpButton';
 import banner from '@/public/banner222.webp';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const Homepage = () => {
     const [bestsellerProducts, setBestsellerProducts] = useState<Array<any> | null>(null);

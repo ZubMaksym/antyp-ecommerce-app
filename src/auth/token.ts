@@ -5,7 +5,7 @@
  */
 
 let accessToken: string | null = null;
-let tokenListeners: Set<(token: string | null) => void> = new Set();
+const tokenListeners: Set<(token: string | null) => void> = new Set();
 
 /**
  * Set the access token in memory

@@ -36,26 +36,14 @@ export const useAuth = (requiredRole?: 'Admin' | 'User') => {
             const decoded = jwtDecode<JwtPayload>(token);
             const role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
             return role === 'Admin' || role === 'User' ? role : null;
-        } catch (error) {
-            console.error('Error decoding token:', error);
-            return null;
-        }
-    }, []);
-
-    // Check if token is expired
-    const isTokenExpired = useCallback((token: string): boolean => {
-        try {
-            const decoded = jwtDecode<JwtPayload>(token);
-            const currentTime = Date.now() / 1000;
-            return decoded.exp < currentTime;
         } catch {
-            return true;
+            return null;
         }
     }, []);
 
     // Update auth state based on token
     const updateAuthState = useCallback((token: string | null) => {
-        if (!token || isTokenExpired(token)) {
+        if (!token) {
             setAuthState({
                 isAuthenticated: false,
                 token: null,
@@ -72,7 +60,7 @@ export const useAuth = (requiredRole?: 'Admin' | 'User') => {
             role,
             isLoading: false,
         });
-    }, [decodeToken, isTokenExpired]);
+    }, [decodeToken]);
 
     // Initialize auth on mount
     useEffect(() => {
@@ -81,31 +69,21 @@ export const useAuth = (requiredRole?: 'Admin' | 'User') => {
         const initAuth = async () => {
             // First check if we already have a token in memory (from login)
             const existingToken = getAccessToken();
-            
-            if (existingToken && !isTokenExpired(existingToken)) {
-                // We have a valid token, use it immediately
+
+            if (existingToken) {
+                // We already have a token from a previous login in this tab
                 if (isMounted) {
                     updateAuthState(existingToken);
                 }
             } else {
-                // No token or expired, try to refresh (only if refresh token cookie exists)
-                // This will fail silently if no refresh token cookie is available
-                const refreshSuccess = await initializeAuth();
-                
+                // No token in memory, try to get a new one using the refresh token cookie.
+                // This follows the classic JWT + refresh token flow:
+                // https://stackoverflow.com/questions/27726066/jwt-refresh-token-flow
+                await initializeAuth();
+
                 if (isMounted) {
                     const token = getAccessToken();
-                    if (token) {
-                        // Successfully got a new token
-                        updateAuthState(token);
-                    } else {
-                        // Refresh failed - this could be:
-                        // 1. No refresh token cookie (user not logged in) - should redirect
-                        // 2. 400 Bad Request (backend issue) - should not redirect immediately
-                        // 3. Network error - should not redirect immediately
-                        // For now, we'll set as unauthenticated and let the redirect logic handle it
-                        // But we'll add a delay to avoid immediate redirect on 400 errors
-                        updateAuthState(null);
-                    }
+                    updateAuthState(token);
                 }
             }
         };
@@ -123,7 +101,7 @@ export const useAuth = (requiredRole?: 'Admin' | 'User') => {
             isMounted = false;
             unsubscribe();
         };
-    }, [updateAuthState, isTokenExpired]);
+    }, [updateAuthState]);
 
     // Check role requirement and redirect if needed
     useEffect(() => {

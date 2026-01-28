@@ -14,10 +14,10 @@ const FilterDropdown = ({ filterName, children, isFirst, filterOptions }: Filter
         if (option.count !== 0){
             return option;
         }
-    })
+    });
 
     if (availableOptions && availableOptions[0] === undefined){
-        return
+        return;
     }
 
     return (

@@ -1,11 +1,13 @@
 'use client';
-
 import React from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { getAccessToken } from '@/auth/token';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import Link from 'next/link';
+import Button from '@/components/ui/Button';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const AdminDashboard = () => {
     const { isLoading, canAccess } = useAuth('Admin');
@@ -13,8 +15,8 @@ const AdminDashboard = () => {
 
     const logOut = async () => {
         const token = getAccessToken();
-    
-        const res = await fetch(`http://62.171.154.171:21000/api/Auth/logout`, {
+
+        const res = await fetch(`${API_BASE_URL}/api/Auth/logout`, {
             method: 'POST',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -24,19 +26,20 @@ const AdminDashboard = () => {
             credentials: 'include', // ← дуже важливо
             body: '', // порожнє тіло як у Swagger
         });
-    
+
         if (!res.ok) throw new Error(await res.text());
-    
+        
+
         router.push('/login');
     };
 
     if (isLoading) {
-        return <LoadingSpinner message="Loading..." />;
+        return <LoadingSpinner message='Loading...' />;
     }
 
     if (!canAccess) {
         // Show loading state while redirecting
-        return <LoadingSpinner message="Redirecting..." />;
+        return <LoadingSpinner message='Redirecting...' />;
     }
 
     return (
@@ -49,6 +52,15 @@ const AdminDashboard = () => {
                     <Link href='/admin/orders'>Orders</Link>
                     <Link href='/admin/products'>Products</Link>
                     <Link href='/admin/users'>Users</Link>
+                </div>
+                <div className='py-3 px-4'>
+                    <Button
+                        onClick={logOut}
+                        classname='w-full text-[16px] font-bold h-[36px]'
+                        apearence='primary'
+                    >
+                        Logout
+                    </Button>
                 </div>
             </aside>
         </div>

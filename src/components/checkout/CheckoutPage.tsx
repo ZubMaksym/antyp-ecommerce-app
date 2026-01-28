@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
-import {useForm, SubmitHandler, FieldErrors} from 'react-hook-form';
+import {useForm, SubmitHandler} from 'react-hook-form';
 import { CheckoutFormFields } from '@/types/componentTypes';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckoutFormValidationSchema } from '@/schemas/CheckoutFormValidationSchema';

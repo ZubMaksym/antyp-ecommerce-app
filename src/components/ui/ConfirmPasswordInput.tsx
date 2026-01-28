@@ -1,10 +1,10 @@
 import { ConfirmPasswordInputProps} from '@/types/componentTypes';
 import classNames from 'classnames';
-import { Eye, EyeClosed } from 'lucide-react'
+import { Eye, EyeClosed } from 'lucide-react';
 import { useState } from 'react';
 
 export const ConfirmPasswordInput = ({ register, errors, errorMessage, classname }: ConfirmPasswordInputProps) => {
-    const [isHidden, setIsHidden] = useState(true)
+    const [isHidden, setIsHidden] = useState(true);
 
     return (
         <>

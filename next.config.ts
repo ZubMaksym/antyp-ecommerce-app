@@ -35,7 +35,7 @@ const nextConfig: NextConfig = {
       }
     ],
   },
-  allowedDevOrigins: ['https://api.danilapainter.studio', 'https://s3.danilapainter.studio'],
+  allowedDevOrigins: ['https://api.danilapainter.studio'],
 };
 
 export default nextConfig;

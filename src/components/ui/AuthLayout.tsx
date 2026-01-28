@@ -26,7 +26,7 @@ const AuthLayout = ({ children, title, type }: AuthLayoutProps) => {
             </div>
         </div>
     </section>
-  )
-}
+  );
+};
 
 export default AuthLayout;

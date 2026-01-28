@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { ApiResponse, Result, ApiResponseProduct, ProductItem, AlcoholStrength, IBU } from '@/types/reducerTypes';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export interface FilterSlice {
     filters: Result | null;
     loading: boolean;
@@ -144,7 +146,7 @@ export const fetchFilters = createAsyncThunk<
     'filter/fetchFilters',
     async (filters) => {
         const { category, ...rest } = filters;
-        let url = `http://62.171.154.171:21000/product/filters-metadata?ProductType=${category}`;
+        let url = `${API_BASE_URL}/product/filters-metadata?ProductType=${category}`;
 
         Object.entries(rest).forEach(([key, arr]) => {
             if (arr.length > 0) {
@@ -166,7 +168,7 @@ export const fetchFilters = createAsyncThunk<
 export const fetchInitialProducts = createAsyncThunk<ProductItem[], { category: string }>(
     'filter/fetchInitialProducts',
     async ({ category }) => {
-        const response = await fetch(`http://62.171.154.171:21000/product?ProductType=${category}`);
+        const response = await fetch(`${API_BASE_URL}/product?ProductType=${category}`);
         if (!response.ok) {
             throw new Error(`API error ${response.status} ${response.statusText}`);
         }
@@ -243,7 +245,7 @@ export const fetchProducts = createAsyncThunk<
         }
 
         const response = await fetch(
-            `http://62.171.154.171:21000/product?Page=${currentPage}&PageSize=${productPerPage}&ProductType=${categoryName}&${params.toString()}`
+            `${API_BASE_URL}/product?Page=${currentPage}&PageSize=${productPerPage}&ProductType=${categoryName}&${params.toString()}`
         );
 
         if (!response.ok) {

@@ -5,6 +5,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ModalProps } from '@/types/componentTypes';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 const Search = ({ isOpen, setIsOpen }: ModalProps) => {
     const [input, setInput] = useState('');
     const [data, setData] = useState<ProductItem[] | string>([]);
@@ -28,7 +30,7 @@ const Search = ({ isOpen, setIsOpen }: ModalProps) => {
                     setData([]);
                     return;
                 }
-                const res = await fetch(`http://62.171.154.171:21000/product?Name=${input}`);
+                const res = await fetch(`${API_BASE_URL}/product?Name=${input}`);
                 if (!res.ok) throw new Error('Error searching');
                 const data = await res.json();
                 if (data.result.items.length > 0) {

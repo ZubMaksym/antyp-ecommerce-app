@@ -12,9 +12,8 @@ import { jwtDecode } from 'jwt-decode';
 import { JwtPayload } from '@/types/helperTypes';
 import AuthLayout from '@/components/ui/AuthLayout';
 import { setAccessToken } from '@/auth/token';
-import { fetchWithAuth } from '@/api/fetchWithAuth';
 
-const API_BASE_URL = 'http://62.171.154.171:21000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const LoginPage = () => {
     const router = useRouter();
@@ -39,7 +38,7 @@ const LoginPage = () => {
                         'Content-Type': 'application/json',
                         'accept': '*/*',
                     },
-                    credentials: 'include', // Include cookies for httpOnly refresh token
+                    credentials: 'include',
                     body: JSON.stringify({
                         email: data.email.trim(),
                         password: data.password,
@@ -47,7 +46,6 @@ const LoginPage = () => {
                     }),
                 });
             } catch (fetchError) {
-                // Handle network errors (CORS, offline, etc.)
                 if (fetchError instanceof TypeError && fetchError.message === 'Failed to fetch') {
                     throw new Error('Unable to connect to server. Please check your internet connection and try again.');
                 }
@@ -60,7 +58,6 @@ const LoginPage = () => {
                     const errorData = await res.json();
                     errorMessage = errorData.errors?.message || errorData.message || `Login failed (${res.status})`;
                 } catch {
-                    // If response is not JSON, use status text
                     errorMessage = res.statusText || `Login failed (${res.status})`;
                 }
                 throw new Error(errorMessage);
@@ -73,14 +70,11 @@ const LoginPage = () => {
                 throw new Error('No access token received from server');
             }
 
-            // Store access token in memory (refresh token is in httpOnly cookie)
             setAccessToken(accessToken);
 
-            // Decode token to get user role
             const decoded = jwtDecode<JwtPayload>(accessToken);
             const role = decoded['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
 
-            // Redirect based on role
             if (role === 'Admin') {
                 router.push('/admin');
             } else {
@@ -98,32 +92,32 @@ const LoginPage = () => {
     };
 
     return (
-            <AuthLayout title='Sign In' type='login'>
-                <form
-                    className='md:w-[610px] px-[20px] md:px-0'
-                    onSubmit={handleSubmit(onSubmit)}
+        <AuthLayout title='Sign In' type='login'>
+            <form
+                className='md:w-[610px] px-[20px] md:px-0'
+                onSubmit={handleSubmit(onSubmit)}
+            >
+                <UsernameInput
+                    register={register}
+                    errors={errors}
+                    errorMessage={errors.email?.message}
+                />
+                <PasswordInput
+                    register={register}
+                    errors={errors}
+                    errorMessage={errors.password?.message}
+                    classname='mt-[15px]'
+                />
+                <Button
+                    apearence='primary'
+                    classname='w-full h-[36px] mt-[30px]'
+                    disabled={isLoading}
                 >
-                    <UsernameInput
-                        register={register}
-                        errors={errors}
-                        errorMessage={errors.email?.message}
-                    />
-                    <PasswordInput
-                        register={register}
-                        errors={errors}
-                        errorMessage={errors.password?.message}
-                        classname='mt-[15px]'
-                    />
-                    <Button 
-                        apearence='primary' 
-                        classname='w-full h-[36px] mt-[30px]'
-                        disabled={isLoading}
-                    >
-                        <span className='font-extrabold'>{isLoading ? 'Signing In...' : 'Sign In'}</span>
-                    </Button>
-                    {error && <p className='text-red-500 mt-2 text-sm'>{error}</p>}
-                </form>
-            </AuthLayout>
+                    <span className='font-extrabold'>{isLoading ? 'Signing In...' : 'Sign In'}</span>
+                </Button>
+                {error && <p className='text-red-500 mt-2 text-sm'>{error}</p>}
+            </form>
+        </AuthLayout>
     );
 };
 

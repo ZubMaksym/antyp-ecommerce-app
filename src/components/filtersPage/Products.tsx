@@ -25,9 +25,9 @@ const Products = ({ products, loading, productsLoadedOnce }: ProductsProps) => {
             }
         )}>
             <div className='absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2'>
-                <LoadingSpinner message="Loading..." height="auto" />
+                <LoadingSpinner message='Loading...' height='auto' />
             </div>
-        </div>
+        </div>  
     );
 
     if (productsLoadedOnce && (products?.length === 0)) return (
