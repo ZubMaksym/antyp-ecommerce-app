@@ -60,3 +60,41 @@ export const operatorCodes = [
     '092', // PEOPLEnet
     '094'  // Інтертелеком
 ];
+
+export const adminProductLinks = [
+    {
+        href: '/admin/products/beer',
+        title: 'Beer'
+    },
+    {
+        href: '/admin/products/cider',
+        title: 'Cider'
+    },
+    {
+        href: '/admin/products/water',
+        title: 'Water'
+    },
+    {
+        href: '/admin/products/no-alcohol',
+        title: 'No-alcohol'
+    },
+    {
+        href: '/admin/products/wine',
+        title: 'Wine'
+    }
+];
+
+export const adminMainLinks = [
+    {
+        href: '/admin/orders',
+        title: 'Orders'
+    },
+    {
+        href: '/admin/users',
+        title: 'Users'
+    },
+    {
+        href: '/admin/filters',
+        title: 'Filters'
+    }
+];

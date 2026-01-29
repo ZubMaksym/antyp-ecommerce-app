@@ -160,3 +160,10 @@ export interface LoadingSpinnerProps {
     color?: string;
     showMessage?: boolean;
 }
+
+export interface DropdownProps {
+    children: React.ReactNode;
+    title: string;
+    classname?: string;
+    id: string;
+}
