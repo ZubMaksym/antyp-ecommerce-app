@@ -1,13 +1,13 @@
 'use client';
-import AuthLayout from '@/components/ui/AuthLayout';
-import UsernameInput from '@/components/ui/UsernameInput';
-import { PasswordInput } from '@/components/ui/PasswordInput';
+import AuthLayout from '@/components/auth/AuthLayout';
+import UsernameInput from '@/components/forms/UsernameInput';
+import { PasswordInput } from '@/components/forms/PasswordInput';
 import Button from '@/components/ui/Button';
 import { useForm, SubmitHandler, UseFormRegister } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { RegisterValidationSchema } from '@/schemas/RegisterValidationSchema';
 import { LoginFormFields, RegisterFormFields } from '@/types/componentTypes';
-import { ConfirmPasswordInput } from '@/components/ui/ConfirmPasswordInput';
+import { ConfirmPasswordInput } from '@/components/forms/ConfirmPasswordInput';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { jwtDecode } from 'jwt-decode';

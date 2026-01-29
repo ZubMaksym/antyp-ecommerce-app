@@ -1,4 +1,4 @@
-import Button from './Button';
+import Button from '@/components/ui/Button';
 import { ProductCardProps } from '@/types/componentTypes';
 import Image from 'next/image';
 import { useDispatch } from 'react-redux';

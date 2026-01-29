@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/state/store';
 import plus from '@/public/icons/shared/plus.svg';
 import minus from '@/public/icons/shared/minus.svg';
-import Button from '../ui/Button';
+import Button from '@/components/ui/Button';
 import { incrementItemQuantity, decrementItemQuantity, changeItemQuantity } from '@/state/cartState/cartSlice';
 import { useRouter } from 'next/navigation';
 import { toggleCart } from '@/state/cartState/cartSlice';

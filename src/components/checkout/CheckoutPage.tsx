@@ -1,6 +1,6 @@
 'use client';
 import Input from '@/components/ui/Input';
-import PhoneNumberInput from '@/components/ui/PhoneNumberInput';
+import PhoneNumberInput from '@/components/forms/PhoneNumberInput';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
 import Image from 'next/image';

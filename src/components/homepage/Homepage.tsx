@@ -1,18 +1,18 @@
 'use client';
-import ProductCard from '../ui/ProductCard';
+import ProductCard from '@/components/product/ProductCard';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import CategoryCard from '../ui/CategoryCard';
+import CategoryCard from './CategoryCard';
 import { categoriess } from '@/utils/data';
 import Link from 'next/link';
 import Image from 'next/image';
 import ProductCardSkeleton from '@/components/ui/ProductCardSkeleton';
 import classNames from 'classnames';
-import Pagination from '../ui/Pagination';
+import Pagination from '@/components/common/Pagination';
 import usePagination from '@/hooks/usePagination';
 import { useDispatch } from 'react-redux';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
-import GoUpButton from '../ui/GoUpButton';
+import GoUpButton from '@/components/common/GoUpButton';
 import banner from '@/public/banner222.webp';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;

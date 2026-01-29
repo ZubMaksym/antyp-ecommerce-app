@@ -1,8 +1,8 @@
 'use client';
 import { Provider } from 'react-redux';
 import { store } from '@/state/store';
-import CartHydrator from '../cart/CartHydrator';
-import FilterHydrator from '../filtersPage/FilterHydrator';
+import CartHydrator from '@/components/cart/CartHydrator';
+import FilterHydrator from '@/components/filters/FilterHydrator';
 
 const Providers = ({ children }: { children: React.ReactNode }) => {
     return (

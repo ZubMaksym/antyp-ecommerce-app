@@ -1,6 +1,6 @@
 'use client';
-import UsernameInput from '@/components/ui/UsernameInput';
-import { PasswordInput } from '@/components/ui/PasswordInput';
+import UsernameInput from '@/components/forms/UsernameInput';
+import { PasswordInput } from '@/components/forms/PasswordInput';
 import Button from '@/components/ui/Button';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { LoginFormFields } from '@/types/componentTypes';
@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { JwtPayload } from '@/types/helperTypes';
-import AuthLayout from '@/components/ui/AuthLayout';
+import AuthLayout from '@/components/auth/AuthLayout';
 import { setAccessToken } from '@/auth/token';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;

@@ -1,9 +1,9 @@
-import FilterDropdown from '../ui/FilterDropdown';
+import FilterDropdown from './FilterDropdown';
 import type { AppDispatch, RootState } from '@/state/store';
 import { useSelector, useDispatch } from 'react-redux';
-import CheckBox from '../ui/CheckBox';
+import CheckBox from '@/components/ui/CheckBox';
 import { FilterName, Result } from '@/types/reducerTypes';
-import Button from '../ui/Button';
+import Button from '@/components/ui/Button';
 import {
     toggleManufacturers,
     toggleWaterTypes,
@@ -20,7 +20,7 @@ import RangeSlider from './RangeSlider';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
 import { ModalProps } from '@/types/componentTypes';
 import { useState, useEffect } from 'react';
-import { FilterSkeleton } from '../ui/FilterSkeleton';
+import { FilterSkeleton } from '@/components/ui/FilterSkeleton';
 
 const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
     const categoryName: any = usePathname().split('/').pop();

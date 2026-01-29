@@ -1,6 +1,6 @@
 import { AuthLayoutProps } from '@/types/componentTypes';
 import Link from 'next/link';
-import Button from './Button';
+import Button from '@/components/ui/Button';
 
 
 const AuthLayout = ({ children, title, type }: AuthLayoutProps) => {

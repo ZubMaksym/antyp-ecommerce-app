@@ -1,11 +1,11 @@
 import classNames from 'classnames';
-import ProductCard from '../ui/ProductCard';
+import ProductCard from '@/components/product/ProductCard';
 import { useRouter } from 'next/navigation';
 import { ProductsProps } from '@/types/componentTypes';
-import Button from '../ui/Button';
+import Button from '@/components/ui/Button';
 import { useDispatch } from 'react-redux';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
-import LoadingSpinner from '../ui/LoadingSpinner';
+import LoadingSpinner from '@/components/ui/LoadingSpinner';
 
 const Products = ({ products, loading, productsLoadedOnce }: ProductsProps) => {
     const router = useRouter();
