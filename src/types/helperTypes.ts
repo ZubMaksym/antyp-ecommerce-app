@@ -1,16 +1,3 @@
-export interface IPrevNext {
-    prevCategory: {
-        name: string;
-        route: string;
-        image: string;
-    } | null;
-    nextCategory: {
-        name: string;
-        route: string;
-        image: string;
-    } | null;
-}
-
 export type JwtPayload = {
     sub: string;
     unique_name: string;
@@ -19,3 +6,5 @@ export type JwtPayload = {
     iss: string;
     aud: string;
 };
+
+export type AdminAction = 'create' | 'edit' | 'delete';

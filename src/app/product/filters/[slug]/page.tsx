@@ -14,7 +14,6 @@ import Products from '@/components/filters/Products';
 import Link from 'next/link';
 import GoUpButton from '@/components/common/GoUpButton';
 import { categoriess } from '@/utils/data';
-import { IPrevNext } from '@/types/helperTypes';
 import classNames from 'classnames';
 import { usePathname } from 'next/navigation';
 
@@ -41,10 +40,9 @@ const CategoryPage = () => {
         productsLoading
     } = useSelector((state: RootState) => state.filter);
     const dispatch = useDispatch<AppDispatch>();
-    const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 6, totalCount: 0 });
+    const { totalPages, setCurrentPage, currentPage, setTotalCount, productPerPage } = usePagination({ productPerPage: 9, totalCount: 0 });
     const [categoryChanged, setCategoryChanges] = useState(false);
     const [prodReq, setProdReq] = useState(false);
-    const [prevNextCategory, setPrevNextCategory] = useState<IPrevNext>();
     const [prevCategory, setPrevCategory] = useState<string | null>(null);
 
     useEffect(() => {

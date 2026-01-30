@@ -1,25 +1,16 @@
 'use client';
 import { usePathname } from 'next/navigation';
-import { ChangeEvent, useEffect, useState, useRef } from 'react';
-import Image from 'next/image';
-import classNames from 'classnames';
-import Button from '@/components/ui/Button';
-import plus from '@/public/icons/shared/plus.svg';
-import minus from '@/public/icons/shared/minus.svg';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/state/store';
 import { addItem, toggleCart } from '@/state/cartState/cartSlice';
-import { FilterName, ProductItem } from '@/types/reducerTypes';
-import { incrementQuantity, decrementQuantity, handleQuantityChange } from '@/utils/helpers';
+import { ProductItem } from '@/types/reducerTypes';
 import ColorThief from 'color-thief-browser';
-import ProductDetailsTable from '@/components/product/ProductDetailsTable';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { useRouter } from 'next/navigation';
-import { Keyboard, Pagination, Navigation } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
 import ProductImageCarousel from '@/components/product/ProductImageCarousel';
+import ProductImageGallery from '@/components/product/ProductImageGallery';
+import ProductInfo from '@/components/product/ProductInfo';
+import ProductQuantitySelector from '@/components/product/ProductQuantitySelector';
+import ProductDescription from '@/components/product/ProductDescription';
 import beerTestImage from '@/public/icons/PLP_Kolsch.webp';
 import { motion, AnimatePresence } from 'framer-motion';
 import useForbidBodyScroll from '@/hooks/useForbidBodyScroll';
@@ -36,11 +27,9 @@ const ProductPage = () => {
     const slug = usePathname().split('/').pop();
     const mainImgRef = useRef<HTMLImageElement | null>(null);
     const images = product && [product.mainPhotoUrl, beerTestImage];
-    const router = useRouter();
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [activeSlide, setActiveSlide] = useState(0);
     const [mainImage, setMainImage] = useState('');
-    const mobileSwiperRef = useRef<any>(null);
     
     const dispatch = useDispatch<AppDispatch>();
 
@@ -50,15 +39,6 @@ const ProductPage = () => {
     };
 
     useForbidBodyScroll(isFullscreen, 20000);
-
-    useEffect(() => {
-        if (!isFullscreen && mobileSwiperRef.current && mainImage) {
-            const index = images.indexOf(mainImage);
-            if (index !== -1) {
-                mobileSwiperRef.current.slideTo(index, 0);
-            }
-        }
-    }, [isFullscreen, mainImage]);
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -71,7 +51,7 @@ const ProductPage = () => {
 
                 const data = await response.json();
                 setProduct(data.result);
-                setQuantity(data.result.multiplicity || 1);
+                setQuantity(data.result.packagings[0].multiplicity || 1);
                 setPoductLoading(false);
                 setMainImage(data.result.mainPhotoUrl);
             } catch (error) {
@@ -139,9 +119,8 @@ const ProductPage = () => {
         <section>
             <div className='flex justify-center'>
                 <AnimatePresence mode='wait'>
-                    {
-                        
-                            <motion.div
+                    {product && (
+                        <motion.div
                                 key={product.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -151,238 +130,36 @@ const ProductPage = () => {
                             >
                                 <div className='flex-1 mb-1'>
                                     <div className='lg:sticky top-28'>
-                                        <div className='flex sm:gap-10 lg:gap-4'>
-                                            <div className='scrollbar flex-1 hidden lg:flex flex-col gap-4 max-w-[150px] max-h-[650px] overflow-auto'>
-                                                {images.map((image: string, index: number) => (
-                                                    <div
-                                                        key={index}
-                                                        className={classNames(
-                                                            'aspect-square flex items-center justify-center bg-white rounded-lg shadow-md max-w-[130px] cursor-pointer',
-                                                            {
-                                                                'opacity-70': mainImage !== image,
-                                                                'hover:opacity-100': mainImage === image,
-                                                            }
-                                                        )}
-                                                        onClick={() => setMainImage(images[index])}
-                                                    >
-                                                        <Image
-                                                            src={image}
-                                                            alt={product.name}
-                                                            width={500}
-                                                            height={500}
-                                                            className='place-self-center w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
-                                                            onLoadingComplete={(img) => img.classList.remove('blur-lg', 'scale-105', 'opacity-0')}
-                                                        />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className='hidden lg:flex flex-1 flex-col min-w-0'>
-                                                <motion.div
-                                                    key={mainImage}
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 1 }}
-                                                    exit={{ opacity: 0 }}
-                                                    transition={{ duration: 0.3 }}
-                                                    className='aspect-square flex justify-center items-center bg-white rounded-lg overflow-hidden shadow-md
-                                                                max-w-[650px] max-h-[650px] cursor-pointer'
-                                                    onClick={() => {
-                                                        setActiveSlide(0);
-                                                        setIsFullscreen(true);
-                                                    }}
-                                                >
-                                                    <Image
-                                                        src={mainImage || ''}
-                                                        alt={product.name}
-                                                        width={500}
-                                                        height={500}
-                                                        className='hidden lg:block w-[70%] transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
-                                                        onLoadingComplete={(img) =>
-                                                            img.classList.remove('blur-lg', 'scale-105', 'opacity-0')
-                                                        }
-                                                    />
-                                                    <Image ref={mainImgRef} src={product.mainPhotoUrl} alt='' className='hidden' width={500} height={500} />
-                                                </motion.div>
-                                            </div>
-                                            <div className='lg:hidden w-full bg-white py-10 rounded-lg flex justify-center'>
-                                                <div
-                                                    className='w-full'
-                                                >
-                                                    <Swiper
-                                                        initialSlide={mainImage ? images.indexOf(mainImage) : 0}
-                                                        pagination={{ clickable: true }}
-                                                        navigation={true}
-                                                        modules={[Keyboard, Pagination, Navigation]}
-                                                        className='mobile-swiper'
-                                                        onSwiper={(swiper) => (mobileSwiperRef.current = swiper)}
-                                                        onSlideChange={(swiper) => {
-                                                            const index = swiper.activeIndex;
-                                                            setMainImage(images[index]);
-                                                        }}
-                                                    >
-                                                        {images.map((image: string, index: number) => (
-                                                            <SwiperSlide
-                                                                key={index}
-                                                            >
-                                                                <Image
-                                                                    src={image}
-                                                                    alt={product.name}
-                                                                    width={500}
-                                                                    height={500}
-                                                                    className='w-[50%] mx-auto transition-all duration-200 ease-in-out blur-lg scale-105 opacity-0'
-                                                                    onLoadingComplete={(img) =>
-                                                                        img.classList.remove('blur-lg', 'scale-105', 'opacity-0')
-                                                                    }
-                                                                    onClick={() => {
-                                                                        setActiveSlide(index);
-                                                                        setIsFullscreen(true);
-                                                                    }}
-                                                                />
-                                                            </SwiperSlide>
-                                                        ))}
-                                                    </Swiper>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <ProductImageGallery
+                                            images={images}
+                                            mainImage={mainImage}
+                                            setMainImage={setMainImage}
+                                            productName={product.name}
+                                            mainImgRef={mainImgRef}
+                                            isFullscreen={isFullscreen}
+                                            setIsFullscreen={setIsFullscreen}
+                                            setActiveSlide={setActiveSlide}
+                                        />
                                     </div>
                                 </div>
                                 <div className='flex-1 flex flex-col gap-4 min-w-0'>
                                     <div className='lg:sticky lg:top-28 xl:top-22'>
-                                        <motion.h1
-                                            key={product.id + '-title'}
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            exit={{ opacity: 0 }}
-                                            transition={{ duration: 0.3 }}
-                                            className='text-[36px] font-black text-[#4d6d7e]'
-                                        >
-                                            {product.shortName}
-                                        </motion.h1>
-                                        <h2 className='text-[18px] text-[#4d6d7e]'>
-                                            {product.name}
-                                        </h2>
-                                        <h3 className='text-[20px] text-[#4d6d7e] font-medium mt-5'>Товари цього виробника:</h3>
-                                        <div className='grid grid-cols-4 gap-x-3 gap-y-6 mt-3'>
-                                            {relatedProducts?.map((relatedProduct: ProductItem, i: number) => (
-                                                <div
-                                                    key={relatedProduct.id}
-                                                    className={classNames(
-                                                        'flex justify-center items-center aspect-square bg-white rounded-lg overflow-hidden shadow-md max-w-[190px] max-h-[190px] cursor-pointer hover:ring-1 hover:ring-[#4d6d7e]',
-                                                        {
-                                                            'hover:*:rotate-10': i % 2 === 0,
-                                                            'hover:*:-rotate-10': i % 2 !== 0,
-                                                        }
-                                                    )}
-                                                    onClick={() => router.push(`/product/${relatedProduct.slug}`)}
-                                                >
-                                                    <Image
-                                                        loading='lazy'
-                                                        width={150}
-                                                        height={150}
-                                                        src={relatedProduct.mainPhotoUrl}
-                                                        alt='product image'
-                                                        className='w-[70%] transition duration-500 ease-in-out'
-                                                    />
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div className='flex justify-between mt-4'>
-                                            <div className='rounded-xl bg-white w-[145px] h-[50px] flex items-center justify-around border border-[#D2DADF]'>
-                                                <button className='ml-3 cursor-pointer' onClick={() => decrementQuantity(quantity, setQuantity, product.multiplicity)}>
-                                                    <Image
-                                                        src={minus}
-                                                        alt='minus'
-                                                        width={20}
-                                                        height={20}
-                                                    />
-                                                </button>
-                                                <input
-                                                    type='number'
-                                                    value={quantity}
-                                                    className='text-[#4d6d7e] text-center font-extrabold w-[40px] no-spinner appearance-none 
-                                            outline-none border-none bg-transparent'
-                                                    onChange={(e: ChangeEvent<HTMLInputElement>) => handleQuantityChange(e, setQuantity, product.multiplicity)}
-
-                                                />
-                                                <button
-                                                    className='mr-3 cursor-pointer'
-                                                    onClick={() => incrementQuantity(quantity, setQuantity)}
-                                                >
-                                                    <Image
-                                                        src={plus}
-                                                        alt='plus'
-                                                        width={20}
-                                                        height={20}
-                                                    />
-                                                </button>
-                                            </div>
-                                            <select
-                                                className='text-[#4d6d7e] font-extrabold *:text-[#4d6d7e] *:font-extrabold rounded-xl ml-3
-                                        bg-white h-[50px] flex items-center justify-around border border-[#D2DADF] w-full *:text-center'
-                                                onChange={(e) => setPackaging(e.target.value)}
-                                            >
-                                                {
-                                                    product.packagings.map((pack: FilterName) => (
-                                                        <option
-                                                            key={pack.id}
-                                                            value={pack.name}
-                                                        >
-                                                            {pack.name}
-                                                        </option>
-                                                    ))
-                                                }
-                                            </select>
-                                        </div>
-                                        <Button
-                                            apearence='primary'
-                                            classname='h-[45px] w-full my-3'
-                                            onClick={() => addToCart(product)}
-                                        >
-                                            <span className='flex justify-center px-3 font-extrabold'>Add to cart</span>
-                                        </Button>
+                                        <ProductInfo product={product} relatedProducts={relatedProducts} />
+                                        <ProductQuantitySelector
+                                            product={product}
+                                            quantity={quantity}
+                                            setQuantity={setQuantity}
+                                            packaging={packaging}
+                                            setPackaging={setPackaging}
+                                            onAddToCart={() => addToCart(product)}
+                                        />
                                     </div>
                                 </div>
                             </motion.div>
-                        
-                    }
+                    )}
                 </AnimatePresence>
             </div>
-            <div
-                className='w-full mt-10 text-white px-6 py-[60px] flex flex-col lg:flex-row justify-around items-center gap-20'
-                style={{ backgroundColor: color ?? '#4d6d7e' }}
-            >
-                <div className='flex h-full flex-col max-w-[925px]'>
-                    <h3 className='stroke h-auto text-[50px] font-black'>
-                        {product.shortName}
-                    </h3>
-                    <p className='text-[18px] font-medium mt-5 mb-8'>
-                        {product.description || 'No description available for this product.'}
-                    </p>
-                    <div className='text-[18px] font-bold'>
-                        <div className=''>
-                            {product.ingredients.length} Natural Ingredients:
-                            <ul className=''>
-                                {product.ingredients.map((ingredient: { id: string, name: string }) => (
-                                    <li
-                                        className=''
-                                        key={ingredient.id}
-                                    >
-                                        {ingredient.name}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div className='text-[18px] font-bold '>
-                    <div className='text-[18px] font-bold'>
-                        Product Details per 100 g (г)
-                    </div>
-                    <div className='flex h-[3px] bg-white'></div>
-                    <div className='flex'>
-                        <ProductDetailsTable product={product} />
-                    </div>
-                </div>
-            </div>
+            <ProductDescription product={product} color={color} />
             {isFullscreen && images && (
                 <ProductImageCarousel
                     images={images}

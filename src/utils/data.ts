@@ -25,11 +25,6 @@ export const categoriess = [
         route: 'beer',
         image: 'https://www.antyp.com.ua/wp-content/uploads/2021/12/%D0%9F%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D1%8F11.jpg'
     },
-    // {
-    //     name: 'Kvass',
-    //     route: 'kvass',
-    //     image: 'https://www.antyp.com.ua/wp-content/uploads/2021/12/%D0%9F%D1%80%D0%BE%D0%B4%D1%83%D0%BA%D1%86%D0%B8%D1%8F2.jpg'
-    // },
     {
         name: 'Cider',
         route: 'cider',
@@ -71,11 +66,11 @@ export const adminProductLinks = [
         title: 'Cider'
     },
     {
-        href: '/admin/products/water',
+        href: '/admin/products/bottled_water',
         title: 'Water'
     },
     {
-        href: '/admin/products/no-alcohol',
+        href: '/admin/products/soft_drink',
         title: 'No-alcohol'
     },
     {

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { ApiResponse, Result, ApiResponseProduct, ProductItem, AlcoholStrength, IBU } from '@/types/reducerTypes';
+import { ApiResponse, Result, ApiResponseProduct, ProductItem, AlcoholStrength, IBU, ToggleFilterPayload } from '@/types/reducerTypes';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -264,85 +264,17 @@ export const filterSlice = createSlice({
     name: 'filter',
     initialState,
     reducers: {
-        toggleManufacturers: (state, action: PayloadAction<string>) => {
-            const manufacturer = action.payload;
-
-            if (state.selectedManufacturers.includes(manufacturer)) {
-                state.selectedManufacturers = state.selectedManufacturers.filter((m) => m !== manufacturer);
+        toggleFilter: (
+            state: any,
+            action: PayloadAction<ToggleFilterPayload>
+        ) => {
+            const { key, value } = action.payload;
+            const list = state[key];
+        
+            if (list.includes(value)) {
+                state[key] = list.filter((v: string) => v !== value);
             } else {
-                state.selectedManufacturers.push(manufacturer);
-            }
-        },
-        toggleBeerTypes: (state, action: PayloadAction<string>) => {
-            const beerType = action.payload;
-
-            if (state.selectedBeerTypes.includes(beerType)) {
-                state.selectedBeerTypes = state.selectedBeerTypes.filter((b) => b !== beerType);
-            } else {
-                state.selectedBeerTypes.push(beerType);
-            }
-        },
-        toggleSeasonTags: (state, action: PayloadAction<string>) => {
-            const seasonTag = action.payload;
-
-            if (state.selectedSeasonTags.includes(seasonTag)) {
-                state.selectedSeasonTags = state.selectedSeasonTags.filter((s) => s !== seasonTag);
-            } else {
-                state.selectedSeasonTags.push(seasonTag);
-            }
-        },
-        togglePackagings: (state, action: PayloadAction<string>) => {
-            const packaging = action.payload;
-
-            if (state.selectedPackagings.includes(packaging)) {
-                state.selectedPackagings = state.selectedPackagings.filter((p) => p !== packaging);
-            } else {
-                state.selectedPackagings.push(packaging);
-            }
-        },
-        toggleWaterTypes: (state, action: PayloadAction<string>) => {
-            const waterType = action.payload;
-
-            if (state.selectedWaterTypes.includes(waterType)) {
-                state.selectedWaterTypes = state.selectedWaterTypes.filter((w) => w !== waterType);
-            } else {
-                state.selectedWaterTypes.push(waterType);
-            }
-        },
-        toggleCarbonationLevels: (state, action: PayloadAction<string>) => {
-            const carbonationLevel = action.payload;
-
-            if (state.selectedCarbonationLevels.includes(carbonationLevel)) {
-                state.selectedCarbonationLevels = state.selectedCarbonationLevels.filter((c) => c !== carbonationLevel);
-            } else {
-                state.selectedCarbonationLevels.push(carbonationLevel);
-            }
-        },
-        toggleSoftDrinkTypes: (state, action: PayloadAction<string>) => {
-            const softDrinkType = action.payload;
-
-            if (state.selectedSoftDrinkTypes.includes(softDrinkType)) {
-                state.selectedSoftDrinkTypes = state.selectedSoftDrinkTypes.filter((s) => s !== softDrinkType);
-            } else {
-                state.selectedSoftDrinkTypes.push(softDrinkType);
-            }
-        },
-        toggleWineColor: (state, action: PayloadAction<string>) => {
-            const wineColor = action.payload;
-
-            if (state.selectedWineColors.includes(wineColor)) {
-                state.selectedWineColors = state.selectedWineColors.filter((s) => s !== wineColor);
-            } else {
-                state.selectedWineColors.push(wineColor);
-            }
-        },
-        toggleWineSweetness: (state, action: PayloadAction<string>) => {
-            const wineSweetness = action.payload;
-
-            if (state.selectedWineSweetness.includes(wineSweetness)) {
-                state.selectedWineSweetness = state.selectedWineSweetness.filter((s) => s !== wineSweetness);
-            } else {
-                state.selectedWineSweetness.push(wineSweetness);
+                list.push(value);
             }
         },
         resetFilters: (state) => {
@@ -487,15 +419,16 @@ export const filterSlice = createSlice({
 
 export const
     {
-        toggleManufacturers,
-        toggleBeerTypes,
-        toggleSeasonTags,
-        togglePackagings,
-        toggleWaterTypes,
-        toggleCarbonationLevels,
-        toggleSoftDrinkTypes,
-        toggleWineColor,
-        toggleWineSweetness,
+        // toggleManufacturers,
+        // toggleBeerTypes,
+        // toggleSeasonTags,
+        // togglePackagings,
+        // toggleWaterTypes,
+        // toggleCarbonationLevels,
+        // toggleSoftDrinkTypes,
+        // toggleWineColor,
+        // toggleWineSweetness,
+        toggleFilter,
         resetFilters,
         resetProducts,
         setAlcoholStrengthRange,

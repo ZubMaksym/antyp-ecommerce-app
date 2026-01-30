@@ -7,11 +7,12 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/state/store';
 import plus from '@/public/icons/shared/plus.svg';
 import minus from '@/public/icons/shared/minus.svg';
-import Button from '@/components/ui/Button';
+import Button from '../ui/Button';
 import { incrementItemQuantity, decrementItemQuantity, changeItemQuantity } from '@/state/cartState/cartSlice';
 import { useRouter } from 'next/navigation';
 import { toggleCart } from '@/state/cartState/cartSlice';
 import Link from 'next/link';
+import { Packaging } from '@/types/reducerTypes';
 
 const Cart = () => {
     const { items, totalQuantity } = useSelector((state: RootState) => state.cart);
@@ -71,7 +72,7 @@ const Cart = () => {
                                     <div className='rounded-xl w-[100px] h-[26px] flex items-center justify-around border border-[#D2DADF]'>
                                         <button
                                             className='ml-3 cursor-pointer'
-                                            onClick={() => dispatch(decrementItemQuantity({ id: item.id, packaging: item.packaging, multiplicity: item.multiplicity }))}>
+                                            onClick={() => dispatch(decrementItemQuantity({ id: item.id, packaging: item.packaging, multiplicity: item.packagings.find((pack: Packaging) => pack.name === item.packaging)?.multiplicity || 1}))}>
                                             <Image
                                                 src={minus}
                                                 alt='minus'
@@ -83,7 +84,7 @@ const Cart = () => {
                                             type='number'
                                             value={item.quantity}
                                             className='text-[#4d6d7e] text-center font-extrabold w-[50px] no-spinner appearance-none outline-none border-none bg-transparent'
-                                            onChange={(e) => dispatch(changeItemQuantity({ id: item.id, value: Number(e.target.value), packaging: item.packaging, multiplicity: item.multiplicity}))}
+                                            onChange={(e) => dispatch(changeItemQuantity({ id: item.id, value: Number(e.target.value), packaging: item.packaging, multiplicity: item.packagings.find((pack: Packaging) => pack.name === item.packaging)?.multiplicity || 1}))}
                                         />
                                         <button
                                             className='mr-3 cursor-pointer'

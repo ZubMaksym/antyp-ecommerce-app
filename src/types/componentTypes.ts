@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { FilterName, ProductItem } from './reducerTypes';
 import { ProductItemCart } from './reducerTypes';
 import { Control, FieldErrors, UseFormRegister } from 'react-hook-form';
+import { AdminAction } from '@/types/helperTypes';
 
 export interface ModalProps {
     isOpen: boolean;
@@ -166,4 +167,17 @@ export interface DropdownProps {
     title: string;
     classname?: string;
     id: string;
+}
+
+export interface AdminProductsListProps {
+    products: ProductItem[] | null;
+    productsLoading: boolean;
+    productsError: string | null;
+}
+
+export interface AdminActionButtonProps {
+    action: AdminAction;
+    onClick?: () => void;
+    disabled?: boolean;
+    className?: string;
 }

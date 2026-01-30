@@ -3,6 +3,7 @@ import AdminSidebar from '@/components/admin/AdminSidebar';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { useAuth } from '@/hooks/useAuth';
 
+
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
     const { isLoading, canAccess } = useAuth('Admin');
 

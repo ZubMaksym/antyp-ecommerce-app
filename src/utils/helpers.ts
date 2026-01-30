@@ -7,15 +7,15 @@ export const scrollTo = (top: number) => {
     });
 };
 
-export const incrementQuantity = (quantity: number, handleChangeQuantity: Dispatch<SetStateAction<number>>) => {
+export const incrementQuantity = (quantity: number, handleChangeQuantity: (quantity: number) => void) => {
     if (quantity < 9999) handleChangeQuantity(quantity + 1);
 };
 
-export const decrementQuantity = (quantity: number, handleChangeQuantity: Dispatch<SetStateAction<number>>, multiplicity: number) => {
+export const decrementQuantity = (quantity: number, handleChangeQuantity: (quantity: number) => void, multiplicity: number) => {
     if (quantity > multiplicity) handleChangeQuantity(quantity - 1);
 };
 
-export const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>, handleChangeQuantity: Dispatch<SetStateAction<number>>, multiplicity: number) => {
+export const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>, handleChangeQuantity: (quantity: number) => void, multiplicity: number) => {
     const val = Number(e.target.value);
     if (val < multiplicity) {
         handleChangeQuantity(multiplicity);

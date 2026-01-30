@@ -60,7 +60,7 @@ export interface ProductItem {
     carbohydrate: number | null;
     sugar: number | null;
     packagings: Packaging[];
-    multiplicity: number;
+    // multiplicity: number;
     description: string;
     ingredients: Array<{
         id: string;
@@ -99,4 +99,10 @@ export interface Packaging {
     id: string;
     name: string;
     photoUrl: string | null;
+    multiplicity: number;
+}
+
+export interface ToggleFilterPayload {
+    key: string;
+    value: string;
 }

@@ -4,17 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import CheckBox from '@/components/ui/CheckBox';
 import { FilterName, Result } from '@/types/reducerTypes';
 import Button from '@/components/ui/Button';
-import {
-    toggleManufacturers,
-    toggleWaterTypes,
-    toggleBeerTypes,
-    toggleSeasonTags,
-    togglePackagings,
-    toggleCarbonationLevels,
-    toggleSoftDrinkTypes,
-    toggleWineColor,
-    toggleWineSweetness
-} from '@/state/filterSlice/filterSlice';
+import { toggleFilter } from '@/state/filterSlice/filterSlice';
 import { usePathname } from 'next/navigation';
 import RangeSlider from './RangeSlider';
 import { resetFilters, resetProducts } from '@/state/filterSlice/filterSlice';
@@ -77,40 +67,8 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
     }
     }, [loading, filters]);
 
-    const getProductsByManufacturer = (manufacturer: FilterName) => {
-        dispatch(toggleManufacturers(manufacturer.id));
-    };
-
-    const getProductsByBeerType = (beerType: FilterName) => {
-        dispatch(toggleBeerTypes(beerType.id));
-    };
-
-    const getProductsBySeasonTag = (seasonTag: FilterName) => {
-        dispatch(toggleSeasonTags(seasonTag.id));
-    };
-
-    const getProductsByPackaging = (packaging: FilterName) => {
-        dispatch(togglePackagings(packaging.id));
-    };
-
-    const getProductsByWaterType = (waterType: FilterName) => {
-        dispatch(toggleWaterTypes(waterType.id));
-    };
-
-    const getProductsByCarbonationLevel = (carbonationLevel: FilterName) => {
-        dispatch(toggleCarbonationLevels(carbonationLevel.id));
-    };
-
-    const getProductsBySoftDrinkType = (softDrinkType: FilterName) => {
-        dispatch(toggleSoftDrinkTypes(softDrinkType.id));
-    };
-
-    const getProductsByWineColor = (wineColor: FilterName) => {
-        dispatch(toggleWineColor(wineColor.id));
-    };
-
-    const getProductsByWineSweetness = (wineSweetness: FilterName) => {
-        dispatch(toggleWineSweetness(wineSweetness.id));
+    const getProductsByFilter = (filter: FilterName, key: keyof Result) => {
+        dispatch(toggleFilter({ key, value: filter.id }));
     };
 
     const resetAll = () => {
@@ -132,7 +90,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                                         <div
                                             key={manufacturer.id}
                                             className='flex w-fit cursor-pointer'
-                                            onClick={() => getProductsByManufacturer(manufacturer)}
+                                            onClick={() => getProductsByFilter(manufacturer, 'selectedManufacturers' as keyof Result)}
                                         >
                                             <CheckBox
                                                 checked={selectedManufacturers.includes(manufacturer.id)}
@@ -176,7 +134,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                                             <div
                                                 key={beerType.id}
                                                 className='flex w-fit cursor-pointer'
-                                                onClick={() => getProductsByBeerType(beerType)}
+                                                onClick={() => getProductsByFilter(beerType, 'selectedBeerTypes' as keyof Result)}
                                             >
                                                 <CheckBox
                                                     checked={selectedBeerTypes.includes(beerType.id)}
@@ -205,7 +163,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                                             <div
                                                 key={seasonTag.id}
                                                 className='flex w-fit cursor-pointer'
-                                                onClick={() => getProductsBySeasonTag(seasonTag)}
+                                                onClick={() => getProductsByFilter(seasonTag, 'selectedSeasonTags' as keyof Result)}
                                             >
                                                 <CheckBox
                                                     checked={selectedSeasonTags.includes(seasonTag.id)}
@@ -234,7 +192,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                                             <div
                                                 key={waterType.id}
                                                 className='flex w-fit cursor-pointer'
-                                                onClick={() => getProductsByWaterType(waterType)}
+                                                onClick={() => getProductsByFilter(waterType, 'selectedWaterTypes' as keyof Result)}
                                             >
                                                 <CheckBox
                                                     checked={selectedWaterTypes.includes(waterType.id)}
@@ -263,7 +221,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                                             <div
                                                 key={carbonationLevel.id}
                                                 className='flex w-fit cursor-pointer'
-                                                onClick={() => getProductsByCarbonationLevel(carbonationLevel)}
+                                                onClick={() => getProductsByFilter(carbonationLevel, 'selectedCarbonationLevels' as keyof Result)}
                                             >
                                                 <CheckBox
                                                     checked={selectedCarbonationLevels.includes(carbonationLevel.id)}
@@ -292,7 +250,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                                             <div
                                                 key={softDrinkType.id}
                                                 className='flex w-fit cursor-pointer'
-                                                onClick={() => getProductsBySoftDrinkType(softDrinkType)}
+                                                onClick={() => getProductsByFilter(softDrinkType, 'selectedSoftDrinkTypes' as keyof Result)}
                                             >
                                                 <CheckBox
                                                     checked={selectedSoftDrinkTypes.includes(softDrinkType.id)}
@@ -321,7 +279,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                                             <div
                                                 key={wineColor.id}
                                                 className='flex w-fit cursor-pointer'
-                                                onClick={() => getProductsByWineColor(wineColor)}
+                                                onClick={() => getProductsByFilter(wineColor, 'selectedWineColors' as keyof Result)}
                                             >
                                                 <CheckBox
                                                     checked={selectedWineColors.includes(wineColor.id)}
@@ -350,7 +308,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                                             <div
                                                 key={wineSweetness.id}
                                                 className='flex w-fit cursor-pointer'
-                                                onClick={() => getProductsByWineSweetness(wineSweetness)}
+                                                onClick={() => getProductsByFilter(wineSweetness, 'selectedWineSweetness' as keyof Result)}
                                             >
                                                 <CheckBox
                                                     checked={selectedWineSweetness.includes(wineSweetness.id)}
@@ -377,7 +335,7 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
                                         <div
                                             key={packaging.id}
                                             className='flex w-fit cursor-pointer'
-                                            onClick={() => getProductsByPackaging(packaging)}
+                                            onClick={() => getProductsByFilter(packaging, 'selectedPackagings' as keyof Result)}
                                         >
                                             <CheckBox
                                                 checked={selectedPackagings.includes(packaging.id)}
