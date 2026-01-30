@@ -1,6 +1,6 @@
 'use client';
 import { usePathname } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
 import { fetchInitialProducts } from '@/state/filterSlice/filterSlice';
@@ -8,15 +8,18 @@ import { AppDispatch } from '@/state/store';
 import { useDispatch } from 'react-redux';
 import AdminProductsList from '@/components/admin/AdminProductsList';
 import AdminActionButton from '@/components/admin/AdminActionButton';
+import SearchInput from '@/components/common/SearchInput';
+import { useProductSearch } from '@/hooks/useProductSearch';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
+// children prop is required by Next.js layout type but not rendered in this layout
 const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
     const category = pathname.split('/').pop();
+    const [searchQuery, setSearchQuery] = useState('');
 
     const dispatch = useDispatch<AppDispatch>();
     const { products, productsLoading, productsError } = useSelector((state: RootState) => state.filter);
+    const { searchResults, isSearching } = useProductSearch(searchQuery, `ProductType=${category}&`);
 
     useEffect(() => {
         if (category) {
@@ -24,18 +27,31 @@ const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
         }
     }, [category, dispatch]);
 
+    // Determine which products to display
+    const displayProducts = searchQuery.trim() ? searchResults : products;
+    const displayLoading = searchQuery.trim() ? isSearching : productsLoading;
+    const displayError = searchQuery.trim() ? null : productsError;
 
     return (
         <section className='flex px-5 py-5 flex flex-col'>
-            <div className='flex items-center justify-between'>
-                <h1 className='text-[42px] font-bold text-[#4d6d7e]'>
-                    {category ? category.charAt(0).toUpperCase() + category.slice(1) : 'Products'}
-                </h1>
+            <h1 className='text-[42px] font-bold text-[#4d6d7e]'>
+                {category ? category.charAt(0).toUpperCase() + category.slice(1) : 'Products'}
+            </h1>
+            <div className='mt-5 flex items-end *:first:ml-0 *:ml-4'>
+                <SearchInput
+                    value={searchQuery}
+                    onChange={setSearchQuery}
+                    placeholder='Search products by name...'
+                />
                 <AdminActionButton action='create' />
             </div>
-            <AdminProductsList products={products} productsLoading={productsLoading} productsError={productsError} />
+            <AdminProductsList
+                products={displayProducts}
+                productsLoading={displayLoading}
+                productsError={displayError}
+            />
         </section>
-    )
-}
+    );
+};
 
 export default ProductsLayout;
