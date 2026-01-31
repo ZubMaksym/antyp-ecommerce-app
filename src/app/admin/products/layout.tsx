@@ -19,7 +19,7 @@ const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
 
     const dispatch = useDispatch<AppDispatch>();
     const { products, productsLoading, productsError } = useSelector((state: RootState) => state.filter);
-    const { searchResults, isSearching } = useProductSearch(searchQuery, `ProductType=${category}&`);
+    const { searchResults, isSearching, searchError } = useProductSearch(searchQuery, `ProductType=${category}&`);
 
     useEffect(() => {
         if (category) {
@@ -30,7 +30,7 @@ const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
     // Determine which products to display
     const displayProducts = searchQuery.trim() ? searchResults : products;
     const displayLoading = searchQuery.trim() ? isSearching : productsLoading;
-    const displayError = searchQuery.trim() ? null : productsError;
+    const displayError = searchQuery.trim() ? searchError : productsError;
 
     return (
         <section className='flex px-5 py-5 flex flex-col'>

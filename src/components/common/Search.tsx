@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation';
 import { ModalProps } from '@/types/componentTypes';
 import { useProductSearch } from '@/hooks/useProductSearch';
 import SearchInput from './SearchInput';
+import LoadingSpinner from '../ui/LoadingSpinner';
 
 const Search = ({ isOpen, setIsOpen }: ModalProps) => {
     const [input, setInput] = useState('');
-    const { searchResults, isSearching } = useProductSearch(input);
+    const { searchResults, isSearching, searchError } = useProductSearch(input);
     const router = useRouter();
 
     const handleProductClick = (productSlug: string) => {
@@ -20,12 +21,13 @@ const Search = ({ isOpen, setIsOpen }: ModalProps) => {
         <div className='relative'>
             <SearchInput value={input} onChange={setInput} />
             <div className=''>
+                {searchError && (
+                    <div className='flex justify-center text-red-500 text-[18px] font-bold items-center mt-10'>
+                        {searchError}
+                    </div>
+                )}
                 {
-                    isSearching ? (
-                        <div className='flex justify-center text-[#4d6d7e] text-[18px] font-bold items-center mt-10'>
-                            Searching...
-                        </div>
-                    ) : searchResults && searchResults.length > 0 ? (
+                    searchResults && searchResults.length > 0 && !isSearching ? (
                         <div className='scrollbar overflow-y-scroll max-h-[calc(100vh-220px)] mt-3 *:first:mt-0 *:mt-3'>
                             {searchResults.map((item: ProductItem) => (
                                 <div
@@ -49,7 +51,7 @@ const Search = ({ isOpen, setIsOpen }: ModalProps) => {
                                 </div>
                             ))}
                         </div>
-                    ) : input.trim() ? (
+                    ) : input.trim() && !isSearching && searchResults !== null && searchResults.length === 0 ? (
                         <div className='flex justify-center text-[#4d6d7e] text-[18px] font-bold items-center mt-10'>
                             Nothing found
                         </div>

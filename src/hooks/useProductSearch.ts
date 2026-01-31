@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ProductItem } from '@/types/reducerTypes';
+import { error } from 'console';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -22,7 +23,6 @@ export const useProductSearch = (searchQuery: string, additionalParams: string =
                 setSearchError(null);
 
                 try {
-                    console.log(`${API_BASE_URL}/product?${additionalParams}Name=${searchQuery}`);
                     const res = await fetch(`${API_BASE_URL}/product?${additionalParams}Name=${searchQuery}`);
                     if (!res.ok) throw new Error('Error searching');
                     const data = await res.json();
@@ -32,7 +32,7 @@ export const useProductSearch = (searchQuery: string, additionalParams: string =
                         setSearchResults([]);
                     }
                 } catch (error) {
-                    setSearchError(error instanceof Error ? error.message : 'Error searching');
+                    setSearchError(error instanceof Error ? error.message : 'Something went wrong while processing the request. We\'re woking to solve this problem');
                     setSearchResults(null);
                 } finally {
                     setIsSearching(false);

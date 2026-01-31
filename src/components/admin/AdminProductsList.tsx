@@ -2,12 +2,13 @@ import Image from 'next/image';
 import LoadingSpinner from '../ui/LoadingSpinner';
 import { AdminProductsListProps } from '@/types/componentTypes';
 import AdminActionButton from './AdminActionButton';
+import classNames from 'classnames';
 
 const AdminProductsList = ({ products, productsLoading, productsError }: AdminProductsListProps) => {
     
     if (productsLoading) {
         return (
-            <div className='w-full border border-gray-300 rounded-md p-4 *:first:mt-0 *:mt-3 h-[750px] overflow-y-scroll scrollbar mt-5'>
+            <div className='w-full flex justify-center items-center border border-gray-300 rounded-md p-4 *:first:mt-0 *:mt-3 h-[550px] overflow-y-scroll scrollbar mt-5'>
                 <LoadingSpinner message='Loading products...' />
             </div>
         )
@@ -15,8 +16,8 @@ const AdminProductsList = ({ products, productsLoading, productsError }: AdminPr
 
     if (productsError) {
         return (
-            <div className='w-full border border-gray-300 rounded-md p-4 *:first:mt-0 *:mt-3 h-[750px] overflow-y-scroll scrollbar mt-5'>
-                <div className='text-red-500'>
+            <div className='w-full flex justify-center items-center border border-gray-300 rounded-md p-4 *:first:mt-0 *:mt-3 h-[550px] overflow-y-scroll scrollbar mt-5'>
+                <div className='text-red-500 text-[18px] font-bold'>
                     {productsError}
                 </div>
             </div>
@@ -24,9 +25,14 @@ const AdminProductsList = ({ products, productsLoading, productsError }: AdminPr
     }
 
     return (
-        <div className='w-full border border-gray-300 rounded-md p-4 *:first:mt-0 *:mt-3 h-[750px] overflow-y-scroll scrollbar mt-5'>
+        <div className={classNames(
+            'flex flex-col w-full border border-gray-300 rounded-md p-4 *:first:mt-0 *:mt-3 h-[550px] overflow-y-scroll scrollbar mt-5',
             {
-                products ? (
+                'justify-center': products !== null && products.length === 0,
+            }
+        )}>
+            {
+                products && products.length > 0 ? (
                     products.map((product) => (
                         <div 
                             key={product.id}
@@ -50,9 +56,9 @@ const AdminProductsList = ({ products, productsLoading, productsError }: AdminPr
                             </div>
                         </div>
                     ))
-                ) : (
-                    <div className='text-gray-500'>No products found</div>
-                )
+                ) : products !== null && products.length === 0 ? (
+                    <div className='text-[#4d6d7e] self-center justify-self-center text-[18px] font-bold'>No products found</div>
+                ) : null
             }
         </div>
     )
