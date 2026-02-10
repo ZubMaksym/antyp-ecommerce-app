@@ -11,7 +11,7 @@ const AdminProductsList = ({ products, productsLoading, productsError }: AdminPr
             <div className='w-full flex justify-center items-center border border-gray-300 rounded-md p-4 *:first:mt-0 *:mt-3 h-[550px] overflow-y-scroll scrollbar mt-5'>
                 <LoadingSpinner message='Loading products...' />
             </div>
-        )
+        );
     }
 
     if (productsError) {
@@ -21,7 +21,7 @@ const AdminProductsList = ({ products, productsLoading, productsError }: AdminPr
                     {productsError}
                 </div>
             </div>
-        )
+        );
     }
 
     return (
@@ -61,7 +61,7 @@ const AdminProductsList = ({ products, productsLoading, productsError }: AdminPr
                 ) : null
             }
         </div>
-    )
-}
+    );
+};
 
 export default AdminProductsList;

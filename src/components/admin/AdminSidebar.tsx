@@ -1,9 +1,7 @@
 import Link from 'next/link';
 import Button from '@/components/ui/Button';
 import { getAccessToken } from '@/auth/token';
-import { useAuth } from '@/hooks/useAuth';
 import { useRouter, usePathname } from 'next/navigation';
-import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import { clearAccessToken } from '@/auth/token';
 import classNames from 'classnames';
 import Dropdown from '@/components/common/Dropdown';

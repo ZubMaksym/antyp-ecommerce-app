@@ -2,12 +2,16 @@ import { configureStore } from '@reduxjs/toolkit';
 import filterReducer from './filterSlice/filterSlice';
 import cartReducer from './cartState/cartSlice';
 import dropdownReducer from './dropdownState/dropdownState';
+import manufacturersReducer from './manufacturersSlice/manufacturersSlice';
+import packagingsReducer from './packagingsSlice/packagingsSlice';
 
 export const store = configureStore({
     reducer: {
         filter: filterReducer,
         cart: cartReducer,
-        dropdown: dropdownReducer
+        dropdown: dropdownReducer,
+        manufacturers: manufacturersReducer,
+        packagings: packagingsReducer,
     }
 });
 

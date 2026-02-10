@@ -1,7 +1,7 @@
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import classNames from 'classnames';
 import { AdminActionButtonProps } from '@/types/componentTypes';
-import { AdminAction } from '@/types/helperTypes';
+import { AdminAction } from '@/types/commonTypes';
 
 const ACTION_CONFIG = {
     create: {

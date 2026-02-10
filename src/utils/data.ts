@@ -91,5 +91,13 @@ export const adminMainLinks = [
     {
         href: '/admin/filters',
         title: 'Filters'
-    }
+    },
+    {
+        href: '/admin/manufacturers',
+        title: 'Manufacturers'
+    },
+    {
+        href: '/admin/packagings',
+        title: 'Packagings'
+    },
 ];

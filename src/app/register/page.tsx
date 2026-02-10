@@ -11,7 +11,7 @@ import { ConfirmPasswordInput } from '@/components/forms/ConfirmPasswordInput';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { JwtPayload } from '@/types/helperTypes';
+import { JwtPayload } from '@/types/commonTypes';
 import { setAccessToken } from '@/auth/token';
 
 const API_BASE_URL = 'http://62.171.154.171:21000';
@@ -96,40 +96,40 @@ const RegisterPage = () => {
             setIsLoading(false);
         }
     };
-  return (
-    <AuthLayout title='Sign Up' type='register'>
-        <form
-            className='md:w-[610px] px-[20px] md:px-0'
-            onSubmit={handleSubmit(onSubmit)}
-        >
-            <UsernameInput
-                register={register as UseFormRegister<RegisterFormFields | LoginFormFields>}
-                errors={errors}
-                errorMessage={errors.email?.message}
-            />
-            <PasswordInput
-                register={register as UseFormRegister<RegisterFormFields | LoginFormFields>}
-                errors={errors}
-                errorMessage={errors.password?.message}
-                classname='mt-[15px]'
-            />
-            <ConfirmPasswordInput
-                register={register}
-                errors={errors}
-                errorMessage={errors.confirmPassword?.message}
-                classname='mt-[15px]'   
-            />
-            <Button 
-                apearence='primary' 
-                classname='w-full h-[36px] mt-[30px]'
-                disabled={isLoading}
+    return (
+        <AuthLayout title='Sign Up' type='register'>
+            <form
+                className='md:w-[610px] px-[20px] md:px-0'
+                onSubmit={handleSubmit(onSubmit)}
             >
-                <span className='font-extrabold'>{isLoading ? 'Signing Up...' : 'Sign Up'}</span>
-            </Button>
-            {error && <p className='text-red-500 mt-2 text-sm'>{error}</p>}
-        </form>
-</AuthLayout>
-  )
+                <UsernameInput
+                    register={register as UseFormRegister<RegisterFormFields | LoginFormFields>}
+                    errors={errors}
+                    errorMessage={errors.email?.message}
+                />
+                <PasswordInput
+                    register={register as UseFormRegister<RegisterFormFields | LoginFormFields>}
+                    errors={errors}
+                    errorMessage={errors.password?.message}
+                    classname='mt-[15px]'
+                />
+                <ConfirmPasswordInput
+                    register={register}
+                    errors={errors}
+                    errorMessage={errors.confirmPassword?.message}
+                    classname='mt-[15px]'
+                />
+                <Button
+                    apearence='primary'
+                    classname='w-full h-[36px] mt-[30px]'
+                    disabled={isLoading}
+                >
+                    <span className='font-extrabold'>{isLoading ? 'Signing Up...' : 'Sign Up'}</span>
+                </Button>
+                {error && <p className='text-red-500 mt-2 text-sm'>{error}</p>}
+            </form>
+        </AuthLayout>
+    )
 }
 
 export default RegisterPage;

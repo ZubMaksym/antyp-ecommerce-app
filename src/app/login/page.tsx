@@ -9,7 +9,7 @@ import { LoginValidationSchema } from '@/schemas/LoginValidationSchema';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import { JwtPayload } from '@/types/helperTypes';
+import { JwtPayload } from '@/types/commonTypes';
 import AuthLayout from '@/components/auth/AuthLayout';
 import { setAccessToken } from '@/auth/token';
 

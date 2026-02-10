@@ -1,29 +1,12 @@
 'use client';
 import { useState } from 'react';
 import AdminActionButton from '@/components/admin/AdminActionButton';
-import SearchInput from '@/components/common/SearchInput';
 import Button from '@/components/ui/Button';
 import { useEffect } from 'react';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import { FilterTypeId, FilterItem, ModalMode } from '@/types/commonTypes';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-type FilterTypeId =
-    | 'beer-type'
-    | 'season-tag'
-    | 'carbonation-level'
-    | 'water-type'
-    | 'soft-drink-type'
-    | 'wine-color'
-    | 'wine-sweetness'
-    | 'ingredient';
-
-type FilterItem = {
-    id: number;
-    name: string;
-};
-
-type ModalMode = 'create' | 'edit' | 'delete' | null;
 
 const FILTER_TYPES: { id: FilterTypeId; label: string }[] = [
     { id: 'beer-type', label: 'Beer Types' },
@@ -38,7 +21,6 @@ const FILTER_TYPES: { id: FilterTypeId; label: string }[] = [
 
 const AdminFiltersPage = () => {
     const [activeFilterType, setActiveFilterType] = useState<FilterTypeId>('beer-type');
-    const [searchQuery, setSearchQuery] = useState('');
 
     const [modalMode, setModalMode] = useState<ModalMode>(null);
     const [selectedFilter, setSelectedFilter] = useState<Array<FilterItem>>([]);
@@ -87,58 +69,52 @@ const AdminFiltersPage = () => {
             if (!response.ok) {
                 throw new Error(`API Error ${response.status} ${response.statusText}`);
             }
-            
+
             const data = await response.json();
             setSelectedFilter(data.result);
             setIsLoading(false);
-        }
+        };
 
         fetchFilters();
-    }, [activeFilterType])
+    }, [activeFilterType]);
 
     return (
         <section className='flex px-5 py-5 flex-col'>
             <h1 className='text-[42px] font-bold text-[#4d6d7e]'>Filters</h1>
 
             {/* Filter type selector */}
-            <div className='mt-4 flex flex-wrap gap-3'>
-                {FILTER_TYPES.map((type) => (
-                    <button
-                        key={type.id}
-                        type='button'
-                        onClick={() => setActiveFilterType(type.id)}
-                        className={`cursor-pointer px-4 py-2 rounded-full text-[16px] font-medium border transition-colors duration-200 ${
-                            activeFilterType === type.id
+            <div className='flex justify-between'>
+                <div className='mt-4 flex flex-wrap gap-3'>
+                    {FILTER_TYPES.map((type) => (
+                        <button
+                            key={type.id}
+                            type='button'
+                            onClick={() => setActiveFilterType(type.id)}
+                            className={`cursor-pointer px-4 py-2 rounded-full text-[16px] font-medium border transition-colors duration-200 ${activeFilterType === type.id
                                 ? 'bg-[#4d6d7e] text-white border-[#4d6d7e]'
                                 : 'bg-transparent text-[#4d6d7e] border-[#4d6d7e] hover:bg-[#d7cdc3]'
-                        }`}
-                    >
-                        {type.label}
-                    </button>
-                ))}
-            </div>
-
-            {/* Actions row */}
-            <div className='mt-5 flex items-end *:first:ml-0 *:ml-4'>
-                <SearchInput
-                    value={searchQuery}
-                    onChange={setSearchQuery}
-                    placeholder={`Search ${currentFilterConfig?.label.toLowerCase()} by name...`}
-                />
-                <AdminActionButton action='create' onClick={openCreateModal} />
+                                }`}
+                        >
+                            {type.label}
+                        </button>
+                    ))}
+                </div>
+                <div className='mt-5 flex items-end'>
+                    <AdminActionButton action='create' onClick={openCreateModal} />
+                </div>
             </div>
 
             {/* Filters list */}
-            <div className='flex flex-col w-full border border-gray-300 rounded-md p-4 *:first:mt-0 *:mt-3 h-[550px] overflow-y-scroll scrollbar mt-5'>
+            <div className='flex flex-col w-full border border-gray-300 rounded-md p-2 h-[550px] overflow-y-scroll scrollbar mt-5'>
                 {isLoading ? (
                     <div className='flex justify-center items-center h-full'>
-                        <LoadingSpinner message='Loading filters...'/>
+                        <LoadingSpinner message='Loading filters...' />
                     </div>
                 ) : selectedFilter && selectedFilter.length > 0 ? (
                     selectedFilter?.map((item: FilterItem) => (
                         <div
                             key={item.id}
-                            className='flex items-center justify-between'
+                            className='flex items-center justify-between hover:bg-[#E8DFD5] py-2 px-3 rounded-md'
                         >
                             <div className='flex items-center'>
                                 <h2 className='text-[#4d6d7e] font-medium text-[18px]'>

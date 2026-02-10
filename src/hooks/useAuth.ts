@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
-import { JwtPayload } from '@/types/helperTypes';
+import { JwtPayload } from '@/types/commonTypes';
 import { getAccessToken, subscribeToToken } from '@/auth/token';
 import { initializeAuth } from '@/api/fetchWithAuth';
 import { clearAccessToken } from '@/auth/token';

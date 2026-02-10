@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { FilterName, ProductItem } from './reducerTypes';
 import { ProductItemCart } from './reducerTypes';
 import { Control, FieldErrors, UseFormRegister } from 'react-hook-form';
-import { AdminAction } from '@/types/helperTypes';
+import { AdminAction } from '@/types/commonTypes';
 
 export interface ModalProps {
     isOpen: boolean;
@@ -76,14 +76,14 @@ export interface ProductDetailsTableProps {
     product: ProductItem;
 }
 
-export interface InputProps {
-    register?: UseFormRegister<CheckoutFormFields>;
-    errors?: FieldErrors<CheckoutFormFields> | undefined;
+export interface InputProps<TFormValues = any> {
+    register?: UseFormRegister<TFormValues>;
+    errors?: FieldErrors<TFormValues> | undefined;
     errorMessage?: string | undefined;
-    className: string;
-    type: 'text' | 'number' | 'tel';
+    className?: string;
+    type: 'text' | 'number' | 'tel' | 'url';
     placeholder: string;
-    id: 'firstName' | 'lastName' | 'company';
+    id: keyof TFormValues & string;
 }
 
 export interface PhoneNumberInputProps {
