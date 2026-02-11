@@ -173,6 +173,8 @@ export interface AdminProductsListProps {
     products: ProductItem[] | null;
     productsLoading: boolean;
     productsError: string | null;
+    modalMode: 'create' | 'edit' | 'delete' | null;
+    setModalMode: Dispatch<SetStateAction<'create' | 'edit' | 'delete' | null>>;
 }
 
 export interface AdminActionButtonProps {
@@ -180,4 +182,10 @@ export interface AdminActionButtonProps {
     onClick?: () => void;
     disabled?: boolean;
     className?: string;
+}
+
+export interface AdminModalProps {
+    modalMode: 'create' | 'edit' | 'delete' | null;
+    setModalMode: Dispatch<SetStateAction<'create' | 'edit' | 'delete' | null>>;
+    children: React.ReactNode;
 }

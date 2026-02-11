@@ -4,7 +4,7 @@ import { AdminProductsListProps } from '@/types/componentTypes';
 import AdminActionButton from './AdminActionButton';
 import classNames from 'classnames';
 
-const AdminProductsList = ({ products, productsLoading, productsError }: AdminProductsListProps) => {
+const AdminProductsList = ({ products, productsLoading, productsError, modalMode, setModalMode }: AdminProductsListProps) => {
     
     if (productsLoading) {
         return (
@@ -51,8 +51,8 @@ const AdminProductsList = ({ products, productsLoading, productsError }: AdminPr
                                 </h2>
                             </div>
                             <div className='*:first:ml-0 *:ml-2'>
-                                <AdminActionButton action='edit' />
-                                <AdminActionButton action='delete' />
+                                <AdminActionButton action='edit' onClick={() => setModalMode('edit')} />
+                                <AdminActionButton action='delete' onClick={() => setModalMode('delete')} />
                             </div>
                         </div>
                     ))
