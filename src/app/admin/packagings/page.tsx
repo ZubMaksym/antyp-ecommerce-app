@@ -19,10 +19,14 @@ import {
     PackagingsValidationSchema,
     PackagingsFormFields,
 } from '@/schemas/PackagingsValidationSchema';
+import {ToastContainer} from 'react-toastify';
+import { notify } from '@/utils/helpers';
+import useForbidBodyScroll from '@/hooks/useForbidBodyScroll';
+
 
 const AdminPackagingsPage = () => {
     const dispatch = useDispatch<AppDispatch>();
-    const { items: packagings, loading, submitting, error } = useSelector(
+    const { items: packagings, loading, submitting, error, success } = useSelector(
         (state: RootState) => state.packagings
     );
 
@@ -35,18 +39,22 @@ const AdminPackagingsPage = () => {
         reset,
         formState: { errors },
     } = useForm<PackagingsFormFields>({
-        resolver: yupResolver(PackagingsValidationSchema),
+        resolver: yupResolver(PackagingsValidationSchema) as any,
         mode: 'onSubmit',
         defaultValues: {
             name: '',
+            // shortName: undefined,
             shortName: '',
         },
     });
+
+    useForbidBodyScroll(modalMode !== null, 20000);
 
     const openCreateModal = () => {
         setModalMode('create');
         reset({
             name: '',
+            // shortName: undefined,
             shortName: '',
         });
         setSelectedPackaging(null);
@@ -57,7 +65,8 @@ const AdminPackagingsPage = () => {
         setSelectedPackaging(packaging);
         reset({
             name: packaging.name,
-            shortName: '', // shortName is not in the response, so we use empty string
+            // shortName: packaging.shortName || undefined,
+            shortName: packaging.shortName || '',
         });
     };
 
@@ -70,6 +79,7 @@ const AdminPackagingsPage = () => {
         setModalMode(null);
         reset({
             name: '',
+            // shortName: undefined,
             shortName: '',
         });
         setSelectedPackaging(null);
@@ -115,7 +125,18 @@ const AdminPackagingsPage = () => {
         dispatch(fetchPackagings());
     }, [dispatch]);
 
+    useEffect(() => {
+        if (error) {
+            notify(error, 'error');
+        }
+        if (!error && success) {
+            notify(success, 'success');
+            // closeModal();
+        }
+    }, [error, success]);
+
     return (
+        <>
         <section className='flex px-5 py-5 flex-col'>
             <h1 className='text-[42px] font-bold text-[#4d6d7e]'>Packagings</h1>
 
@@ -269,6 +290,10 @@ const AdminPackagingsPage = () => {
                 </div>
             )}
         </section>
+        <div>
+            <ToastContainer />     
+        </div>
+      </>
     );
 };
 

@@ -9,8 +9,11 @@ export const PackagingsValidationSchema = yup.object({
     shortName: yup
         .string()
         .trim()
-        .optional()
-        .nullable(),
+        .nullable()
+        .notRequired(),
 });
 
-export type PackagingsFormFields = yup.InferType<typeof PackagingsValidationSchema>;
+export type PackagingsFormFields = {
+    name: string;
+    shortName?: string | null | undefined;
+};

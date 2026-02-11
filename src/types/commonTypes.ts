@@ -18,6 +18,7 @@ export type Manufacturer = {
 };
 
 export type Packaging = {
+    id: string;
     name: string;
     shortName: string | null;
 };

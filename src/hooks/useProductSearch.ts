@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { ProductItem } from '@/types/reducerTypes';
-import { error } from 'console';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 

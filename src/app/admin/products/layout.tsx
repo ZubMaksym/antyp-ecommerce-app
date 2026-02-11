@@ -10,22 +10,23 @@ import AdminProductsList from '@/components/admin/AdminProductsList';
 import AdminActionButton from '@/components/admin/AdminActionButton';
 import SearchInput from '@/components/common/SearchInput';
 import { useProductSearch } from '@/hooks/useProductSearch';
+import { PRODUCT_TYPES } from '@/utils/data';
 
 // children prop is required by Next.js layout type but not rendered in this layout
 const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
     const pathname = usePathname();
-    const category = pathname.split('/').pop();
+    const productType = PRODUCT_TYPES.find((type) => type.id === pathname.split('/').pop());
     const [searchQuery, setSearchQuery] = useState('');
 
     const dispatch = useDispatch<AppDispatch>();
     const { products, productsLoading, productsError } = useSelector((state: RootState) => state.filter);
-    const { searchResults, isSearching, searchError } = useProductSearch(searchQuery, `ProductType=${category}&`);
+    const { searchResults, isSearching, searchError } = useProductSearch(searchQuery, `ProductType=${productType?.id}&`);
 
     useEffect(() => {
-        if (category) {
-            dispatch(fetchInitialProducts({ category }));
+        if (productType?.id) {
+            dispatch(fetchInitialProducts({ category: productType.id }));
         }
-    }, [category, dispatch]);
+    }, [productType?.id, dispatch]);
 
     // Determine which products to display
     const displayProducts = searchQuery.trim() ? searchResults : products;
@@ -35,7 +36,7 @@ const ProductsLayout = ({ children }: { children: React.ReactNode }) => {
     return (
         <section className='flex px-5 py-5 flex flex-col'>
             <h1 className='text-[42px] font-bold text-[#4d6d7e]'>
-                {category ? category.charAt(0).toUpperCase() + category.slice(1) : 'Products'}
+                {productType?.label || 'Products'}
             </h1>
             <div className='mt-5 flex items-end *:first:ml-0 *:ml-4'>
                 <SearchInput

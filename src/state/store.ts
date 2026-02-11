@@ -4,6 +4,7 @@ import cartReducer from './cartState/cartSlice';
 import dropdownReducer from './dropdownState/dropdownState';
 import manufacturersReducer from './manufacturersSlice/manufacturersSlice';
 import packagingsReducer from './packagingsSlice/packagingsSlice';
+import adminFiltersReducer from './adminFiltersSlice/adminFiltersSlice';
 
 export const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
         dropdown: dropdownReducer,
         manufacturers: manufacturersReducer,
         packagings: packagingsReducer,
+        adminFilters: adminFiltersReducer,
     }
 });
 

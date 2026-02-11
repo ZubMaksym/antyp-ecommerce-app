@@ -1,4 +1,5 @@
-import { SetStateAction, ChangeEvent, Dispatch } from 'react';
+import { ChangeEvent } from 'react';
+import { toast } from 'react-toastify';
 
 export const scrollTo = (top: number) => {
     window.scrollTo({
@@ -24,4 +25,10 @@ export const handleQuantityChange = (e: ChangeEvent<HTMLInputElement>, handleCha
     } else {
         handleChangeQuantity(val);
     }
+};
+
+export const notify = (message: string, type: 'success' | 'error' | 'warning' | 'info') => {
+    toast[type](message, {
+        position: 'bottom-right',
+    });
 };

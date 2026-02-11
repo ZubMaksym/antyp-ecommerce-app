@@ -1,3 +1,5 @@
+import { FilterTypeId } from "@/types/commonTypes";
+
 export const navLinksData = [
     {
         href: '/shop_all',
@@ -100,4 +102,23 @@ export const adminMainLinks = [
         href: '/admin/packagings',
         title: 'Packagings'
     },
+];
+
+export const FILTER_TYPES: { id: FilterTypeId; label: string }[] = [
+    { id: 'beer-type', label: 'Beer Types' },
+    { id: 'season-tag', label: 'Season Tags' },
+    { id: 'carbonation-level', label: 'Carbonation Levels' },
+    { id: 'water-type', label: 'Water Types' },
+    { id: 'soft-drink-type', label: 'Soft Drink Types' },
+    { id: 'wine-color', label: 'Wine Colors' },
+    { id: 'wine-sweetness', label: 'Wine Sweetness' },
+    { id: 'ingredient', label: 'Ingredients' },
+];
+
+export const PRODUCT_TYPES: { id: string; label: string }[] = [
+    { id: 'beer', label: 'Beer' },
+    { id: 'cider', label: 'Cider' },
+    { id: 'bottled_water', label: 'Water' },
+    { id: 'soft_drink', label: 'No-alcohol' },
+    { id: 'wine', label: 'Wine' },
 ];

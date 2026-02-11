@@ -1,55 +1,75 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Manufacturer } from '@/types/commonTypes';
+import { FilterItem, FilterTypeId } from '@/types/commonTypes';
 import { fetchWithAuth, ApiResponse } from '@/api/fetchWithAuth';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export interface ManufacturersState {
-    items: Manufacturer[];
+export interface AdminFiltersState {
+    items: FilterItem[];
     loading: boolean;
     submitting: boolean;
     error: string | null;
+    currentFilterType: FilterTypeId | null;
     success: string | null;
 }
 
-const initialState: ManufacturersState = {
+const initialState: AdminFiltersState = {
     items: [],
     loading: false,
     submitting: false,
     error: null,
+    currentFilterType: null,
     success: null,
 };
 
-type UpsertPayload = {
+type CreateFilterPayload = {
+    filterType: FilterTypeId;
     name: string;
-    shortName: string;
-    aboutUrl: string | null;
 };
 
-export const fetchManufacturers = createAsyncThunk<Manufacturer[]>(
-    'manufacturers/fetchAll',
-    async () => {
-        const response = await fetchWithAuth(`${API_BASE_URL}/manufacturers`);
+type UpdateFilterPayload = {
+    filterType: FilterTypeId;
+    id: number;
+    name: string;
+};
+
+type DeleteFilterPayload = {
+    filterType: FilterTypeId;
+    id: number;
+};
+
+export const fetchFilters = createAsyncThunk<
+    FilterItem[],
+    FilterTypeId
+>(
+    'adminFilters/fetchAll',
+    async (filterType) => {
+        const response = await fetchWithAuth(`${API_BASE_URL}/attributes/${filterType}`);
 
         if (!response.ok) {
             throw new Error(`API Error ${response.status} ${response.statusText}`);
         }
 
-        const data: ApiResponse<Manufacturer[]> = await response.json();
+        const data: ApiResponse<FilterItem[]> = await response.json();
         return data.result || [];
     }
 );
 
-export const createManufacturer = createAsyncThunk<Manufacturer, UpsertPayload>(
-    'manufacturers/create',
-    async (payload, { rejectWithValue }) => {
+export const createFilter = createAsyncThunk<
+    FilterItem,
+    CreateFilterPayload
+>(
+    'adminFilters/create',
+    async ({ filterType, name }, { rejectWithValue }) => {
         try {
-            const response = await fetchWithAuth(`${API_BASE_URL}/api/Manufacturer`, {
+            const response = await fetchWithAuth(`${API_BASE_URL}/api/attributes/${filterType}/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({
+                    name: name.trim()
+                }),
             });
 
             if (!response.ok) {
@@ -61,27 +81,29 @@ export const createManufacturer = createAsyncThunk<Manufacturer, UpsertPayload>(
                 );
             }
 
-            const data: ApiResponse<Manufacturer> = await response.json();
+            const data: ApiResponse<FilterItem> = await response.json();
             return data.result;
         } catch (error: any) {
-            return rejectWithValue(error.message || 'Failed to create manufacturer');
+            return rejectWithValue(error.message || 'Failed to create filter');
         }
     }
 );
 
-export const updateManufacturer = createAsyncThunk<
-    Manufacturer,
-    UpsertPayload & { id: string }
+export const updateFilter = createAsyncThunk<
+    FilterItem,
+    UpdateFilterPayload
 >(
-    'manufacturers/update',
-    async ({ id, ...payload }, { rejectWithValue }) => {
+    'adminFilters/update',
+    async ({ filterType, id, name }, { rejectWithValue }) => {
         try {
-            const response = await fetchWithAuth(`${API_BASE_URL}/api/Manufacturer/${id}`, {
+            const response = await fetchWithAuth(`${API_BASE_URL}/api/attributes/${filterType}/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(payload),
+                body: JSON.stringify({
+                    name: name.trim()
+                }),
             });
 
             if (!response.ok) {
@@ -93,19 +115,22 @@ export const updateManufacturer = createAsyncThunk<
                 );
             }
 
-            const data: ApiResponse<Manufacturer> = await response.json();
+            const data: ApiResponse<FilterItem> = await response.json();
             return data.result;
         } catch (error: any) {
-            return rejectWithValue(error.message || 'Failed to update manufacturer');
+            return rejectWithValue(error.message || 'Failed to update filter');
         }
     }
 );
 
-export const deleteManufacturer = createAsyncThunk<string, string>(
-    'manufacturers/delete',
-    async (id, { rejectWithValue }) => {
+export const deleteFilter = createAsyncThunk<
+    number,
+    DeleteFilterPayload
+>(
+    'adminFilters/delete',
+    async ({ filterType, id }, { rejectWithValue }) => {
         try {
-            const response = await fetchWithAuth(`${API_BASE_URL}/api/Manufacturer/${id}`, {
+            const response = await fetchWithAuth(`${API_BASE_URL}/api/attributes/${filterType}/${id}`, {
                 method: 'DELETE',
             });
 
@@ -120,109 +145,113 @@ export const deleteManufacturer = createAsyncThunk<string, string>(
 
             return id;
         } catch (error: any) {
-            return rejectWithValue(error.message || 'Failed to delete manufacturer');
+            return rejectWithValue(error.message || 'Failed to delete filter');
         }
     }
 );
 
-export const manufacturersSlice = createSlice({
-    name: 'manufacturers',
+export const adminFiltersSlice = createSlice({
+    name: 'adminFilters',
     initialState,
-    reducers: {},
+    reducers: {
+        setCurrentFilterType: (state, action: PayloadAction<FilterTypeId | null>) => {
+            state.currentFilterType = action.payload;
+        },
+        clearError: (state) => {
+            state.error = null;
+        },
+    },
     extraReducers: (builder) => {
         builder
             // Fetch all
-            .addCase(fetchManufacturers.pending, (state) => {
+            .addCase(fetchFilters.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
             .addCase(
-                fetchManufacturers.fulfilled,
-                (state, action: PayloadAction<Manufacturer[]>
-                ) => {
+                fetchFilters.fulfilled,
+                (state, action: PayloadAction<FilterItem[]>) => {
                     state.loading = false;
                     state.items = action.payload;
                 }
             )
-            .addCase(fetchManufacturers.rejected, (state, action) => {
+            .addCase(fetchFilters.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.error.message || 'Failed to load manufacturers';
+                state.error = action.error.message || 'Failed to load filters';
             })
 
             // Create
-            .addCase(createManufacturer.pending, (state) => {
+            .addCase(createFilter.pending, (state) => {
                 state.submitting = true;
                 state.error = null;
                 state.success = null;
             })
             .addCase(
-                createManufacturer.fulfilled,
-                (state, action: PayloadAction<Manufacturer>
-                ) => {
+                createFilter.fulfilled,
+                (state, action: PayloadAction<FilterItem>) => {
                     state.submitting = false;
                     state.items.push(action.payload);
-                    state.success = 'Manufacturer created successfully';
+                    state.success = 'Filter created successfully';
                 }
             )
-            .addCase(createManufacturer.rejected, (state, action) => {
+            .addCase(createFilter.rejected, (state, action) => {
                 state.submitting = false;
                 state.error =
                     (action.payload as string) ||
                     action.error.message ||
-                    'Failed to create manufacturer';
+                    'Failed to create filter';
                 state.success = null;
             })
 
             // Update
-            .addCase(updateManufacturer.pending, (state) => {
+            .addCase(updateFilter.pending, (state) => {
                 state.submitting = true;
                 state.error = null;
                 state.success = null;
             })
             .addCase(
-                updateManufacturer.fulfilled,
-                (state, action: PayloadAction<Manufacturer>
-                ) => {
+                updateFilter.fulfilled,
+                (state, action: PayloadAction<FilterItem>) => {
                     state.submitting = false;
-                    state.success = 'Manufacturer updated successfully';
                     const index = state.items.findIndex(
                         (item) => item.id === action.payload.id
                     );
                     if (index !== -1) {
                         state.items[index] = action.payload;
                     }
+                    state.success = 'Filter updated successfully';
                 }
             )
-            .addCase(updateManufacturer.rejected, (state, action) => {
+            .addCase(updateFilter.rejected, (state, action) => {
                 state.submitting = false;
                 state.error =
                     (action.payload as string) ||
                     action.error.message ||
-                    'Failed to update manufacturer';
+                    'Failed to update filter';
                 state.success = null;
             })
 
             // Delete
-            .addCase(deleteManufacturer.pending, (state) => {
+            .addCase(deleteFilter.pending, (state) => {
                 state.submitting = true;
                 state.error = null;
                 state.success = null;
             })
-            .addCase(deleteManufacturer.fulfilled, (state, action: PayloadAction<string>) => {
+            .addCase(deleteFilter.fulfilled, (state, action: PayloadAction<number>) => {
                 state.submitting = false;
                 state.items = state.items.filter((item) => item.id !== action.payload);
-                state.success = 'Manufacturer deleted successfully';
+                state.success = 'Filter deleted successfully';
             })
-            .addCase(deleteManufacturer.rejected, (state, action) => {
+            .addCase(deleteFilter.rejected, (state, action) => {
                 state.submitting = false;
                 state.error =
                     (action.payload as string) ||
                     action.error.message ||
-                    'Failed to delete manufacturer';
+                    'Failed to delete filter';
                 state.success = null;
             });
     },
 });
 
-export default manufacturersSlice.reducer;
-
+export const { setCurrentFilterType, clearError } = adminFiltersSlice.actions;
+export default adminFiltersSlice.reducer;

@@ -9,6 +9,7 @@ export interface PackagingsState {
     loading: boolean;
     submitting: boolean;
     error: string | null;
+    success: string | null;
 }
 
 const initialState: PackagingsState = {
@@ -16,6 +17,7 @@ const initialState: PackagingsState = {
     loading: false,
     submitting: false,
     error: null,
+    success: null,
 };
 
 type UpsertPayload = {
@@ -150,6 +152,7 @@ export const packagingsSlice = createSlice({
             .addCase(createPackaging.pending, (state) => {
                 state.submitting = true;
                 state.error = null;
+                state.success = null;
             })
             .addCase(
                 createPackaging.fulfilled,
@@ -157,6 +160,7 @@ export const packagingsSlice = createSlice({
                 ) => {
                     state.submitting = false;
                     state.items.push(action.payload);
+                    state.success = 'Packaging created successfully';
                 }
             )
             .addCase(createPackaging.rejected, (state, action) => {
@@ -165,12 +169,14 @@ export const packagingsSlice = createSlice({
                     (action.payload as string) ||
                     action.error.message ||
                     'Failed to create packaging';
+                state.success = null;
             })
 
             // Update
             .addCase(updatePackaging.pending, (state) => {
                 state.submitting = true;
                 state.error = null;
+                state.success = null;
             })
             .addCase(
                 updatePackaging.fulfilled,
@@ -183,6 +189,7 @@ export const packagingsSlice = createSlice({
                     if (index !== -1) {
                         state.items[index] = action.payload;
                     }
+                    state.success = 'Packaging updated successfully';
                 }
             )
             .addCase(updatePackaging.rejected, (state, action) => {
@@ -191,16 +198,19 @@ export const packagingsSlice = createSlice({
                     (action.payload as string) ||
                     action.error.message ||
                     'Failed to update packaging';
+                state.success = null;
             })
 
             // Delete
             .addCase(deletePackaging.pending, (state) => {
                 state.submitting = true;
                 state.error = null;
+                state.success = null;
             })
             .addCase(deletePackaging.fulfilled, (state, action: PayloadAction<string>) => {
                 state.submitting = false;
                 state.items = state.items.filter((item) => item.name !== action.payload);
+                state.success = 'Packaging deleted successfully';
             })
             .addCase(deletePackaging.rejected, (state, action) => {
                 state.submitting = false;
@@ -208,6 +218,7 @@ export const packagingsSlice = createSlice({
                     (action.payload as string) ||
                     action.error.message ||
                     'Failed to delete packaging';
+                state.success = null;
             });
     },
 });
