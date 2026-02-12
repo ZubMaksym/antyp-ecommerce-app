@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import { FileWithPath, useDropzone } from 'react-dropzone';
 import { fetchProductBySlug } from '@/state/productsSlice/productsSlice';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '@/state/store';
@@ -14,18 +14,21 @@ import AdminActionButton from '@/components/admin/AdminActionButton';
 import { Trash2 } from 'lucide-react';
 
 const PhotosPage = () => {
+    const [currentFiles, setCurrentFiles] = useState<FileWithPath[]>([]);
     const {acceptedFiles, getRootProps, getInputProps} = useDropzone({
         accept: {
             'image/*': ['.png', '.jpg', '.jpeg', '.webp'],
         },
         maxFiles: 10,
         maxSize: 10 * 1024 * 1024,
+        onDrop(files: FileWithPath[]): void {
+            setCurrentFiles(prev => [...prev, ...files])
+        }
     });
 
     const dispatch = useDispatch<AppDispatch>();
     const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
     const [isLoadingProduct, setIsLoadingProduct] = useState(true);
-    const [currentFiles, setCurrentFiles] = useState<File[]>([]);
 
     useEffect(() => {
         const selectedProductSlug = localStorage.getItem('selectedProductSlug');
@@ -125,11 +128,11 @@ const PhotosPage = () => {
                         </div>
 
                         {/* Selected Files Preview */}
-                        {acceptedFiles.length > 0 && (
+                        {currentFiles.length > 0 && (
                             <div className='border border-gray-300 rounded-md p-4 bg-white'>
                                 <div className='flex items-center justify-between mb-3'>
                                     <h3 className='text-[#4d6d7e] font-semibold text-lg mb-3'>
-                                        Selected Files ({acceptedFiles.length})
+                                        Selected Files ({currentFiles.length})
                                     </h3>
                                     <AdminActionButton 
                                         action='create' 
@@ -138,7 +141,7 @@ const PhotosPage = () => {
                                     />
                                 </div>
                                 <div className='flex flex-col gap-2 max-h-[300px] overflow-y-auto scrollbar'>
-                                    {acceptedFiles.map((file) => (
+                                    {currentFiles.map((file) => (
                                         <div 
                                             key={file.path}
                                             className='flex items-center justify-between p-3 bg-[#FAFAFA] rounded-md hover:bg-[#E8DFD5] transition-colors'
