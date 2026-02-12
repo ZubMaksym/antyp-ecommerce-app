@@ -26,6 +26,7 @@ const AdminActionButton = ({
     onClick,
     disabled = false,
     className,
+    title,
 }: AdminActionButtonProps) => {
     const config = ACTION_CONFIG[action as AdminAction];
     const Icon = config.icon;
@@ -50,7 +51,7 @@ const AdminActionButton = ({
             )}
         >
             <Icon size={18} />
-            <span>{config.label}</span>
+            <span>{title || config.label}</span>
         </button>
     );
 };

@@ -10,15 +10,15 @@ const FilterDropdown = ({ filterName, children, isFirst, filterOptions }: Filter
     const [isFilterOpen, setIsFilterOpen] = useState(isFirst ? true : false);
     // const [optionCount, setOptionCount] = useState(0);
 
-    const availableOptions = filterOptions?.map((option: FilterName) => {
-        if (option.count !== 0){
-            return option;
-        }
-    });
+    // const availableOptions = filterOptions?.map((option: FilterName) => {
+    //     if (option.count !== 0){
+    //         return option;
+    //     }
+    // });
 
-    if (availableOptions && availableOptions[0] === undefined){
-        return;
-    }
+    // if (availableOptions && availableOptions[0] === undefined){
+    //     return;
+    // }
 
     return (
         <div

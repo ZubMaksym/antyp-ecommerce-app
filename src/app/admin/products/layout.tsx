@@ -32,6 +32,7 @@ import {
     createProduct,
     updateProduct,
     deleteProduct,
+    fetchProductBySlug,
     ProductCategory
 } from '@/state/productsSlice/productsSlice';
 import { FilterTypeId } from '@/types/commonTypes';
@@ -57,15 +58,7 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
     const { items: filterItems } = useSelector((state: RootState) => state.adminFilters);
     const { submitting, error, success } = useSelector((state: RootState) => state.products);
 
-    const {
-        register,
-        handleSubmit,
-        reset,
-        control,
-        watch,
-        trigger,
-        formState: { errors },
-    } = useForm<ProductFormFields>({
+    const formMethods = useForm<ProductFormFields>({
         resolver: yupResolver(ProductValidationSchema) as any,
         mode: 'onSubmit',
         defaultValues: {
@@ -85,8 +78,25 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
             bestSellerRank: 0,
             isNew: false,
             newUntilUtc: null,
+            // Wine-specific fields
+            wineColorId: null,
+            wineSweetnessId: null,
+            isSparkling: false,
+            // Beer-specific fields
+            ibu: null,
+            alcoholStrength: null,
+            originalExtract: null,
+            beerTypeId: null,
+            seasonTagIds: [],
+            // Water-specific fields
+            carbonationLevelId: null,
+            waterTypeId: null,
+            // Soft Drink-specific fields
+            softDrinkTypeId: null,
         },
     });
+
+    const { reset, trigger, control, watch } = formMethods;
 
     const { fields: packagingFields, append: appendPackaging, remove: removePackaging } = useFieldArray({
         control,
@@ -144,12 +154,27 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
             bestSellerRank: 0,
             isNew: false,
             newUntilUtc: null,
+            // Wine-specific fields
+            wineColorId: null,
+            wineSweetnessId: null,
+            isSparkling: false,
+            // Beer-specific fields
+            ibu: null,
+            alcoholStrength: null,
+            originalExtract: null,
+            beerTypeId: null,
+            seasonTagIds: [],
+            // Water-specific fields
+            carbonationLevelId: null,
+            waterTypeId: null,
+            // Soft Drink-specific fields
+            softDrinkTypeId: null,
         });
     }, [reset]);
 
     // Calculate total steps based on category
     const getTotalSteps = () => {
-        if (productType?.id === 'wine' || productType?.id === 'beer') {
+        if (productType?.id === 'wine' || productType?.id === 'beer' || productType?.id === 'cider' || productType?.id === 'bottled_water' || productType?.id === 'soft_drink') {
             return 5; // Basic, Packagings, Nutritional, Flags, Category-specific
         }
         return 4; // Basic, Packagings, Nutritional, Flags
@@ -172,11 +197,35 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
                 fieldsToValidate.push('multiplicity', 'protein', 'fat', 'carbohydrate', 'sugar');
                 break;
             case 4: // Flags
-                // Optional validation - can proceed even if not filled
-                return true;
+                // Conditionally validate based on checkbox states
+                const isBestSeller = watch('isBestSeller');
+                const isNew = watch('isNew');
+                
+                if (isBestSeller) {
+                    fieldsToValidate.push('bestSellerUntilUtc', 'bestSellerRank');
+                }
+                if (isNew) {
+                    fieldsToValidate.push('newUntilUtc');
+                }
+                
+                // If no checkboxes are checked, allow proceeding
+                if (!isBestSeller && !isNew) {
+                    return true;
+                }
+                break;
             case 5: // Category-specific
-                // Will be validated on submit
-                return true;
+                // Validate category-specific fields based on product type
+                if (productType?.id === 'wine') {
+                    fieldsToValidate.push('wineColorId', 'wineSweetnessId');
+                } else if (productType?.id === 'beer') {
+                    fieldsToValidate.push('beerTypeId');
+                } else if (productType?.id === 'bottled-water') {
+                    fieldsToValidate.push('carbonationLevelId', 'waterTypeId');
+                } else if (productType?.id === 'soft_drink') {
+                    fieldsToValidate.push('softDrinkTypeId');
+                }
+                // Cider doesn't have select fields, only alcoholStrength (number input)
+                break;
         }
 
         // Trigger validation for the fields
@@ -204,21 +253,109 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
         }
     }, [modalMode]);
 
+    // Fetch product data when edit mode is activated
+    useEffect(() => {
+        const loadProductForEdit = async () => {
+            if (modalMode === 'edit' && selectedProductId && productType?.id) {
+                try {
+                    // Find the product in the list to get its slug
+                    const productFromList = displayProducts?.find((p) => p.id === selectedProductId);
+                    if (!productFromList?.slug) {
+                        notify('Product slug not found', 'error');
+                        return;
+                    }
+
+                    const product = await dispatch(fetchProductBySlug({
+                        slug: productFromList.slug,
+                    })).unwrap();
+
+                    // Map product data to form fields
+                    const formData: Partial<ProductFormFields> = {
+                        name: product.name || '',
+                        shortName: product.shortName || '',
+                        manufacturer: (product as any).manufacturer?.id || '',
+                        description: product.description || '',
+                        packagings: product.packagings && product.packagings.length > 0
+                            ? product.packagings.map((p: any) => ({
+                                packagingId: p.id || p.packagingId || '',
+                                multiplicity: p.multiplicity || 0,
+                            }))
+                            : [{ packagingId: '', multiplicity: 0 }],
+                        ingredients: product.ingredients?.map((ing: any) => ing.id || ing) || [],
+                        multiplicity: (product as any).multiplicity || 0,
+                        protein: product.protein || 0,
+                        fat: product.fat || 0,
+                        carbohydrate: product.carbohydrate || 0,
+                        sugar: product.sugar || 0,
+                        isBestSeller: product.isBestSeller || false,
+                        bestSellerUntilUtc: (product as any).bestSellerUntilUtc 
+                            ? (() => {
+                                const date = new Date((product as any).bestSellerUntilUtc);
+                                // Convert to local time for datetime-local input
+                                const year = date.getFullYear();
+                                const month = String(date.getMonth() + 1).padStart(2, '0');
+                                const day = String(date.getDate()).padStart(2, '0');
+                                const hours = String(date.getHours()).padStart(2, '0');
+                                const minutes = String(date.getMinutes()).padStart(2, '0');
+                                return `${year}-${month}-${day}T${hours}:${minutes}`;
+                            })()
+                            : null,
+                        bestSellerRank: (product as any).bestSellerRank || 0,
+                        isNew: product.isNew || false,
+                        newUntilUtc: (product as any).newUntilUtc
+                            ? (() => {
+                                const date = new Date((product as any).newUntilUtc);
+                                // Convert to local time for datetime-local input
+                                const year = date.getFullYear();
+                                const month = String(date.getMonth() + 1).padStart(2, '0');
+                                const day = String(date.getDate()).padStart(2, '0');
+                                const hours = String(date.getHours()).padStart(2, '0');
+                                const minutes = String(date.getMinutes()).padStart(2, '0');
+                                return `${year}-${month}-${day}T${hours}:${minutes}`;
+                            })()
+                            : null,
+                        // Wine-specific
+                        wineColorId: product.wineColor?.id || null,
+                        wineSweetnessId: product.wineSweetness?.id || null,
+                        isSparkling: product.isSparking || false,
+                        // Beer-specific
+                        ibu: product.ibu || null,
+                        alcoholStrength: product.alcoholStrength || null,
+                        originalExtract: (product as any).originalExtract || null,
+                        beerTypeId: product.beerType?.id || null,
+                        seasonTagIds: (product as any).seasonTags?.map((tag: any) => tag.id || tag) || [],
+                        // Water-specific
+                        carbonationLevelId: product.carbonationLevel?.id || null,
+                        waterTypeId: product.waterType?.id || null,
+                        // Soft Drink-specific
+                        softDrinkTypeId: product.softDrinkType?.id || null,
+                    };
+
+                    reset(formData);
+                    setCurrentStep(1);
+                } catch (error) {
+                    console.error('Failed to load product for edit:', error);
+                    notify('Failed to load product data', 'error');
+                }
+            }
+        };
+
+        loadProductForEdit();
+    }, [modalMode, selectedProductId, productType?.id, dispatch, reset, displayProducts]);
+
     // Handle success/error messages
     useEffect(() => {
-        if (success) {
-            notify(success, 'success');
-            if (modalMode === 'create' || modalMode === 'edit') {
-                closeModal();
-                dispatch(fetchInitialProducts({ category: productType?.id || '' }));
-            }
-        }
         if (error) {
             notify(error, 'error');
         }
-    }, [success, error, modalMode, productType?.id, dispatch, closeModal]);
+        if (!error && success) {
+            notify(success, 'success');
+        }
+    }, [error, success]);
 
     const onSubmit = async (data: ProductFormFields) => {
+        console.log(data);
+        console.log(productType?.id);
         if (!modalMode || !productType?.id) return;
 
         // Transform form data to API format
@@ -232,7 +369,7 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
                 multiplicity: p.multiplicity,
             })),
             ingredientIds: data.ingredients || [],
-            multiplicity: data.multiplicity,
+            multiplicity: 1,
             protein: data.protein,
             fat: data.fat,
             carbohydrate: data.carbohydrate,
@@ -241,36 +378,46 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
             bestSellerUntilUtc: data.isBestSeller && data.bestSellerUntilUtc
                 ? new Date(data.bestSellerUntilUtc).toISOString()
                 : null,
-            bestSellerRank: data.isBestSeller ? (data.bestSellerRank || 0) : null,
+            bestSellerRank: data.isBestSeller 
+                ? (data.bestSellerRank !== null && data.bestSellerRank !== undefined ? data.bestSellerRank : 0)
+                : 0,
             isNew: data.isNew,
             newUntilUtc: data.isNew && data.newUntilUtc
                 ? new Date(data.newUntilUtc).toISOString()
                 : null,
+            // nameTranslations is not in the form, so we'll send an empty array
+            // If the API requires it, it should be added to the form
+            nameTranslations: [{
+                language: 'en',
+                name: data.name.trim(),
+            }],
         };
 
-        // Add category-specific fields
+        // Add category-specific fields from form data
         if (productType.id === 'wine') {
-            const wineColorId = (document.getElementById('wineColorId') as HTMLSelectElement)?.value;
-            const wineSweetnessId = (document.getElementById('wineSweetnessId') as HTMLSelectElement)?.value;
-            const isSparkling = (document.getElementById('isSparkling') as HTMLInputElement)?.checked;
-
-            if (wineColorId) basePayload.wineColorId = wineColorId;
-            if (wineSweetnessId) basePayload.wineSweetnessId = wineSweetnessId;
-            basePayload.isSparkling = isSparkling || false;
+            if (data.wineColorId) basePayload.wineColorId = data.wineColorId;
+            if (data.wineSweetnessId) basePayload.wineSweetnessId = data.wineSweetnessId;
+            basePayload.isSparkling = data.isSparkling || false;
         } else if (productType.id === 'beer') {
-            const ibu = parseFloat((document.getElementById('ibu') as HTMLInputElement)?.value || '0');
-            const alcoholStrength = parseFloat((document.getElementById('alcoholStrength') as HTMLInputElement)?.value || '0');
-            const originalExtract = parseFloat((document.getElementById('originalExtract') as HTMLInputElement)?.value || '0');
-            const beerTypeId = (document.getElementById('beerTypeId') as HTMLSelectElement)?.value;
-            const seasonTagIds = Array.from((document.getElementById('seasonTagIds') as HTMLSelectElement)?.selectedOptions || [])
-                .map((option) => option.value);
-
-            basePayload.ibu = ibu;
-            basePayload.alcoholStrength = alcoholStrength;
-            basePayload.originalExtract = originalExtract;
-            if (beerTypeId) basePayload.beerTypeId = beerTypeId;
-            if (seasonTagIds.length > 0) basePayload.seasonTagIds = seasonTagIds;
+            basePayload.ibu = data.ibu !== null && data.ibu !== undefined ? data.ibu : 0;
+            basePayload.alcoholStrength = data.alcoholStrength !== null && data.alcoholStrength !== undefined ? data.alcoholStrength : 0;
+            basePayload.originalExtract = data.originalExtract !== null && data.originalExtract !== undefined ? data.originalExtract : 0;
+            // beerTypeId is required for beer, validation ensures it's not empty
+            if (data.beerTypeId && data.beerTypeId.trim() !== '') {
+                basePayload.beerTypeId = data.beerTypeId;
+            }
+            basePayload.seasonTagIds = data.seasonTagIds || [];
+        } else if (productType.id === 'cider') {
+            basePayload.alcoholStrength = data.alcoholStrength !== null && data.alcoholStrength !== undefined ? data.alcoholStrength : 0;
+        } else if (productType.id === 'bottled_water') {
+            if (data.carbonationLevelId) basePayload.carbonationLevelId = data.carbonationLevelId;
+            if (data.waterTypeId) basePayload.waterTypeId = data.waterTypeId;
+        } else if (productType.id === 'soft_drink') {
+            if (data.softDrinkTypeId) basePayload.softDrinkTypeId = data.softDrinkTypeId;
         }
+
+        // Log payload for debugging
+        console.log('Payload being sent:', JSON.stringify(basePayload, null, 2));
 
         try {
             if (modalMode === 'create') {
@@ -278,24 +425,30 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
                     category: productType.id as ProductCategory,
                     data: basePayload,
                 })).unwrap();
+                closeModal();
+                dispatch(fetchInitialProducts({ category: productType.id }));
             } else if (modalMode === 'edit' && selectedProductId) {
                 await dispatch(updateProduct({
                     category: productType.id as ProductCategory,
                     id: selectedProductId,
                     data: basePayload,
                 })).unwrap();
+                closeModal();
+                dispatch(fetchInitialProducts({ category: productType.id }));
             }
         } catch {
             // Error is handled by Redux and shown via toast
         }
     };
 
-    const handleDelete = async () => {
-        if (!selectedProductId || !productType?.id) return;
+    const handleDelete = async (productId: string) => {
+        if (!productId || !productType?.id) return;
+        console.log(productId);
+        // console.log(productType.id);
         try {
             await dispatch(deleteProduct({
                 category: productType.id as ProductCategory,
-                id: selectedProductId,
+                id: productId,
             })).unwrap();
             closeModal();
             dispatch(fetchInitialProducts({ category: productType.id }));
@@ -346,12 +499,23 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
                 fetchFilterType('beer-type');
                 fetchFilterType('season-tag');
                 fetchFilterType('ingredient');
+            } else if (productType.id === 'cider') {
+                fetchFilterType('ingredient');
+            } else if (productType.id === 'bottled_water') {
+                fetchFilterType('carbonation-level');
+                fetchFilterType('water-type');
+                fetchFilterType('ingredient');
+            } else if (productType.id === 'soft_drink') {
+                fetchFilterType('soft-drink-type');
+                fetchFilterType('ingredient');
             } else {
                 fetchFilterType('ingredient');
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modalMode, productType?.id]);
+
+    const selectedProduct = products?.find((product) => product.id === selectedProductId)?.name || 'Product';
 
     return (
         <>
@@ -373,6 +537,7 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
                     productsError={displayError}
                     modalMode={modalMode}
                     setModalMode={setModalMode}
+                    setSelectedProductId={setSelectedProductId}
                 />
             </section>
             <AdminModal
@@ -385,7 +550,9 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
                             Delete {productType?.label}
                         </h2>
                         <p className='text-[#4d6d7e] mb-4'>
-                            Are you sure you want to delete this product? This action cannot be undone.
+                            Are you sure you want to delete 
+                            <span className='font-bold'>{`${selectedProduct}? `}</span>
+                            This action cannot be undone.
                         </p>
                         {error && <div className='text-red-600 text-sm mb-4'>{error}</div>}
                         <div className='flex justify-end gap-3'>
@@ -400,10 +567,10 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
                             <Button
                                 apearence='primary'
                                 classname='px-4 h-[36px]'
-                                onClick={handleDelete}
+                                onClick={() => handleDelete(selectedProductId || '')}
                                 disabled={submitting}
                             >
-                                {submitting ? <LoadingSpinner /> : 'Delete'}
+                                {submitting ? 'Deleting...' : 'Delete'}
                             </Button>
                         </div>
                     </>
@@ -414,15 +581,7 @@ const ProductsLayout = ({ children: _children }: { children: React.ReactNode }) 
                         </h2>
                         {error && <div className='text-red-600 text-sm mb-4'>{error}</div>}
                         <ProductForm
-                            form={{
-                                register,
-                                handleSubmit,
-                                reset,
-                                control,
-                                watch,
-                                trigger,
-                                formState: { errors },
-                            } as any}
+                            form={formMethods}
                             packagingFields={{
                                 fields: packagingFields,
                                 append: appendPackaging,

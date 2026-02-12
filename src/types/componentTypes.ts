@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { FilterName, ProductItem } from './reducerTypes';
 import { ProductItemCart } from './reducerTypes';
 import { Control, FieldErrors, UseFormRegister } from 'react-hook-form';
-import { AdminAction } from '@/types/commonTypes';
+import { AdminAction, Manufacturer } from '@/types/commonTypes';
 
 export interface ModalProps {
     isOpen: boolean;
@@ -76,7 +76,7 @@ export interface ProductDetailsTableProps {
     product: ProductItem;
 }
 
-export interface InputProps<TFormValues = any> {
+export interface InputProps<TFormValues extends Record<string, any>> {
     register?: UseFormRegister<TFormValues>;
     errors?: FieldErrors<TFormValues> | undefined;
     errorMessage?: string | undefined;
@@ -84,6 +84,7 @@ export interface InputProps<TFormValues = any> {
     type: 'text' | 'number' | 'tel' | 'url';
     placeholder: string;
     id: keyof TFormValues & string;
+    step?: string;
 }
 
 export interface PhoneNumberInputProps {
@@ -175,6 +176,7 @@ export interface AdminProductsListProps {
     productsError: string | null;
     modalMode: 'create' | 'edit' | 'delete' | null;
     setModalMode: Dispatch<SetStateAction<'create' | 'edit' | 'delete' | null>>;
+    setSelectedProductId: Dispatch<SetStateAction<string | null>>;
 }
 
 export interface AdminActionButtonProps {
@@ -182,10 +184,20 @@ export interface AdminActionButtonProps {
     onClick?: () => void;
     disabled?: boolean;
     className?: string;
+    title?: string;
 }
 
 export interface AdminModalProps {
     modalMode: 'create' | 'edit' | 'delete' | null;
     setModalMode: Dispatch<SetStateAction<'create' | 'edit' | 'delete' | null>>;
     children: React.ReactNode;
+}
+
+export interface SelectProps<TFormValues extends Record<string, any>> {
+    className?: string;
+    register?: UseFormRegister<TFormValues>;
+    errors?: FieldErrors<TFormValues> | undefined;
+    errorMessage?: string | undefined;
+    id: keyof TFormValues & string;
+    options: any[];
 }

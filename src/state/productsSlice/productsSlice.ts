@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { fetchWithAuth, ApiResponse } from '@/api/fetchWithAuth';
+import { ProductItem } from '@/types/reducerTypes';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -41,7 +42,13 @@ export interface Product {
     originalExtract?: number;
     beerTypeId?: string;
     seasonTagIds?: string[];
-    // Other categories may have their own fields
+    // Cider specific
+    // alcoholStrength is shared with beer
+    // Water specific
+    carbonationLevelId?: string;
+    waterTypeId?: string;
+    // Soft Drink specific
+    softDrinkTypeId?: string;
 }
 
 export interface ProductsState {
@@ -99,8 +106,24 @@ type BeerProductPayload = BaseProductPayload & {
     seasonTagIds?: string[];
 };
 
+// Cider payload
+type CiderProductPayload = BaseProductPayload & {
+    alcoholStrength: number;
+};
+
+// Water payload
+type WaterProductPayload = BaseProductPayload & {
+    carbonationLevelId: string;
+    waterTypeId: string;
+};
+
+// Soft Drink payload
+type SoftDrinkProductPayload = BaseProductPayload & {
+    softDrinkTypeId: string;
+};
+
 // Union type for all product payloads
-type ProductPayload = BaseProductPayload | WineProductPayload | BeerProductPayload;
+type ProductPayload = BaseProductPayload | WineProductPayload | BeerProductPayload | CiderProductPayload | WaterProductPayload | SoftDrinkProductPayload;
 
 type CreateProductPayload = {
     category: ProductCategory;
@@ -122,7 +145,17 @@ export const createProduct = createAsyncThunk<Product, CreateProductPayload>(
     'products/create',
     async ({ category, data }, { rejectWithValue }) => {
         try {
-            const response = await fetchWithAuth(`${API_BASE_URL}/api/Product/${category}`, {
+            let validCategory: string = category;
+            if (category !== 'bottled_water') {
+                validCategory = category + 's';
+            }
+            if (validCategory.includes('_')) {
+                validCategory = validCategory.replace('_', '-');
+            }
+
+            console.log('create product url', `${API_BASE_URL}/api/Products/${validCategory}/create`)
+
+            const response = await fetchWithAuth(`${API_BASE_URL}/api/Products/${validCategory}/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -132,9 +165,13 @@ export const createProduct = createAsyncThunk<Product, CreateProductPayload>(
 
             if (!response.ok) {
                 const errorData = (await response.json().catch(() => ({}))) as ApiResponse | any;
+                console.error('Create Product API Error Response:', errorData);
+                console.error('Request URL:', `${API_BASE_URL}/api/Products/${validCategory}/create`);
+                console.error('Request Payload:', JSON.stringify(data, null, 2));
                 return rejectWithValue(
                     errorData?.errors?.message ||
                     errorData?.message ||
+                    errorData?.title ||
                     `API Error ${response.status} ${response.statusText}`
                 );
             }
@@ -151,7 +188,15 @@ export const updateProduct = createAsyncThunk<Product, UpdateProductPayload>(
     'products/update',
     async ({ category, id, data }, { rejectWithValue }) => {
         try {
-            const response = await fetchWithAuth(`${API_BASE_URL}/api/Product/${category}/${id}`, {
+            let validCategory: string = category;
+            if (category !== 'bottled_water') {
+                validCategory = category + 's';
+            }
+            if (validCategory.includes('_')) {
+                validCategory = validCategory.replace('_', '-');
+            }
+
+            const response = await fetchWithAuth(`${API_BASE_URL}/api/Products/${validCategory}/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -176,11 +221,45 @@ export const updateProduct = createAsyncThunk<Product, UpdateProductPayload>(
     }
 );
 
+export const fetchProductBySlug = createAsyncThunk<ProductItem, { slug: string }>(
+    'products/fetchBySlug',
+    async ({ slug }, { rejectWithValue }) => {
+        try {
+            // Fetch product by slug as per API endpoint
+            const response = await fetchWithAuth(`${API_BASE_URL}/product/${slug}`);
+            
+            if (!response.ok) {
+                const errorData = (await response.json().catch(() => ({}))) as ApiResponse | any;
+                return rejectWithValue(
+                    errorData?.errors?.message ||
+                    errorData?.message ||
+                    `API Error ${response.status} ${response.statusText}`
+                );
+            }
+
+            const result: ApiResponse<ProductItem> = await response.json();
+            return result.result;
+        } catch (error: any) {
+            return rejectWithValue(error.message || 'Failed to fetch product');
+        }
+    }
+);
+
 export const deleteProduct = createAsyncThunk<string, DeleteProductPayload>(
     'products/delete',
     async ({ category, id }, { rejectWithValue }) => {
         try {
-            const response = await fetchWithAuth(`${API_BASE_URL}/api/Product/${category}/${id}`, {
+            let validCategory: string = category;
+            if (category !== 'bottled_water') {
+                validCategory = category + 's';
+            }
+            if (validCategory.includes('_')) {
+                validCategory = validCategory.replace('_', '-');
+            }
+
+            console.log(`${API_BASE_URL}/api/Products/${validCategory}/${id}`);
+
+            const response = await fetchWithAuth(`${API_BASE_URL}/api/Products/${validCategory}/${id}`, {
                 method: 'DELETE',
             });
 

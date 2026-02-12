@@ -13,6 +13,7 @@ import { useRouter } from 'next/navigation';
 import { toggleCart } from '@/state/cartState/cartSlice';
 import Link from 'next/link';
 import { Packaging } from '@/types/reducerTypes';
+import ProductImagePlaceholder from '@/public/product_image_placeholder.webp';
 
 const Cart = () => {
     const { items, totalQuantity } = useSelector((state: RootState) => state.cart);
@@ -55,7 +56,7 @@ const Cart = () => {
                                 <Image
                                     className='w-full h-full object-contain'
                                     loading='lazy'
-                                    src={item.mainPhotoUrl}
+                                    src={item.mainPhotoUrl || ProductImagePlaceholder}
                                     width={250}
                                     height={250}
                                     alt={`${item.shortName} photo`}

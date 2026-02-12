@@ -8,6 +8,7 @@ import { AppDispatch } from '@/state/store';
 import AddToCartButton from './AddToCartButton';
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
+import ProductImagePlaceholder from '@/public/product_image_placeholder.webp';
 
 const ProductCard = ({ onCardClick, product }: ProductCardProps) => {
     const dispatch = useDispatch<AppDispatch>();
@@ -89,7 +90,7 @@ const ProductCard = ({ onCardClick, product }: ProductCardProps) => {
             </div>
             <div className='flex-1 flex items-center justify-center mt-6'>
                 <Image
-                    src={product.mainPhotoUrl}
+                    src={product.mainPhotoUrl || ProductImagePlaceholder}
                     alt={product.name}
                     width={450}
                     height={450}

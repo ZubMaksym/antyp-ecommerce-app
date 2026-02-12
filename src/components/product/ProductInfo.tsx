@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { ProductItem } from '@/types/reducerTypes';
+import ProductImagePlaceholder from '@/public/product_image_placeholder.webp';
 
 interface ProductInfoProps {
     product: ProductItem;
@@ -46,7 +47,7 @@ const ProductInfo = ({ product, relatedProducts }: ProductInfoProps) => {
                             loading='lazy'
                             width={150}
                             height={150}
-                            src={relatedProduct.mainPhotoUrl}
+                            src={relatedProduct.mainPhotoUrl || ProductImagePlaceholder}
                             alt='product image'
                             className='w-[70%] transition duration-500 ease-in-out'
                         />

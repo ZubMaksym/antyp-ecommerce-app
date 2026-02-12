@@ -102,6 +102,10 @@ export const adminMainLinks = [
         href: '/admin/packagings',
         title: 'Packagings'
     },
+    {
+        href: '/admin/photos',
+        title: 'Photos'
+    }
 ];
 
 export const FILTER_TYPES: { id: FilterTypeId; label: string }[] = [

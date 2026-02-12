@@ -10,6 +10,18 @@ interface ProductFormStep4Props {
 }
 
 export default function ProductFormStep4({ register, errors, isBestSeller, isNew }: ProductFormStep4Props) {
+    // Get current date/time in format for datetime-local input (YYYY-MM-DDTHH:mm)
+    const getMinDateTime = () => {
+        const now = new Date();
+        // Format: YYYY-MM-DDTHH:mm
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    };
+
     return (
         <div className='space-y-4'>
             <div className='border-b border-[#4d6d7e] pb-4'>
@@ -29,12 +41,13 @@ export default function ProductFormStep4({ register, errors, isBestSeller, isNew
                             <input
                                 type='datetime-local'
                                 {...register('bestSellerUntilUtc')}
+                                min={getMinDateTime()}
                                 className={`h-[40px] rounded-lg bg-white text-[#4d6d7e] px-3 border ${
                                     errors.bestSellerUntilUtc ? 'border-red-700' : 'border-[#4d6d7e]'
                                 }`}
                             />
                             {errors.bestSellerUntilUtc && (
-                                <p className='text-red-500'>{errors.bestSellerUntilUtc.message}</p>
+                                <p className='text-red-500 text-sm'>{errors.bestSellerUntilUtc.message}</p>
                             )}
                         </label>
                         <label className='flex flex-col gap-1'>
@@ -42,7 +55,7 @@ export default function ProductFormStep4({ register, errors, isBestSeller, isNew
                             <Input<ProductFormFields>
                                 type='number'
                                 id='bestSellerRank'
-                                placeholder='0'
+                                placeholder='1'
                                 register={register}
                                 errors={errors}
                                 errorMessage={errors.bestSellerRank?.message}
@@ -69,12 +82,13 @@ export default function ProductFormStep4({ register, errors, isBestSeller, isNew
                         <input
                             type='datetime-local'
                             {...register('newUntilUtc')}
+                            min={getMinDateTime()}
                             className={`h-[40px] rounded-lg bg-white text-[#4d6d7e] px-3 border ${
                                 errors.newUntilUtc ? 'border-red-700' : 'border-[#4d6d7e]'
                             }`}
                         />
                         {errors.newUntilUtc && (
-                            <p className='text-red-500'>{errors.newUntilUtc.message}</p>
+                            <p className='text-red-500 text-sm'>{errors.newUntilUtc.message}</p>
                         )}
                     </label>
                 )}

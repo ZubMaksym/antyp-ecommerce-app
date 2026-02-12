@@ -8,10 +8,11 @@ import { Keyboard, Pagination, Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { StaticImageData } from 'next/image';
 
 interface ProductImageGalleryProps {
     images: string[];
-    mainImage: string;
+    mainImage: string | StaticImageData;
     setMainImage: (image: string) => void;
     productName: string;
     mainImgRef: React.RefObject<HTMLImageElement | null>;
@@ -34,7 +35,7 @@ const ProductImageGallery = ({
 
     useEffect(() => {
         if (!isFullscreen && mobileSwiperRef.current && mainImage) {
-            const index = images.indexOf(mainImage);
+            const index = images.indexOf(mainImage as string);
             if (index !== -1) {
                 mobileSwiperRef.current.slideTo(index, 0);
             }
@@ -72,7 +73,7 @@ const ProductImageGallery = ({
             {/* Desktop Main Image */}
             <div className='hidden lg:flex flex-1 flex-col min-w-0'>
                 <motion.div
-                    key={mainImage}
+                    key={mainImage as string}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -85,7 +86,7 @@ const ProductImageGallery = ({
                     }}
                 >
                     <Image
-                        src={mainImage || ''}
+                        src={mainImage as string}
                         alt={productName}
                         width={500}
                         height={500}
@@ -102,7 +103,7 @@ const ProductImageGallery = ({
             <div className='lg:hidden w-full bg-white py-10 rounded-lg flex justify-center'>
                 <div className='w-full'>
                     <Swiper
-                        initialSlide={mainImage ? images.indexOf(mainImage) : 0}
+                        initialSlide={mainImage ? images.indexOf(mainImage as string) : 0}
                         pagination={{ clickable: true }}
                         navigation={true}
                         modules={[Keyboard, Pagination, Navigation]}

@@ -15,6 +15,7 @@ import beerTestImage from '@/public/icons/PLP_Kolsch.webp';
 import { motion, AnimatePresence } from 'framer-motion';
 import useForbidBodyScroll from '@/hooks/useForbidBodyScroll';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
+import ProductImagePlaceholder from '@/public/product_image_placeholder.webp';
 
 
 const ProductPage = () => {
@@ -26,7 +27,7 @@ const ProductPage = () => {
     const [relatedProducts, setRelatedProducts] = useState<ProductItem[]>();
     const slug = usePathname().split('/').pop();
     const mainImgRef = useRef<HTMLImageElement | null>(null);
-    const images = product && [product.mainPhotoUrl, beerTestImage];
+    const images = product && [product.mainPhotoUrl || ProductImagePlaceholder, beerTestImage];
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [activeSlide, setActiveSlide] = useState(0);
     const [mainImage, setMainImage] = useState('');
@@ -132,7 +133,7 @@ const ProductPage = () => {
                                     <div className='lg:sticky top-28'>
                                         <ProductImageGallery
                                             images={images}
-                                            mainImage={mainImage}
+                                            mainImage={mainImage || ProductImagePlaceholder}
                                             setMainImage={setMainImage}
                                             productName={product.name}
                                             mainImgRef={mainImgRef}

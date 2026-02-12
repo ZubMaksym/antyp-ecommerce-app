@@ -92,7 +92,7 @@ const Homepage = () => {
                                 <CategoryCard subtitle={data.name}>
                                     {/* <span className='text-white xl:text-[28px] lg:text-[24px] md:text-[28px] text-[22px] font-black'>{data.name}</span> */}
                                     <Image
-                                        src={data.image}
+                                        src={data.image }
                                         width={350}
                                         height={350}
                                         className='w-full h-full'

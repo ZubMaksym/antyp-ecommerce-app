@@ -12,7 +12,7 @@ export default function ProductFormStep3({ register, errors }: ProductFormStep3P
         <div className='border-b border-[#4d6d7e] pb-4'>
             <h3 className='text-[18px] font-semibold text-[#4d6d7e] mb-3'>Nutritional Information</h3>
             <div className='grid grid-cols-2 gap-3'>
-                <label className='flex flex-col gap-1'>
+                {/* <label className='flex flex-col gap-1'>
                     <span className='text-[16px] font-medium text-[#4d6d7e]'>Multiplicity *</span>
                     <Input<ProductFormFields>
                         type='number'
@@ -23,7 +23,7 @@ export default function ProductFormStep3({ register, errors }: ProductFormStep3P
                         errorMessage={errors.multiplicity?.message}
                         className='h-[40px]'
                     />
-                </label>
+                </label> */}
                 <label className='flex flex-col gap-1'>
                     <span className='text-[16px] font-medium text-[#4d6d7e]'>Protein (g) *</span>
                     <Input<ProductFormFields>
@@ -34,6 +34,7 @@ export default function ProductFormStep3({ register, errors }: ProductFormStep3P
                         errors={errors}
                         errorMessage={errors.protein?.message}
                         className='h-[40px]'
+                        step='0.1'
                     />
                 </label>
                 <label className='flex flex-col gap-1'>
@@ -46,6 +47,7 @@ export default function ProductFormStep3({ register, errors }: ProductFormStep3P
                         errors={errors}
                         errorMessage={errors.fat?.message}
                         className='h-[40px]'
+                        step='0.1'
                     />
                 </label>
                 <label className='flex flex-col gap-1'>
@@ -58,6 +60,7 @@ export default function ProductFormStep3({ register, errors }: ProductFormStep3P
                         errors={errors}
                         errorMessage={errors.carbohydrate?.message}
                         className='h-[40px]'
+                        step='0.1'
                     />
                 </label>
                 <label className='flex flex-col gap-1'>
@@ -70,6 +73,7 @@ export default function ProductFormStep3({ register, errors }: ProductFormStep3P
                         errors={errors}
                         errorMessage={errors.sugar?.message}
                         className='h-[40px]'
+                        step='0.1'
                     />
                 </label>
             </div>

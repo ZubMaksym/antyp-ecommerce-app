@@ -71,6 +71,8 @@ const DesktopFilters = ({ isOpen, setIsOpen }: ModalProps) => {
         dispatch(toggleFilter({ key, value: filter.id }));
     };
 
+    console.log(filters?.seasonTags);
+
     const resetAll = () => {
         dispatch(resetFilters());
         dispatch(resetProducts());

@@ -3,8 +3,17 @@ import LoadingSpinner from '../ui/LoadingSpinner';
 import { AdminProductsListProps } from '@/types/componentTypes';
 import AdminActionButton from './AdminActionButton';
 import classNames from 'classnames';
+import ProductImagePlaceholder from '@/public/product_image_placeholder.webp';
+import Button from '../ui/Button';
+import { useRouter } from 'next/navigation';
 
-const AdminProductsList = ({ products, productsLoading, productsError, modalMode, setModalMode }: AdminProductsListProps) => {
+const AdminProductsList = ({ products, productsLoading, productsError, modalMode, setModalMode, setSelectedProductId }: AdminProductsListProps) => {
+    const router = useRouter();
+
+    const onUploadPhotos = (selectedProductSlug: string) => {
+        localStorage.setItem('selectedProductSlug', selectedProductSlug);
+        router.push('/admin/photos');
+    }
     
     if (productsLoading) {
         return (
@@ -40,7 +49,7 @@ const AdminProductsList = ({ products, productsLoading, productsError, modalMode
                         >
                             <div className='flex items-center'>
                                 <Image
-                                    src={product.mainPhotoUrl}
+                                    src={product.mainPhotoUrl || ProductImagePlaceholder}
                                     alt={product.name}
                                     width={110}
                                     height={110}
@@ -50,9 +59,22 @@ const AdminProductsList = ({ products, productsLoading, productsError, modalMode
                                     {product.name}
                                 </h2>
                             </div>
-                            <div className='*:first:ml-0 *:ml-2'>
-                                <AdminActionButton action='edit' onClick={() => setModalMode('edit')} />
-                                <AdminActionButton action='delete' onClick={() => setModalMode('delete')} />
+                            <div className='*:first:ml-0 *:ml-2 flex items-center gap-2'>
+                                <Button 
+                                    classname='px-4 h-[32px]' 
+                                    apearence='secondary'
+                                    onClick={() => onUploadPhotos(product.slug)}
+                                >
+                                    Upload photos
+                                </Button>
+                                <AdminActionButton action='edit' onClick={() => {
+                                    setSelectedProductId(product.id);
+                                    setModalMode('edit');
+                                }} />
+                                <AdminActionButton action='delete' onClick={() => {
+                                    setSelectedProductId(product.id);
+                                    setModalMode('delete');
+                                }} />
                             </div>
                         </div>
                     ))

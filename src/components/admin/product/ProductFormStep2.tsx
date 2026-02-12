@@ -1,7 +1,8 @@
-import { UseFormRegister, FieldErrors, UseFieldArrayReturn } from 'react-hook-form';
+import { UseFormRegister, FieldErrors, UseFieldArrayReturn, UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { ProductFormFields } from '@/schemas/ProductValidationSchema';
 import { Packaging } from '@/types/commonTypes';
 import { FilterItem } from '@/types/commonTypes';
+import MultiSelectSelector from './MultiSelectSelector';
 
 interface ProductFormStep2Props {
     register: UseFormRegister<ProductFormFields>;
@@ -9,6 +10,8 @@ interface ProductFormStep2Props {
     packagings: Packaging[];
     ingredients: FilterItem[];
     packagingFields: UseFieldArrayReturn<ProductFormFields, 'packagings', 'id'>;
+    setValue: UseFormSetValue<ProductFormFields>;
+    watch: UseFormWatch<ProductFormFields>;
 }
 
 export default function ProductFormStep2({
@@ -17,6 +20,8 @@ export default function ProductFormStep2({
     packagings,
     ingredients,
     packagingFields,
+    setValue,
+    watch,
 }: ProductFormStep2Props) {
     const { fields, append, remove } = packagingFields;
 
@@ -48,17 +53,19 @@ export default function ProductFormStep2({
                                 </option>
                             ))}
                         </select>
-                        <input
-                            type='number'
-                            {...register(`packagings.${index}.multiplicity` as any)}
-                            placeholder='Multiplicity'
-                            className={`w-32 h-[40px] rounded-lg bg-white text-[#4d6d7e] px-3 border ${
-                                errors.packagings?.[index]?.multiplicity ? 'border-red-700' : 'border-[#4d6d7e]'
-                            }`}
-                        />
-                        {errors.packagings?.[index]?.multiplicity && (
-                            <p className='text-red-500 text-sm'>{errors.packagings[index]?.multiplicity?.message}</p>
-                        )}
+                        <div className='flex flex-col gap-1'>
+                            <input
+                                type='number'
+                                {...register(`packagings.${index}.multiplicity` as any)}
+                                placeholder='Multiplicity'
+                                className={`w-32 h-[40px] rounded-lg bg-white text-[#4d6d7e] px-3 border ${
+                                    errors.packagings?.[index]?.multiplicity ? 'border-red-700' : 'border-[#4d6d7e]'
+                                }`}
+                            />
+                            {errors.packagings?.[index]?.multiplicity && (
+                                <p className='text-red-500 text-sm max-w-[100px]'>{errors.packagings[index]?.multiplicity?.message}</p>
+                            )}
+                        </div>
                         {fields.length > 1 && (
                             <button
                                 type='button'
@@ -75,21 +82,17 @@ export default function ProductFormStep2({
                 )}
             </div>
 
-            <div className='border-b border-[#4d6d7e] pb-4'>
-                <h3 className='text-[18px] font-semibold text-[#4d6d7e] mb-3'>Ingredients</h3>
-                <select
-                    multiple
-                    {...register('ingredients')}
-                    className='min-h-[100px] rounded-lg bg-white text-[#4d6d7e] px-3 py-2 border border-[#4d6d7e]'
-                >
-                    {ingredients.map((ingredient) => (
-                        <option key={ingredient.id} value={ingredient.id}>
-                            {ingredient.name}
-                        </option>
-                    ))}
-                </select>
-                <p className='text-sm text-gray-500 mt-1'>Hold Ctrl/Cmd to select multiple</p>
-            </div>
+            <MultiSelectSelector
+                register={register}
+                setValue={setValue}
+                watch={watch}
+                errors={errors}
+                fieldName='ingredients'
+                items={ingredients}
+                selectedLabel='Selected Ingredients'
+                availableLabel='Ingredients'
+                helperText='Select ingredients to add to the product'
+            />
         </div>
     );
 }

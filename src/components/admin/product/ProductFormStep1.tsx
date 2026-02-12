@@ -11,7 +11,7 @@ interface ProductFormStep1Props {
 
 export default function ProductFormStep1({ register, errors, manufacturers }: ProductFormStep1Props) {
     return (
-        <div className='border-b border-[#4d6d7e] pb-4'>
+        <div className=''>
             <h3 className='text-[18px] font-semibold text-[#4d6d7e] mb-3'>Basic Information</h3>
 
             <label className='flex flex-col gap-1'>

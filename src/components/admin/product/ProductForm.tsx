@@ -25,6 +25,9 @@ interface ProductFormProps {
         'beer-type': FilterItem[];
         'season-tag': FilterItem[];
         'ingredient': FilterItem[];
+        'carbonation-level': FilterItem[];
+        'water-type': FilterItem[];
+        'soft-drink-type': FilterItem[];
     };
     onNext: () => void;
     onPrevious: () => void;
@@ -48,14 +51,31 @@ export default function ProductForm({
     onCancel,
     onSubmit,
 }: ProductFormProps) {
-    const { register, handleSubmit, watch, formState: { errors } } = form;
+    const { register, handleSubmit, watch, setValue, formState: { errors } } = form;
     const isBestSeller = watch('isBestSeller');
     const isNew = watch('isNew');
 
+    // Only allow form submission on the final step
+    const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        // Only submit if we're on the final step
+        if (currentStep === totalSteps) {
+            handleSubmit(onSubmit as any)(e);
+        }
+    };
+
+    // Prevent Enter key from submitting form when not on final step
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
+        if (e.key === 'Enter' && currentStep < totalSteps) {
+            e.preventDefault();
+        }
+    };
+
     return (
         <form
-            className='flex flex-col gap-4 max-h-[70vh] overflow-y-auto pr-2'
-            onSubmit={handleSubmit(onSubmit as any)}
+            className='flex flex-col gap-4 max-h-[70vh] overflow-y-auto pr-2 scrollbar'
+            onSubmit={handleFormSubmit}
+            onKeyDown={handleKeyDown}
         >
             <ProductFormProgress currentStep={currentStep} totalSteps={totalSteps} />
 
@@ -76,6 +96,8 @@ export default function ProductForm({
                     packagings={packagings}
                     ingredients={filterOptions['ingredient']}
                     packagingFields={packagingFields}
+                    setValue={setValue}
+                    watch={watch}
                 />
             )}
 
@@ -101,6 +123,10 @@ export default function ProductForm({
             {currentStep === 5 && productTypeId && (
                 <ProductFormStep5
                     productTypeId={productTypeId}
+                    register={register}
+                    errors={errors}
+                    setValue={setValue}
+                    watch={watch}
                     filterOptions={filterOptions}
                 />
             )}

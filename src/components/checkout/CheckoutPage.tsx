@@ -9,6 +9,7 @@ import {useForm, SubmitHandler} from 'react-hook-form';
 import { CheckoutFormFields } from '@/types/componentTypes';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CheckoutFormValidationSchema } from '@/schemas/CheckoutFormValidationSchema';
+import ProductImagePlaceholder from '@/public/product_image_placeholder.webp';
 
 const CheckoutPage = () => {
     const { items, totalQuantity } = useSelector((state: RootState) => state.cart);
@@ -111,7 +112,7 @@ const CheckoutPage = () => {
                                         <Image
                                             className='w-full h-full object-contain'
                                             loading='lazy'
-                                            src={item.mainPhotoUrl}
+                                            src={item.mainPhotoUrl || ProductImagePlaceholder}
                                             width={250}
                                             height={250}
                                             alt={`${item.shortName} photo`}

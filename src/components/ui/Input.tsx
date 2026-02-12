@@ -11,6 +11,7 @@ const Input = <TFormValues extends Record<string, any>>({
   register,
   errors,
   errorMessage,
+  step,
 }: InputProps<TFormValues>) => {
   return (
     <>
@@ -32,6 +33,7 @@ const Input = <TFormValues extends Record<string, any>>({
               'off'
         }
         placeholder={placeholder}
+        step={step ? step : undefined}
       />
       {
         errors?.[id] && <p className='text-red-500'>{errorMessage}</p>
