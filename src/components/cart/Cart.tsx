@@ -14,9 +14,11 @@ import { toggleCart } from '@/state/cartState/cartSlice';
 import Link from 'next/link';
 import { Packaging } from '@/types/reducerTypes';
 import ProductImagePlaceholder from '@/public/product_image_placeholder.webp';
+import { getImageUrlWithCacheBust } from '@/utils/helpers';
 
 const Cart = () => {
     const { items, totalQuantity } = useSelector((state: RootState) => state.cart);
+    const imageCacheVersion = useSelector((state: RootState) => state.photos.imageCacheVersion);
     const dispatch = useDispatch<AppDispatch>();
     const router = useRouter();
 
@@ -54,9 +56,10 @@ const Cart = () => {
                                 onClick={() => handleProductClick(item.slug)}
                             >
                                 <Image
+                                    key={`${item.id}-${imageCacheVersion}`}
                                     className='w-full h-full object-contain'
                                     loading='lazy'
-                                    src={item.mainPhotoUrl || ProductImagePlaceholder}
+                                    src={item.mainPhotoUrl ? getImageUrlWithCacheBust(item.mainPhotoUrl, imageCacheVersion) : ProductImagePlaceholder}
                                     width={250}
                                     height={250}
                                     alt={`${item.shortName} photo`}

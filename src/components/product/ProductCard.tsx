@@ -1,19 +1,25 @@
 import { ProductCardProps } from '@/types/componentTypes';
 import Image from 'next/image';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addItem } from '@/state/cartState/cartSlice';
 import { ProductItemCart } from '@/types/reducerTypes';
 import { toggleCart } from '@/state/cartState/cartSlice';
-import { AppDispatch } from '@/state/store';
+import { AppDispatch, RootState } from '@/state/store';
 import AddToCartButton from './AddToCartButton';
 import { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import ProductImagePlaceholder from '@/public/product_image_placeholder.webp';
+import { getImageUrlWithCacheBust } from '@/utils/helpers';
 
 const ProductCard = ({ onCardClick, product }: ProductCardProps) => {
     const dispatch = useDispatch<AppDispatch>();
+    const imageCacheVersion = useSelector((state: RootState) => state.photos.imageCacheVersion);
     const [isPackagingOpen, setIsPackagingOpen] = useState(false);
     const packagingRef = useRef<HTMLDivElement>(null);
+    
+    const imageUrl = product.mainPhotoUrl 
+        ? getImageUrlWithCacheBust(product.mainPhotoUrl, imageCacheVersion)
+        : ProductImagePlaceholder;
 
     const handleClick = (e: React.MouseEvent, item: ProductItemCart) => {
         e.stopPropagation();
@@ -90,7 +96,8 @@ const ProductCard = ({ onCardClick, product }: ProductCardProps) => {
             </div>
             <div className='flex-1 flex items-center justify-center mt-6'>
                 <Image
-                    src={product.mainPhotoUrl || ProductImagePlaceholder}
+                    key={`${product.id}-${imageCacheVersion}`}
+                    src={imageUrl}
                     alt={product.name}
                     width={450}
                     height={450}

@@ -31,7 +31,7 @@ const Header = () => {
 
     useEffect(() => {
         if (isAuthenticated) {
-            setProfileLink(role === 'Admin' ? '/admin' : '/dashboard');
+            setProfileLink(role === 'Admin' ? '/admin/products/beer' : '/dashboard');
         } else {
             setProfileLink('/login');
         }

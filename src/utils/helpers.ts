@@ -32,3 +32,29 @@ export const notify = (message: string, type: 'success' | 'error' | 'warning' | 
         position: 'bottom-right',
     });
 };
+
+/**
+ * Adds cache-busting query parameter to image URL
+ * @param imageUrl - The image URL to add cache-busting to
+ * @param cacheVersion - The cache version number (timestamp)
+ * @returns The image URL with cache-busting parameter
+ */
+export const getImageUrlWithCacheBust = (imageUrl: string | null | undefined, cacheVersion: number): string => {
+    if (!imageUrl) return '';
+    try {
+        // If URL is already absolute, use it directly
+        if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+            const url = new URL(imageUrl);
+            url.searchParams.set('v', cacheVersion.toString());
+            return url.toString();
+        }
+        // For relative URLs, construct full URL
+        const url = new URL(imageUrl, typeof window !== 'undefined' ? window.location.origin : 'http://localhost');
+        url.searchParams.set('v', cacheVersion.toString());
+        return url.toString();
+    } catch (error) {
+        // Fallback: append query parameter manually
+        const separator = imageUrl.includes('?') ? '&' : '?';
+        return `${imageUrl}${separator}v=${cacheVersion}`;
+    }
+};

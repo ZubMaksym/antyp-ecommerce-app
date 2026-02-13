@@ -6,9 +6,13 @@ import classNames from 'classnames';
 import ProductImagePlaceholder from '@/public/product_image_placeholder.webp';
 import Button from '../ui/Button';
 import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/state/store';
+import { getImageUrlWithCacheBust } from '@/utils/helpers';
 
 const AdminProductsList = ({ products, productsLoading, productsError, modalMode, setModalMode, setSelectedProductId }: AdminProductsListProps) => {
     const router = useRouter();
+    const imageCacheVersion = useSelector((state: RootState) => state.photos.imageCacheVersion);
 
     const onUploadPhotos = (selectedProductSlug: string) => {
         localStorage.setItem('selectedProductSlug', selectedProductSlug);
@@ -49,7 +53,8 @@ const AdminProductsList = ({ products, productsLoading, productsError, modalMode
                         >
                             <div className='flex items-center'>
                                 <Image
-                                    src={product.mainPhotoUrl || ProductImagePlaceholder}
+                                    key={`${product.id}-${imageCacheVersion}`}
+                                    src={product.mainPhotoUrl ? getImageUrlWithCacheBust(product.mainPhotoUrl, imageCacheVersion) : ProductImagePlaceholder}
                                     alt={product.name}
                                     width={110}
                                     height={110}

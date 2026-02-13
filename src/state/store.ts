@@ -6,6 +6,7 @@ import manufacturersReducer from './manufacturersSlice/manufacturersSlice';
 import packagingsReducer from './packagingsSlice/packagingsSlice';
 import adminFiltersReducer from './adminFiltersSlice/adminFiltersSlice';
 import productsReducer from './productsSlice/productsSlice';
+import photosReducer from './photosSlice/photosSlice';
 
 export const store = configureStore({
     reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
         packagings: packagingsReducer,
         adminFilters: adminFiltersReducer,
         products: productsReducer,
+        photos: photosReducer,
     }
 });
 

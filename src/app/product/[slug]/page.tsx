@@ -1,8 +1,8 @@
 'use client';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/state/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '@/state/store';
 import { addItem, toggleCart } from '@/state/cartState/cartSlice';
 import { ProductItem } from '@/types/reducerTypes';
 import ColorThief from 'color-thief-browser';
@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import useForbidBodyScroll from '@/hooks/useForbidBodyScroll';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import ProductImagePlaceholder from '@/public/product_image_placeholder.webp';
+import { getImageUrlWithCacheBust } from '@/utils/helpers';
 
 
 const ProductPage = () => {
@@ -27,7 +28,9 @@ const ProductPage = () => {
     const [relatedProducts, setRelatedProducts] = useState<ProductItem[]>();
     const slug = usePathname().split('/').pop();
     const mainImgRef = useRef<HTMLImageElement | null>(null);
-    const images = product && [product.mainPhotoUrl || ProductImagePlaceholder, beerTestImage];
+    const imageCacheVersion = useSelector((state: RootState) => state.photos.imageCacheVersion);
+    const mainPhotoUrl = product?.mainPhotoUrl ? getImageUrlWithCacheBust(product.mainPhotoUrl, imageCacheVersion) : ProductImagePlaceholder;
+    const images = product && [mainPhotoUrl, beerTestImage];
     const [isFullscreen, setIsFullscreen] = useState(false);
     const [activeSlide, setActiveSlide] = useState(0);
     const [mainImage, setMainImage] = useState('');
@@ -54,13 +57,22 @@ const ProductPage = () => {
                 setProduct(data.result);
                 setQuantity(data.result.packagings[0].multiplicity || 1);
                 setPoductLoading(false);
-                setMainImage(data.result.mainPhotoUrl);
+                const photoUrl = data.result.mainPhotoUrl ? getImageUrlWithCacheBust(data.result.mainPhotoUrl, imageCacheVersion) : ProductImagePlaceholder;
+                setMainImage(photoUrl);
             } catch (error) {
                 console.error(error);
             }
         };
         fetchProduct();
-    }, [slug]);
+    }, [slug, imageCacheVersion]);
+    
+    // Update mainImage when cache version changes
+    useEffect(() => {
+        if (product?.mainPhotoUrl) {
+            const photoUrl = getImageUrlWithCacheBust(product.mainPhotoUrl, imageCacheVersion);
+            setMainImage(photoUrl);
+        }
+    }, [imageCacheVersion, product]);
 
     useEffect(() => {
         const fetchRelatedProducts = async () => {

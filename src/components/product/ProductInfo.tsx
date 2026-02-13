@@ -5,6 +5,9 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { ProductItem } from '@/types/reducerTypes';
 import ProductImagePlaceholder from '@/public/product_image_placeholder.webp';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/state/store';
+import { getImageUrlWithCacheBust } from '@/utils/helpers';
 
 interface ProductInfoProps {
     product: ProductItem;
@@ -13,6 +16,7 @@ interface ProductInfoProps {
 
 const ProductInfo = ({ product, relatedProducts }: ProductInfoProps) => {
     const router = useRouter();
+    const imageCacheVersion = useSelector((state: RootState) => state.photos.imageCacheVersion);
 
     return (
         <>
@@ -44,10 +48,11 @@ const ProductInfo = ({ product, relatedProducts }: ProductInfoProps) => {
                         onClick={() => router.push(`/product/${relatedProduct.slug}`)}
                     >
                         <Image
+                            key={`${relatedProduct.id}-${imageCacheVersion}`}
                             loading='lazy'
                             width={150}
                             height={150}
-                            src={relatedProduct.mainPhotoUrl || ProductImagePlaceholder}
+                            src={relatedProduct.mainPhotoUrl ? getImageUrlWithCacheBust(relatedProduct.mainPhotoUrl, imageCacheVersion) : ProductImagePlaceholder}
                             alt='product image'
                             className='w-[70%] transition duration-500 ease-in-out'
                         />

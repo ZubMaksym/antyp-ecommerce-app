@@ -131,7 +131,7 @@ export const useAuth = (requiredRole?: 'Admin' | 'User') => {
             if (authState.role !== requiredRole) {
                 // Redirect to appropriate panel or login
                 if (authState.role === 'Admin') {
-                    router.push('/admin');
+                    router.push('/admin/products/beer');
                 } else if (authState.role === 'User') {
                     router.push('/user');
                 } else {

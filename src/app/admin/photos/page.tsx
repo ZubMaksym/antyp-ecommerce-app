@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { FileWithPath, useDropzone } from 'react-dropzone';
 import { fetchProductBySlug } from '@/state/productsSlice/productsSlice';
 import { useDispatch } from 'react-redux';
@@ -12,6 +12,9 @@ import Image from 'next/image';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';
 import AdminActionButton from '@/components/admin/AdminActionButton';
 import { Trash2 } from 'lucide-react';
+import { deletePhotos, uploadPhotos } from '@/state/photosSlice/photosSlice';
+import { notify, getImageUrlWithCacheBust } from '@/utils/helpers';
+import { ToastContainer } from 'react-toastify';
 
 const PhotosPage = () => {
     const [currentFiles, setCurrentFiles] = useState<FileWithPath[]>([]);
@@ -29,6 +32,8 @@ const PhotosPage = () => {
     const dispatch = useDispatch<AppDispatch>();
     const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
     const [isLoadingProduct, setIsLoadingProduct] = useState(true);
+    const { error, success, imageCacheVersion, uploadLoading, deleteLoading, loading } = useSelector((state: RootState) => state.photos);
+    const previousSuccessRef = useRef<string | null>(null);
 
     useEffect(() => {
         const selectedProductSlug = localStorage.getItem('selectedProductSlug');
@@ -49,11 +54,49 @@ const PhotosPage = () => {
         }
     }, [dispatch]);
 
+    useEffect(() => {
+        if (success) {
+            notify(success, 'success');
+        }
+        // Only refetch if success message changed (not on every render)
+        if ((success === 'Photos deleted successfully' || success === 'Photos uploaded successfully') && 
+            success !== previousSuccessRef.current) {
+            previousSuccessRef.current = success;
+            setCurrentFiles([]);
+            // Refetch product data to get updated photo URLs
+            const selectedProductSlug = localStorage.getItem('selectedProductSlug');
+            if (selectedProductSlug) {
+                setIsLoadingProduct(true);
+                dispatch(fetchProductBySlug({ slug: selectedProductSlug as string }))
+                    .unwrap()
+                    .then((product) => {
+                        setSelectedProduct(product);
+                        setIsLoadingProduct(false);
+                    })
+                    .catch((error) => {
+                        console.error('error refetching product:', error);
+                        setIsLoadingProduct(false);
+                    });
+            }
+        }
+        if (error) {
+            notify(error, 'error');
+        }
+    }, [success, error, dispatch]);
+
     const formatFileSize = (bytes: number) => {
         if (bytes < 1024) return bytes + ' B';
         if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
         return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
     };
+
+    const handleUploadPhotos = () => {
+        dispatch(uploadPhotos({ id: selectedProduct?.id || '', files: currentFiles }));
+    }
+
+    const handleDeletePhotos = () => {
+        dispatch(deletePhotos({ id: selectedProduct?.id || '' }));
+    }
 
     return (
         <section className='flex px-5 py-5 flex-col'>
@@ -71,7 +114,8 @@ const PhotosPage = () => {
                     <div className='flex items-center justify-between border border-gray-300 rounded-md p-4 bg-[#F6EFE7]'>
                         <div className='flex items-center'>
                             <Image
-                                src={selectedProduct.mainPhotoUrl || ProductImagePlaceholder}
+                                key={`${selectedProduct.id}-${imageCacheVersion}`}
+                                src={selectedProduct.mainPhotoUrl ? getImageUrlWithCacheBust(selectedProduct.mainPhotoUrl, imageCacheVersion) : ProductImagePlaceholder}
                                 alt={selectedProduct.name}
                                 width={110}
                                 height={110}
@@ -91,7 +135,9 @@ const PhotosPage = () => {
                         <div className='flex items-center gap-2'>
                             <AdminActionButton 
                                 action='delete' 
-                                title='Delete photos'
+                                title={deleteLoading ? 'Deleting...' : 'Delete photos'}
+                                onClick={handleDeletePhotos}
+                                disabled={loading}
                             />
                         </div>
                     </div>
@@ -136,8 +182,9 @@ const PhotosPage = () => {
                                     </h3>
                                     <AdminActionButton 
                                         action='create' 
-                                        title='Upload photos'
-                                        disabled={acceptedFiles.length === 0}
+                                        title={uploadLoading ? 'Uploading...' : 'Upload photos'}
+                                        disabled={acceptedFiles.length === 0 || loading}
+                                        onClick={handleUploadPhotos}
                                     />
                                 </div>
                                 <div className='flex flex-col gap-2 max-h-[300px] overflow-y-auto scrollbar'>
@@ -194,6 +241,7 @@ const PhotosPage = () => {
                     </div>
                 </div>
             )}
+            <ToastContainer />
         </section>
     );
 }
